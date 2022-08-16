@@ -1,6 +1,11 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@better-scroll/core': ^2.4.2
+  '@better-scroll/nested-scroll': ^2.4.2
+  '@better-scroll/observe-dom': ^2.4.2
+  '@better-scroll/pull-up': ^2.4.2
+  '@better-scroll/slide': ^2.4.2
   '@types/node': ^18.7.3
   '@typescript-eslint/eslint-plugin': ^5.32.0
   '@typescript-eslint/parser': ^5.32.0
@@ -26,6 +31,7 @@ specifiers:
   nodemon: ^2.0.19
   normalize.css: ^8.0.1
   pinia: ^2.0.17
+  postcss-px-to-viewport-8-plugin: ^1.1.5
   prettier: ^2.7.1
   sass: ^1.54.4
   typescript: ^4.6.4
@@ -38,6 +44,11 @@ specifiers:
   vue-tsc: ^0.38.4
 
 dependencies:
+  '@better-scroll/core': 2.4.2
+  '@better-scroll/nested-scroll': 2.4.2
+  '@better-scroll/observe-dom': 2.4.2
+  '@better-scroll/pull-up': 2.4.2
+  '@better-scroll/slide': 2.4.2
   '@vueuse/core': 9.1.0_vue@3.2.37
   axios: 0.27.2_debug@4.3.4
   cheerio: 1.0.0-rc.12
@@ -69,6 +80,7 @@ devDependencies:
   husky: 8.0.1
   lint-staged: 13.0.3
   nodemon: 2.0.19
+  postcss-px-to-viewport-8-plugin: 1.1.5
   prettier: 2.7.1
   typescript: 4.7.4
   unplugin-auto-import: 0.10.3_gvfhqaq4iriax5zs7grzec6lkm
@@ -104,6 +116,40 @@ packages:
       '@babel/helper-string-parser': 7.18.10
       '@babel/helper-validator-identifier': 7.18.6
       to-fast-properties: 2.0.0
+
+  /@better-scroll/core/2.4.2:
+    resolution: {integrity: sha512-IqVZLnh04YpaEAy9wJDxtFK/stxVQjB9A9Wcr3Uwkj7Av1TtFpin+t/TObl53diNDG5ZJ+vck/OAthphpuugLA==}
+    dependencies:
+      '@better-scroll/shared-utils': 2.4.2
+    dev: false
+
+  /@better-scroll/nested-scroll/2.4.2:
+    resolution: {integrity: sha512-JnC2sqtDqVkj9F5J39u52b6qDsMqXbnURG67dHf97tYoYP2dluwjkvhhxjSFrghREoQzT/KWcDbkfcGy47lQwQ==}
+    dependencies:
+      '@better-scroll/core': 2.4.2
+    dev: false
+
+  /@better-scroll/observe-dom/2.4.2:
+    resolution: {integrity: sha512-eeS77CZs+V72dkya10e5ptndBAbhQVcXoYGvfoIihOJgCPqO5MdYTpzRmlbshYCEE5juUMLe82Kx8FSbOejpAw==}
+    dependencies:
+      '@better-scroll/core': 2.4.2
+    dev: false
+
+  /@better-scroll/pull-up/2.4.2:
+    resolution: {integrity: sha512-07Cke3oa96lN9/inxJZ0ixh0nBbbqxOi2IKcBGtD6dP+susiMcdhgd/c7zNRjXkwlw0vzTNfXTgExIOEWzLHYg==}
+    dependencies:
+      '@better-scroll/core': 2.4.2
+    dev: false
+
+  /@better-scroll/shared-utils/2.4.2:
+    resolution: {integrity: sha512-Gy/Jfbpu+hq0u+PcjkTqyXGqAf+0dexTzEZ5IDXEVwJVLmd3cx8A73oTcAZ8QZgk4wSHvlMjXecSaptkhnNPEw==}
+    dev: false
+
+  /@better-scroll/slide/2.4.2:
+    resolution: {integrity: sha512-VfdFHm/meo4nEyfx0JLn8rUHfQdQCnoBHs/BsV+vmjVivKg+cVgfS+QaytrIulWKqNAWNlfXbAaNtZMv8gNKZg==}
+    dependencies:
+      '@better-scroll/core': 2.4.2
+    dev: false
 
   /@esbuild/linux-loong64/0.14.54:
     resolution: {integrity: sha512-bZBrLAIX1kpWelV0XemxBZllyRmM6vgFQQG2GdNb+r3Fkp0FOh1NJSvekXDs7jq70k4euu1cryLMfU+mTXlEpw==}
@@ -2095,6 +2141,11 @@ packages:
     dependencies:
       boolbase: 1.0.0
 
+  /object-assign/4.1.1:
+    resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
+    engines: {node: '>=0.10.0'}
+    dev: true
+
   /object-inspect/1.12.2:
     resolution: {integrity: sha512-z+cPxW0QGUp0mcqcsgQyLVRDoXFQbXOwBaqyF7VIgI4TWNQsDHrBpUQslRmIfAoYWdYzs6UlKJtB2XJpTaNSpQ==}
 
@@ -2265,6 +2316,12 @@ packages:
       jsonc-parser: 3.1.0
       mlly: 0.5.12
       pathe: 0.3.4
+    dev: true
+
+  /postcss-px-to-viewport-8-plugin/1.1.5:
+    resolution: {integrity: sha512-qM6x2NyGbRj8R15o/LCbw5hacU+XK1s80zTvWgLjHsOP8B9P1KbDZbNS11BG6/WPut8LR8DvEU5iKw8JnQn9MQ==}
+    dependencies:
+      object-assign: 4.1.1
     dev: true
 
   /postcss-selector-parser/6.0.10:

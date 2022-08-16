@@ -7,6 +7,7 @@
             <van-search
               v-show="searchVisible"
               v-model="keyword"
+              class="van-hairline--bottom"
               show-action
               placeholder="请输入视频名称"
               autofocus
@@ -18,7 +19,11 @@
             </van-search>
           </transition>
         </form>
-        <video-list class="search-list" :list="searchData.list" />
+        <search-skeletom :loading="loading" :num="3">
+          <scroll-wrap ref="scrollRef" class="search-list">
+            <video-list :list="searchData.list" />
+          </scroll-wrap>
+        </search-skeletom>
       </div>
     </transition>
   </teleport>
@@ -27,6 +32,8 @@
 <script setup lang="ts">
 import VideoList from '@/components/list/video-list.vue'
 import useSearch from './use-search'
+import ScrollWrap from '@/components/scroll/scroll-wrap.vue'
+import SearchSkeletom from './search-skeleton.vue'
 
 interface Props {
   visible: boolean
@@ -40,6 +47,8 @@ const props = withDefaults(defineProps<Props>(), {
   visible: false,
 })
 
+const scrollRef = ref<typeof ScrollWrap>()
+
 const searchVisible = computed({
   get() {
     return props.visible
@@ -49,7 +58,22 @@ const searchVisible = computed({
   },
 })
 
-const { keyword, searchData, onCancel, onSearch } = useSearch(searchVisible)
+watch(
+  () => props.visible,
+  async (visible) => {
+    if (visible) {
+      await nextTick()
+      refreshScroll()
+    }
+  }
+)
+
+const { keyword, loading, searchData, onCancel, onSearch } =
+  useSearch(searchVisible)
+
+function refreshScroll() {
+  scrollRef.value?.scroll?.refresh()
+}
 </script>
 
 <style lang="scss">
@@ -66,6 +90,6 @@ const { keyword, searchData, onCancel, onSearch } = useSearch(searchVisible)
 }
 .search-list {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
 }
 </style>

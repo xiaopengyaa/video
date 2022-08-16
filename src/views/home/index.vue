@@ -29,7 +29,6 @@ function showSearch() {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 70%;
   height: 100%;
   color: #fff;
   text-shadow: 2px 2px 6px #d5ebe1;

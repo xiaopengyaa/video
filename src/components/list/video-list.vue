@@ -3,7 +3,7 @@
     <div v-for="(item, index) in list" :key="index" class="video-item">
       <div class="main-content">
         <div class="main-content__left">
-          <van-image width="130" height="180" radius="4" :src="item.image" />
+          <van-image width="90" height="128" radius="4" :src="item.image" />
           <div v-if="item.mark" class="mark">
             <van-image :src="item.mark" />
           </div>
@@ -24,6 +24,25 @@
           </div>
         </div>
       </div>
+      <van-row gutter="12" class="btn-wrap">
+        <van-col span="12">
+          <van-button class="btn" round block color="#ec6a38"
+            >立即播放</van-button
+          >
+        </van-col>
+        <van-col span="12">
+          <van-button
+            class="btn download"
+            round
+            block
+            color="#f6f8fa"
+            icon="star"
+          >
+            缓存
+          </van-button>
+        </van-col>
+      </van-row>
+      <play-list :list="item.playlist" />
     </div>
   </div>
 </template>
@@ -38,9 +57,12 @@ interface Props {
 const props = defineProps<Props>()
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .video-item {
   padding: 12px;
+  &:not(:last-child) {
+    border-bottom: 8px solid #f6f8fa;
+  }
 }
 .main-content {
   display: flex;
@@ -58,7 +80,8 @@ const props = defineProps<Props>()
     margin-left: 12px;
     overflow: hidden;
     .title {
-      font-size: 26px;
+      font-size: 20px;
+      font-weight: bold;
       color: #ec6a38;
       margin-bottom: 14px;
     }
@@ -67,10 +90,20 @@ const props = defineProps<Props>()
       background: #f6f8fa;
       padding: 4px 8px;
       margin-right: 6px;
+      border-radius: 2px;
     }
     .desc {
       margin-top: 14px;
     }
+  }
+}
+.btn-wrap {
+  margin: 12px 0;
+  .btn {
+    height: 40px;
+  }
+  :deep(.download .van-button__content) {
+    color: #000;
   }
 }
 </style>
