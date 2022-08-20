@@ -1,32 +1,30 @@
 <template>
-  <teleport to="body">
-    <transition name="van-fade">
-      <div v-show="searchVisible" class="search-wrap">
-        <form action="/">
-          <transition name="slide-fade">
-            <van-search
-              v-show="searchVisible"
-              v-model="keyword"
-              class="van-hairline--bottom"
-              show-action
-              placeholder="请输入视频名称"
-              autofocus
-              @search="onSearch"
-            >
-              <template #action>
-                <div @click="onCancel">取消</div>
-              </template>
-            </van-search>
-          </transition>
-        </form>
-        <search-skeletom :loading="loading" :num="3">
-          <scroll-wrap ref="scrollRef" class="search-list">
-            <video-list :list="searchData.list" />
-          </scroll-wrap>
-        </search-skeletom>
-      </div>
-    </transition>
-  </teleport>
+  <transition name="van-fade">
+    <div v-show="searchVisible" class="search-wrap">
+      <form action="/">
+        <transition name="slide-fade">
+          <van-search
+            v-show="searchVisible"
+            v-model="keyword"
+            class="van-hairline--bottom"
+            show-action
+            placeholder="请输入视频名称"
+            autofocus
+            @search="onSearch"
+          >
+            <template #action>
+              <div @click="onCancel">取消</div>
+            </template>
+          </van-search>
+        </transition>
+      </form>
+      <search-skeletom :loading="loading" :num="3">
+        <scroll-wrap ref="scrollRef" class="search-list">
+          <video-list :list="searchData.list" />
+        </scroll-wrap>
+      </search-skeletom>
+    </div>
+  </transition>
 </template>
 
 <script setup lang="ts">

@@ -14,6 +14,7 @@ const homeApi = {
       .each((index, elem) => {
         const image = $(elem).find('._infos .figure_pic').attr('src')
         const mark = $(elem).find('._infos .mark_v img').attr('src')
+        const href = $(elem).find('._infos .result_title a').attr('href')
         const $h1 = $(elem).find('._infos .result_title .hl')
         const sub = $(elem).find('._infos .result_title .sub').text()
         const type = $(elem).find('._infos .result_title .type').text()
@@ -53,6 +54,7 @@ const homeApi = {
           image,
           mark,
           title,
+          href,
           sub: [type].concat(sub.replace(/\(|\)/g, '').split('/')),
           desc,
           playlist,

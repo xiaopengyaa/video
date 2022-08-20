@@ -8,12 +8,14 @@ export interface PlayItem {
   href: string
   num: string
   mark: string
+  playTitle?: string
 }
 
 export interface SearchItem {
   image: string
   mark: string
   title: string
+  href: string
   sub: string[]
   desc: string
   playlist: PlayItem[]

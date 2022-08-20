@@ -29,6 +29,7 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+    'vue/no-v-html': 'off',
     'vue/html-self-closing': [
       'error',
       {

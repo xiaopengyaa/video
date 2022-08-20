@@ -1,5 +1,5 @@
 const router = require('koa-router')()
-const txApi = require('../api/tx')
+const txApi = require('../api/tx/search')
 
 const apiMap = {
   tx: txApi,

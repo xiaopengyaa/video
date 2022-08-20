@@ -4,9 +4,10 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { VantResolver } from 'unplugin-vue-components/resolvers'
+import { viteVConsole } from 'vite-plugin-vconsole'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const getEnv = (key: string) => {
     return loadEnv(mode, process.cwd())[key]
   }
@@ -20,6 +21,15 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       vue(),
+      viteVConsole({
+        entry: path.resolve('src/main.ts'),
+        localEnabled: command === 'serve',
+        enabled: false,
+        config: {
+          maxLogNumber: 1000,
+          theme: 'light',
+        },
+      }),
       AutoImport({
         include: [/\.vue$/],
         imports: ['vue', 'vue-router', 'pinia'],

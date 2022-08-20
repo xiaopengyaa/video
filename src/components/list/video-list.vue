@@ -1,7 +1,7 @@
 <template>
   <div class="video-list">
     <div v-for="(item, index) in list" :key="index" class="video-item">
-      <div class="main-content">
+      <div class="main-content" @click="toDetail(item.href)">
         <div class="main-content__left">
           <van-image width="90" height="128" radius="4" :src="item.image" />
           <div v-if="item.mark" class="mark">
@@ -26,7 +26,12 @@
       </div>
       <van-row gutter="12" class="btn-wrap">
         <van-col span="12">
-          <van-button class="btn" round block color="#ec6a38"
+          <van-button
+            class="btn"
+            round
+            block
+            color="#ec6a38"
+            @click="toDetail(item.href)"
             >立即播放</van-button
           >
         </van-col>
@@ -37,24 +42,45 @@
             block
             color="#f6f8fa"
             icon="star"
+            @click="download"
           >
             缓存
           </van-button>
         </van-col>
       </van-row>
-      <play-list :list="item.playlist" />
+      <play-list :list="item.playlist" @click="handleClick" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { SearchItem } from '@/types/search'
+import { PlayItem, SearchItem } from '@/types/search'
+import { Toast } from 'vant'
+import 'vant/es/toast/style'
 
 interface Props {
   list: SearchItem[]
 }
 
+const router = useRouter()
 const props = defineProps<Props>()
+
+function handleClick(item: PlayItem) {
+  toDetail(item.href)
+}
+
+function toDetail(href: string) {
+  router.push({
+    path: '/detail',
+    query: {
+      url: href,
+    },
+  })
+}
+
+function download() {
+  Toast('想什么呢，你还想下载=。=')
+}
 </script>
 
 <style lang="scss" scoped>
