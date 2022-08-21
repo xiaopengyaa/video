@@ -11,15 +11,15 @@ const homeApi = {
       return getResult({
         introduction: data.introduction.introData.list[0].item_params,
         topList: data.topList.data,
+        videoInfo: data.global.videoInfo,
       })
     }
   },
-  async getPlaylist(cid, page_num) {
+  async getPlaylist(cid, page_num = 0) {
     const list = await getList(cid, page_num)
 
     return getResult(
       list.map((item) => {
-        const playTitle = item.item_params.play_title
         const vid = item.item_params.vid
         const num = item.item_params.title
         const isTrailer = item.item_params.is_trailer
@@ -28,7 +28,8 @@ const homeApi = {
             ? '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
             : '//vfiles.gtimg.cn/vupload/20210322/tag_mini_trailerlite.png'
         return {
-          playTitle,
+          vid,
+          cid,
           href: `https://v.qq.com/x/cover/${cid}/${vid}.html`,
           num,
           mark: item.item_params.imgtag_all ? mark : '',

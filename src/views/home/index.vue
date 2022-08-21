@@ -15,7 +15,7 @@
   <video-search v-model:visible="visible" />
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="home">
 const visible = ref(false)
 
 function showSearch() {

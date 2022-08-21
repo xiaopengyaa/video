@@ -5,6 +5,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { VantResolver } from 'unplugin-vue-components/resolvers'
 import { viteVConsole } from 'vite-plugin-vconsole'
+import VueSetupExtend from 'vite-plugin-vue-setup-extend'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }) => {
@@ -12,8 +13,11 @@ export default defineConfig(({ mode, command }) => {
     return loadEnv(mode, process.cwd())[key]
   }
 
+  const PUBLIC_PATH = getEnv('VITE_APP_PUBLIC_PATH')
+  const SHOW_VCONSOLE = getEnv('VITE_APP_SHOW_VCONSOLE')
+
   return {
-    base: getEnv('VITE_APP_PUBLIC_PATH'),
+    base: PUBLIC_PATH,
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),
@@ -21,18 +25,18 @@ export default defineConfig(({ mode, command }) => {
     },
     plugins: [
       vue(),
+      VueSetupExtend(),
       viteVConsole({
         entry: path.resolve('src/main.ts'),
-        localEnabled: command === 'serve',
+        localEnabled: SHOW_VCONSOLE === '1' && command === 'serve',
         enabled: false,
         config: {
-          maxLogNumber: 1000,
           theme: 'light',
         },
       }),
       AutoImport({
         include: [/\.vue$/],
-        imports: ['vue', 'vue-router', 'pinia'],
+        imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
         dts: './src/auto-imports.d.ts',
         resolvers: [VantResolver()],
         eslintrc: {

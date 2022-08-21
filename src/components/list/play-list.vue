@@ -6,7 +6,7 @@
         :key="index"
         class="item"
         :class="{
-          active: showActive && active === item.num,
+          active: showActive && active === item.vid,
         }"
         @click="handleClick(item)"
       >
@@ -68,7 +68,7 @@ function scrollToActive() {
 function handleClick(item: PlayItem) {
   emit('click', item)
   if (props.showActive) {
-    emit('update:active', item.num)
+    emit('update:active', item.vid)
   }
 }
 </script>

@@ -4,6 +4,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('@/views/home/index.vue'),
+    meta: {
+      keepAlive: 'home',
+    },
   },
   {
     path: '/detail',

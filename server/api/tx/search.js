@@ -12,6 +12,7 @@ const homeApi = {
     $('.search_container .mix_warp')
       .children()
       .each((index, elem) => {
+        const cid = $(elem).find('.result_item').attr('data-id')
         const image = $(elem).find('._infos .figure_pic').attr('src')
         const mark = $(elem).find('._infos .mark_v img').attr('src')
         const href = $(elem).find('._infos .result_title a').attr('href')
@@ -35,10 +36,21 @@ const homeApi = {
             if (cElem.attribs.class && cElem.attribs.class.includes('unfold')) {
               return
             }
-            const href = $(cElem).find('a').attr('href')
             const num = $(cElem).find('a').text()
-            const mark = $(cElem).find('.mark_v img').attr('src')
+            const mark = $(cElem).find('.mark_v img').attr('src') || ''
+            let href = $(cElem).find('a').attr('href')
+            let vid = ''
+
+            // 处理href
+            const reg = /cover\/(.*)\.html/
+            const match = reg.exec(href)
+            if (match) {
+              vid = match[1].split('/').pop()
+            }
+
             playlist.push({
+              cid,
+              vid,
               href,
               num,
               mark,
@@ -51,6 +63,7 @@ const homeApi = {
         }
 
         list.push({
+          cid,
           image,
           mark,
           title,

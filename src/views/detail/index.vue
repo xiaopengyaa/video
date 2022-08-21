@@ -1,6 +1,13 @@
 <template>
-  <transition name="van-slide-right">
+  <transition>
     <div class="detail">
+      <van-icon
+        class="detail__back"
+        color="#fff"
+        size="20"
+        name="arrow-left"
+        @click="toHome"
+      />
       <iframe
         class="detail__video"
         allowtransparency="true"
@@ -8,6 +15,7 @@
         scrolling="no"
         allowfullscreen="true"
         autoplay="true"
+        :src="playUrl"
       />
       <div class="detail__content">
         <div class="detail__title">
@@ -26,63 +34,48 @@
               {{ detailData.introduction.update_notify_desc }}
             </div>
           </div>
-          <play-list v-model:active="active" :list="playlist" show-active />
+          <play-list
+            v-model:active="active"
+            :list="playlist"
+            show-active
+            @click="handleClick"
+          />
         </div>
       </div>
     </div>
   </transition>
 </template>
 
-<script setup lang="ts">
-import { getPlaylist, getDetail } from '@/api/detail'
-import { PlayItem } from '@/types/search'
-import { DetailRes } from '@/types/detail'
+<script setup lang="ts" name="detail">
+import useContent from './use-content'
 
 const route = useRoute()
-const router = useRouter()
-const url = ref('')
-const active = ref('10')
-const playlist = ref<PlayItem[]>([])
-const detailData = ref<DetailRes>({
-  introduction: {
-    area_name: '',
-    cover_description: '',
-    detail_info: '',
-    episode_all: '',
-    hotval: '',
-    main_genres: '',
-    title: '',
-    update_notify_desc: '',
-    year: '',
-  },
-  topList: [],
-})
+const playUrl = ref('')
+const cid = ref('')
 
 watchEffect(() => {
-  // url.value = `https://m2090.com/?url=${route.query.url}`
-  // url.value = `https://okjx.cc/?url=${route.query.url}`
-  url.value = `https://jx.bozrc.com:4433/player/?url=${route.query.url}`
+  // playUrl.value = `https://m2090.com/?url=${route.query.url}`
+  // playUrl.value = `https://okjx.cc/?url=${route.query.url}`
+  // playUrl.value = `https://jx.bozrc.com:4433/player/?url=${route.query.url}`
+  cid.value = route.query.cid as string
 })
 
-onMounted(async () => {
-  if (!url.value) {
-    toHome()
-  }
-  detailData.value = await getDetail(route.query.url as string)
-  playlist.value = await getPlaylist()
-})
-
-function toHome() {
-  router.push('/')
-}
+const { detailData, playlist, active, toHome, handleClick } = useContent(cid)
 </script>
 
 <style lang="scss" scoped>
 .detail {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
+  &__back {
+    position: absolute;
+    top: 20px;
+    left: 14px;
+    z-index: 10;
+  }
   &__video {
     width: 100vw;
     height: 56.25vw;

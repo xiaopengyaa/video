@@ -17,7 +17,8 @@
     "@better-scroll/observe-dom": "^2.4.2",
     "@better-scroll/pull-up": "^2.4.2",
     "@better-scroll/slide": "^2.4.2",
-    "@vueuse/core": "^9.0.2",
+    "@vant/use": "^1.4.2",
+    "@vueuse/core": "^9.1.0",
     "axios": "^0.27.2",
     "cheerio": "1.0.0-rc.12",
     "dayjs": "^1.11.4",
@@ -56,6 +57,7 @@
     "vconsole": "^3.14.6",
     "vite": "^3.0.0",
     "vite-plugin-vconsole": "^1.2.2",
+    "vite-plugin-vue-setup-extend": "^0.4.0",
     "vue-tsc": "^0.38.4"
   },
   "husky": {

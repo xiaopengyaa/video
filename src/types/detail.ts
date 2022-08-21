@@ -1,6 +1,7 @@
 export interface DetailRes {
   introduction: DetailIntro
   topList: TopItem[]
+  videoInfo: VideoInfo
 }
 
 export interface DetailIntro {
@@ -13,6 +14,16 @@ export interface DetailIntro {
   title: string
   update_notify_desc: string
   year: string
+}
+
+export interface VideoInfo {
+  c_covers: string
+  c_title_output: string
+  pioneer_tag: string
+  title: string
+  type: number
+  type_name: string
+  vid: string
 }
 
 export interface TopItem {

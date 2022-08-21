@@ -1,7 +1,10 @@
 <template>
   <div class="video-list">
     <div v-for="(item, index) in list" :key="index" class="video-item">
-      <div class="main-content" @click="toDetail(item.href)">
+      <div
+        class="main-content"
+        @click="toDetail(item.playlist[0].href, item.cid)"
+      >
         <div class="main-content__left">
           <van-image width="90" height="128" radius="4" :src="item.image" />
           <div v-if="item.mark" class="mark">
@@ -31,7 +34,7 @@
             round
             block
             color="#ec6a38"
-            @click="toDetail(item.href)"
+            @click="toDetail(item.playlist[0].href, item.cid)"
             >立即播放</van-button
           >
         </van-col>
@@ -48,7 +51,10 @@
           </van-button>
         </van-col>
       </van-row>
-      <play-list :list="item.playlist" @click="handleClick" />
+      <play-list
+        :list="item.playlist"
+        @click="(playItem: PlayItem) => handleClick(playItem, item)"
+      />
     </div>
   </div>
 </template>
@@ -65,15 +71,16 @@ interface Props {
 const router = useRouter()
 const props = defineProps<Props>()
 
-function handleClick(item: PlayItem) {
-  toDetail(item.href)
+function handleClick(playItem: PlayItem, item: SearchItem) {
+  toDetail(playItem.href, item.cid)
 }
 
-function toDetail(href: string) {
+function toDetail(href: string, cid: string) {
   router.push({
     path: '/detail',
     query: {
       url: href,
+      cid,
     },
   })
 }

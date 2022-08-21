@@ -5,13 +5,15 @@ export interface SearchReq extends BaseType {
 }
 
 export interface PlayItem {
+  vid: string
+  cid: string
   href: string
   num: string
   mark: string
-  playTitle?: string
 }
 
 export interface SearchItem {
+  cid: string
   image: string
   mark: string
   title: string

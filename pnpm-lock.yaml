@@ -9,8 +9,9 @@ specifiers:
   '@types/node': ^18.7.3
   '@typescript-eslint/eslint-plugin': ^5.32.0
   '@typescript-eslint/parser': ^5.32.0
+  '@vant/use': ^1.4.2
   '@vitejs/plugin-vue': ^3.0.0
-  '@vueuse/core': ^9.0.2
+  '@vueuse/core': ^9.1.0
   axios: ^0.27.2
   cheerio: 1.0.0-rc.12
   dayjs: ^1.11.4
@@ -41,6 +42,7 @@ specifiers:
   vconsole: ^3.14.6
   vite: ^3.0.0
   vite-plugin-vconsole: ^1.2.2
+  vite-plugin-vue-setup-extend: ^0.4.0
   vue: ^3.2.37
   vue-router: ^4.1.3
   vue-tsc: ^0.38.4
@@ -51,6 +53,7 @@ dependencies:
   '@better-scroll/observe-dom': 2.4.2
   '@better-scroll/pull-up': 2.4.2
   '@better-scroll/slide': 2.4.2
+  '@vant/use': 1.4.2
   '@vueuse/core': 9.1.0_vue@3.2.37
   axios: 0.27.2_debug@4.3.4
   cheerio: 1.0.0-rc.12
@@ -90,6 +93,7 @@ devDependencies:
   vconsole: 3.14.6
   vite: 3.0.7_sass@1.54.4
   vite-plugin-vconsole: 1.2.2
+  vite-plugin-vue-setup-extend: 0.4.0_vite@3.0.7
   vue-tsc: 0.38.9_typescript@4.7.4
 
 packages:
@@ -387,8 +391,8 @@ packages:
       '@popperjs/core': 2.11.6
     dev: false
 
-  /@vant/use/1.4.1:
-    resolution: {integrity: sha512-YonNN0SuJLEJuqdoMcVAJm2JUZWkHNrW81QzeF6FLyG5HFUGlmTM5Sby7gdS3Z/8UDMlkWRQpJxBWbmVzmUWxQ==}
+  /@vant/use/1.4.2:
+    resolution: {integrity: sha512-+30mOa/FY26qk8Ag/Cmqb51JaOgE9rS1xDS24yDx4aHixMhTZH2QsuFGrQVPEazkeK8R+p14oW28kK3146Gtbg==}
     dev: false
 
   /@vitejs/plugin-vue/3.0.3_vite@3.0.7+vue@3.2.37:
@@ -2981,7 +2985,7 @@ packages:
     dependencies:
       '@vant/icons': 1.8.0
       '@vant/popperjs': 1.2.1
-      '@vant/use': 1.4.1
+      '@vant/use': 1.4.2
       vue: 3.2.37
     dev: false
 
@@ -3001,6 +3005,16 @@ packages:
 
   /vite-plugin-vconsole/1.2.2:
     resolution: {integrity: sha512-eB0uyQzEQAijpxxcgnE9h/k0y6Lr5wiYeq+OW/4hPT7sNwd4KVqMKQXArTn5S6zy8Uo7ae7ulAU3atczekAGAw==}
+    dev: true
+
+  /vite-plugin-vue-setup-extend/0.4.0_vite@3.0.7:
+    resolution: {integrity: sha512-WMbjPCui75fboFoUTHhdbXzu4Y/bJMv5N9QT9a7do3wNMNHHqrk+Tn2jrSJU0LS5fGl/EG+FEDBYVUeWIkDqXQ==}
+    peerDependencies:
+      vite: '>=2.0.0'
+    dependencies:
+      '@vue/compiler-sfc': 3.2.37
+      magic-string: 0.25.9
+      vite: 3.0.7_sass@1.54.4
     dev: true
 
   /vite/3.0.7_sass@1.54.4:

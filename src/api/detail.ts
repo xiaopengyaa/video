@@ -9,7 +9,9 @@ export async function getDetail(url: string) {
   return data
 }
 
-export async function getPlaylist() {
-  const data = await http.get<PlayItem[]>('/detail/getPlaylist')
+export async function getPlaylist(cid: string) {
+  const data = await http.get<PlayItem[]>('/detail/getPlaylist', {
+    cid,
+  })
   return data
 }

@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollWrap: typeof import('./components/scroll/scroll-wrap.vue')['default']
+    SearchHistory: typeof import('./components/search/search-history.vue')['default']
     SearchSkeleton: typeof import('./components/search/search-skeleton.vue')['default']
     VanButton: typeof import('vant/es')['Button']
     VanCol: typeof import('vant/es')['Col']

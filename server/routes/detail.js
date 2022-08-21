@@ -14,8 +14,8 @@ router.get('/getDetail', async (ctx) => {
 })
 
 router.get('/getPlaylist', async (ctx) => {
-  const { type = 'tx' } = ctx.query
-  const data = await apiMap[type].getPlaylist('m441e3rjq9kwpsc', 0)
+  const { type = 'tx', cid } = ctx.query
+  const data = await apiMap[type].getPlaylist(cid, 0)
   ctx.body = data
 })
 

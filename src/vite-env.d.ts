@@ -13,6 +13,7 @@ declare module '*.vue' {
 interface ImportMetaEnv {
   readonly VITE_APP_BASE_URL: string
   readonly VITE_APP_PUBLIC_PATH: string
+  readonly VITE_APP_SHOW_VCONSOLE: string
 }
 
 interface ImportMeta {
