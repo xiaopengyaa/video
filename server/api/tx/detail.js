@@ -21,7 +21,7 @@ const homeApi = {
     return getResult(
       list.map((item) => {
         const vid = item.item_params.vid
-        const num = item.item_params.title
+        const text = item.item_params.title
         const isTrailer = item.item_params.is_trailer
         const mark =
           isTrailer === '0'
@@ -31,7 +31,7 @@ const homeApi = {
           vid,
           cid,
           href: `https://v.qq.com/x/cover/${cid}/${vid}.html`,
-          num,
+          text,
           mark: item.item_params.imgtag_all ? mark : '',
         }
       })

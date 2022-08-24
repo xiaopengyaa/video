@@ -1,10 +1,7 @@
 <template>
   <div class="video-list">
     <div v-for="(item, index) in list" :key="index" class="video-item">
-      <div
-        class="main-content"
-        @click="toDetail(item.playlist[0].href, item.cid)"
-      >
+      <div class="main-content" @click="btnClick(item)">
         <div class="main-content__left">
           <van-image width="90" height="128" radius="4" :src="item.image" />
           <div v-if="item.mark" class="mark">
@@ -12,7 +9,7 @@
           </div>
         </div>
         <div class="main-content__right">
-          <div class="title">{{ item.title }}</div>
+          <div class="title" v-html="item.title" />
           <div class="sub">
             <div
               v-for="(sItem, sIndex) in item.sub"
@@ -30,13 +27,34 @@
       <van-row gutter="12" class="btn-wrap">
         <van-col span="12">
           <van-button
+            v-if="item.btnlist.length <= 1"
             class="btn"
             round
             block
             color="#ec6a38"
-            @click="toDetail(item.playlist[0].href, item.cid)"
+            @click="btnClick(item)"
             >立即播放</van-button
           >
+          <van-popover
+            v-else-if="popoverList[index]"
+            v-model:show="popoverList[index].show"
+            theme="dark"
+            placement="top"
+            :actions="popoverList[index].actions"
+            @select="(playItem: PlayItem) => playClick(playItem, item)"
+          >
+            <template #reference>
+              <van-button
+                class="btn"
+                round
+                block
+                color="#ec6a38"
+                icon="arrow-down"
+                icon-position="right"
+                >立即播放</van-button
+              >
+            </template>
+          </van-popover>
         </van-col>
         <van-col span="12">
           <van-button
@@ -52,14 +70,17 @@
         </van-col>
       </van-row>
       <play-list
+        v-show="item.playlist.length"
         :list="item.playlist"
-        @click="(playItem: PlayItem) => handleClick(playItem, item)"
+        :series="item.series"
+        @click="(playItem: PlayItem) => playClick(playItem, item)"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import PlayList from './play-list.vue'
 import { PlayItem, SearchItem } from '@/types/search'
 import { Toast } from 'vant'
 import 'vant/es/toast/style'
@@ -67,20 +88,45 @@ import 'vant/es/toast/style'
 interface Props {
   list: SearchItem[]
 }
+interface popoverItem {
+  show: boolean
+  actions: PlayItem[]
+}
 
 const router = useRouter()
 const props = defineProps<Props>()
+const popoverList = ref<popoverItem[]>([])
 
-function handleClick(playItem: PlayItem, item: SearchItem) {
-  toDetail(playItem.href, item.cid)
+watchEffect(() => {
+  popoverList.value = props.list.map((item) => {
+    return {
+      show: false,
+      actions: item.btnlist,
+    }
+  })
+})
+
+function btnClick(item: SearchItem) {
+  let href = item.href
+  if (item.playlist.length) {
+    href = item.playlist[0].href
+  } else if (item.btnlist.length) {
+    href = item.btnlist[0].href
+  }
+  toDetail(href, item.cid, item.series)
 }
 
-function toDetail(href: string, cid: string) {
+function playClick(playItem: PlayItem, item: SearchItem) {
+  toDetail(playItem.href, item.cid, item.series)
+}
+
+function toDetail(href: string, cid: string, series: string) {
   router.push({
     path: '/detail',
     query: {
       url: href,
-      cid,
+      cid: cid,
+      series: series,
     },
   })
 }
@@ -115,14 +161,17 @@ function download() {
     .title {
       font-size: 20px;
       font-weight: bold;
-      color: #ec6a38;
-      margin-bottom: 14px;
+      margin-bottom: 4px;
+      :deep(.main) {
+        color: #ec6a38;
+      }
     }
     .sub-item {
       display: inline-block;
       background: #f6f8fa;
       padding: 4px 8px;
       margin-right: 6px;
+      margin-top: 10px;
       border-radius: 2px;
     }
     .desc {
@@ -137,6 +186,9 @@ function download() {
   }
   :deep(.download .van-button__content) {
     color: #000;
+  }
+  :deep(.van-popover__wrapper) {
+    width: 100%;
   }
 }
 </style>

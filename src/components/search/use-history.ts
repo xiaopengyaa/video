@@ -1,9 +1,9 @@
 import { SEARCH_KEY } from '@/utils/constant'
 import { useStorage } from '@vueuse/core'
 
-export default function useHistory() {
-  const searchList = useStorage<string[]>(SEARCH_KEY, [])
+const searchList = useStorage<string[]>(SEARCH_KEY, [])
 
+export default function useHistory() {
   function delHistory() {
     searchList.value = []
   }

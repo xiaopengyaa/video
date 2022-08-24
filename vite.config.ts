@@ -24,18 +24,7 @@ export default defineConfig(({ mode, command }) => {
       },
     },
     plugins: [
-      vue(),
-      VueSetupExtend(),
-      viteVConsole({
-        entry: path.resolve('src/main.ts'),
-        localEnabled: SHOW_VCONSOLE === '1' && command === 'serve',
-        enabled: false,
-        config: {
-          theme: 'light',
-        },
-      }),
       AutoImport({
-        include: [/\.vue$/],
         imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
         dts: './src/auto-imports.d.ts',
         resolvers: [VantResolver()],
@@ -46,6 +35,16 @@ export default defineConfig(({ mode, command }) => {
       Components({
         dts: './src/components.d.ts',
         resolvers: [VantResolver()],
+      }),
+      vue(),
+      VueSetupExtend(),
+      viteVConsole({
+        entry: path.resolve('src/main.ts'),
+        localEnabled: SHOW_VCONSOLE === '1' && command === 'serve',
+        enabled: false,
+        config: {
+          theme: 'light',
+        },
       }),
     ],
     server: {

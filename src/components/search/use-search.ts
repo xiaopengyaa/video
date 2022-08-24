@@ -1,16 +1,15 @@
 import { Ref, ref } from 'vue'
 import { search } from '@/api/search'
 import { SearchRes } from '@/types/search'
+import useHistory from './use-history'
 
-export default function useSearch(
-  visible: Ref<boolean>,
-  addHistory: (keyword: string) => void
-) {
+export default function useSearch(visible: Ref<boolean>) {
   const keyword = ref('')
   const loading = ref(false)
   const searchData = ref<SearchRes>(getDefSearch())
+  const { addHistory } = useHistory()
 
-  const onSearch = async (keyword: string) => {
+  async function onSearch(keyword: string) {
     try {
       loading.value = true
       addHistory(keyword)

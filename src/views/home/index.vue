@@ -16,6 +16,8 @@
 </template>
 
 <script setup lang="ts" name="home">
+import VideoSearch from '@/components/search/video-search.vue'
+
 const visible = ref(false)
 
 function showSearch() {

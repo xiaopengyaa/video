@@ -8,7 +8,7 @@ export interface PlayItem {
   vid: string
   cid: string
   href: string
-  num: string
+  text: string
   mark: string
 }
 
@@ -20,7 +20,9 @@ export interface SearchItem {
   href: string
   sub: string[]
   desc: string
+  series: string
   playlist: PlayItem[]
+  btnlist: PlayItem[]
 }
 
 export interface SearchRes {

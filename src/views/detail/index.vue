@@ -25,7 +25,9 @@
         <div class="detail__play">
           <div class="update">
             <div
-              v-show="detailData.introduction.update_notify_desc"
+              v-show="
+                detailData.introduction.update_notify_desc || playlist.length
+              "
               class="update__title"
             >
               剧集与更新
@@ -37,6 +39,7 @@
           <play-list
             v-model:active="active"
             :list="playlist"
+            :series="series"
             show-active
             @click="handleClick"
           />
@@ -47,17 +50,20 @@
 </template>
 
 <script setup lang="ts" name="detail">
+import PlayList from '@/components/list/play-list.vue'
 import useContent from './use-content'
 
 const route = useRoute()
 const playUrl = ref('')
 const cid = ref('')
+const series = ref('')
 
 watchEffect(() => {
   // playUrl.value = `https://m2090.com/?url=${route.query.url}`
   // playUrl.value = `https://okjx.cc/?url=${route.query.url}`
   // playUrl.value = `https://jx.bozrc.com:4433/player/?url=${route.query.url}`
   cid.value = route.query.cid as string
+  series.value = route.query.series as string
 })
 
 const { detailData, playlist, active, toHome, handleClick } = useContent(cid)

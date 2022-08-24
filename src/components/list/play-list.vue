@@ -1,16 +1,21 @@
 <template>
   <div ref="rootRef" class="play-list-wrap">
-    <div class="play-list">
+    <div
+      class="play-list"
+      :class="{
+        'is-series': series === '1',
+      }"
+    >
       <div
         v-for="(item, index) in list"
         :key="index"
-        class="item"
+        class="item van-ellipsis"
         :class="{
           active: showActive && active === item.vid,
         }"
         @click="handleClick(item)"
       >
-        {{ item.num }}
+        {{ item.text }}
         <div v-if="item.mark" class="mark">
           <van-image :src="item.mark" />
         </div>
@@ -26,19 +31,21 @@ import useScroll from '@/components/scroll/use-scroll'
 interface Props {
   active?: string
   showActive?: boolean
+  series?: string
   list: PlayItem[]
 }
 
 interface Emits {
   (event: 'scroll', ...args: unknown[]): void
   (event: 'click', item: PlayItem): void
-  (event: 'update:active', num: string): void
+  (event: 'update:active', text: string): void
 }
 
 const emit = defineEmits<Emits>()
 const props = withDefaults(defineProps<Props>(), {
   active: '',
   showActive: false,
+  series: '0',
 })
 
 const rootRef = ref<HTMLElement | null>(null)
@@ -89,6 +96,7 @@ function handleClick(item: PlayItem) {
     height: 54px;
     line-height: 54px;
     font-weight: bold;
+    padding: 0 12px;
     background: #f6f8fa;
     border-radius: 2px;
     text-align: center;
@@ -103,6 +111,12 @@ function handleClick(item: PlayItem) {
     }
     &.active {
       background: linear-gradient(to top right, #fcf0ea, #fef7f4);
+    }
+  }
+  &.is-series {
+    .item {
+      width: 200px;
+      text-align: left;
     }
   }
 }

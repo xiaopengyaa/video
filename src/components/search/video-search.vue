@@ -35,6 +35,7 @@
 
 <script setup lang="ts">
 import VideoList from '@/components/list/video-list.vue'
+import SearchHistory from './search-history.vue'
 import useSearch from './use-search'
 import useHistory from './use-history'
 import ScrollWrap from '@/components/scroll/scroll-wrap.vue'
@@ -68,9 +69,10 @@ const searchVisible = computed({
   },
 })
 
-const { searchList, addHistory } = useHistory()
+const { searchList } = useHistory()
+
 const { keyword, loading, searchData, onCancel, onSearch, getDefSearch } =
-  useSearch(searchVisible, addHistory)
+  useSearch(searchVisible)
 
 watch(
   () => props.visible,

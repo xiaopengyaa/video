@@ -29,8 +29,8 @@ export default function useContent(cid: Ref<string>) {
     router.replace({
       path: '/detail',
       query: {
+        ...route.query,
         url: item.href,
-        cid: cid.value,
       },
     })
   }
