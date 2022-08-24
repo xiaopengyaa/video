@@ -61,7 +61,7 @@ const series = ref('')
 watchEffect(() => {
   // playUrl.value = `https://m2090.com/?url=${route.query.url}`
   // playUrl.value = `https://okjx.cc/?url=${route.query.url}`
-  // playUrl.value = `https://jx.bozrc.com:4433/player/?url=${route.query.url}`
+  playUrl.value = `https://jx.bozrc.com:4433/player/?url=${route.query.url}`
   cid.value = route.query.cid as string
   series.value = route.query.series as string
 })

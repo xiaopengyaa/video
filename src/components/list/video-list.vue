@@ -121,6 +121,9 @@ function playClick(playItem: PlayItem, item: SearchItem) {
 }
 
 function toDetail(href: string, cid: string, series: string) {
+  if (!href) {
+    return
+  }
   router.push({
     path: '/detail',
     query: {

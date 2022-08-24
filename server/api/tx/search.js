@@ -74,6 +74,10 @@ function getPlaylist($, elem, cid) {
     let vid = ''
 
     // 处理href
+    if (href.includes('javascript')) {
+      href = ''
+    }
+
     const reg = /cover\/(.*)\.html/
     const match = reg.exec(href)
     if (match) {
