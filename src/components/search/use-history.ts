@@ -9,8 +9,14 @@ export default function useHistory() {
   }
 
   function addHistory(keyword: string) {
-    if (!keyword || searchList.value.includes(keyword)) {
+    if (!keyword) {
       return
+    }
+    if (searchList.value.includes(keyword)) {
+      const index = searchList.value.findIndex((value) => {
+        return value === keyword
+      })
+      searchList.value.splice(index, 1)
     }
 
     searchList.value.unshift(keyword)

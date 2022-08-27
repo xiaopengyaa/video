@@ -25,7 +25,11 @@
       <div v-show="keyword" class="search-list">
         <search-skeletom :loading="loading" :num="3">
           <scroll-wrap ref="scrollRef">
-            <video-list :list="searchData.list" class="list" />
+            <video-list
+              :list="searchData.list"
+              :relate-list="searchData.relateList"
+              class="list"
+            />
           </scroll-wrap>
         </search-skeletom>
       </div>

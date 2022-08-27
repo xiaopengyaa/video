@@ -41,6 +41,10 @@ interface Emits {
   (event: 'update:active', text: string): void
 }
 
+defineExpose({
+  scrollToActive,
+})
+
 const emit = defineEmits<Emits>()
 const props = withDefaults(defineProps<Props>(), {
   active: '',

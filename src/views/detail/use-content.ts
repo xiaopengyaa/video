@@ -11,14 +11,24 @@ export default function useContent(cid: Ref<string>) {
   const detailData = ref<DetailRes>(getDefDetail())
   const active = ref('')
   const playlist = ref<PlayItem[]>([])
+  const loading = ref(false)
 
   onMounted(async () => {
     if (!route.query.url) {
       toHome()
     }
-    detailData.value = await getDetail(route.query.url as string)
-    active.value = detailData.value.videoInfo.vid
-    playlist.value = await getPlaylist(cid.value)
+
+    loading.value = true
+    Promise.all([getDetail(route.query.url as string), getPlaylist(cid.value)])
+      .then(([detail, list]) => {
+        detailData.value = detail
+        playlist.value = list
+        active.value = detailData.value.videoInfo.vid
+        loading.value = false
+      })
+      .catch(() => {
+        loading.value = false
+      })
   })
 
   function toHome() {
@@ -39,6 +49,7 @@ export default function useContent(cid: Ref<string>) {
     detailData,
     playlist,
     active,
+    loading,
     toHome,
     handleClick,
   }

@@ -76,17 +76,23 @@
         @click="(playItem: PlayItem) => playClick(playItem, item)"
       />
     </div>
+    <div v-show="relateList.length" class="video-item">
+      <div class="relate-title">相关影视作品</div>
+      <relate-list :list="relateList" @click="relateClick" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import PlayList from './play-list.vue'
-import { PlayItem, SearchItem } from '@/types/search'
+import RelateList from './relate-list.vue'
+import { PlayItem, SearchItem, RelateItem } from '@/types/search'
 import { Toast } from 'vant'
 import 'vant/es/toast/style'
 
 interface Props {
   list: SearchItem[]
+  relateList: RelateItem[]
 }
 interface popoverItem {
   show: boolean
@@ -118,6 +124,14 @@ function btnClick(item: SearchItem) {
 
 function playClick(playItem: PlayItem, item: SearchItem) {
   toDetail(playItem.href, item.cid, item.series)
+}
+
+function relateClick(item: RelateItem) {
+  let href = item.href
+  if (item.playlist.length) {
+    href = item.playlist[0].href
+  }
+  toDetail(href, item.cid, item.series)
 }
 
 function toDetail(href: string, cid: string, series: string) {
@@ -182,6 +196,14 @@ function download() {
     }
   }
 }
+
+.relate-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ec6a38;
+  margin: 2px 0 12px;
+}
+
 .btn-wrap {
   margin: 12px 0;
   .btn {

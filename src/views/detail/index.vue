@@ -17,56 +17,77 @@
         autoplay="true"
         :src="playUrl"
       />
-      <div class="detail__content">
-        <div class="detail__title">
-          <div class="title">{{ detailData.introduction.title }}</div>
-          <div class="info" v-html="detailData.introduction.detail_info" />
-        </div>
-        <div class="detail__play">
-          <div class="update">
-            <div
-              v-show="
-                detailData.introduction.update_notify_desc || playlist.length
-              "
-              class="update__title"
-            >
-              剧集与更新
-            </div>
-            <div class="update__desc">
-              {{ detailData.introduction.update_notify_desc }}
-            </div>
+      <loading-skeleton :loading="loading">
+        <div class="detail__content">
+          <div class="detail__title">
+            <div class="title">{{ detailData.introduction.title }}</div>
+            <div class="info" v-html="detailData.introduction.detail_info" />
           </div>
-          <play-list
-            v-model:active="active"
-            :list="playlist"
-            :series="series"
-            show-active
-            @click="handleClick"
-          />
+          <div class="detail__play">
+            <div class="update">
+              <div
+                v-show="
+                  detailData.introduction.update_notify_desc || playlist.length
+                "
+                class="update__title"
+              >
+                剧集与更新
+              </div>
+              <div class="update__desc">
+                {{ detailData.introduction.update_notify_desc }}
+              </div>
+            </div>
+            <play-list
+              ref="playlistRef"
+              v-model:active="active"
+              :list="playlist"
+              :series="series"
+              show-active
+              @click="handleClick"
+            />
+          </div>
         </div>
-      </div>
+      </loading-skeleton>
     </div>
   </transition>
 </template>
 
 <script setup lang="ts" name="detail">
 import PlayList from '@/components/list/play-list.vue'
+import LoadingSkeleton from '@/components/skeleton/loading-skeleton.vue'
 import useContent from './use-content'
+import { LOADING_DELAY } from '@/utils/constant'
 
 const route = useRoute()
 const playUrl = ref('')
 const cid = ref('')
 const series = ref('')
+const playlistRef = ref<typeof PlayList>()
 
 watchEffect(() => {
   // playUrl.value = `https://m2090.com/?url=${route.query.url}`
-  // playUrl.value = `https://okjx.cc/?url=${route.query.url}`
-  playUrl.value = `https://jx.bozrc.com:4433/player/?url=${route.query.url}`
+  playUrl.value = `https://okjx.cc/?url=${route.query.url}`
+  // playUrl.value = `https://jx.bozrc.com:4433/player/?url=${route.query.url}`
   cid.value = route.query.cid as string
   series.value = route.query.series as string
 })
 
-const { detailData, playlist, active, toHome, handleClick } = useContent(cid)
+const { detailData, playlist, active, loading, toHome, handleClick } =
+  useContent(cid)
+
+const backTop = computed(() => {
+  const urls = ['okjx.cc']
+  const flag = urls.some((url) => {
+    return playUrl.value.includes(url)
+  })
+  return flag ? '50px' : '20px'
+})
+
+watch(loading, () => {
+  setTimeout(() => {
+    playlistRef.value?.scrollToActive()
+  }, LOADING_DELAY + 100)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -78,7 +99,7 @@ const { detailData, playlist, active, toHome, handleClick } = useContent(cid)
   height: 100%;
   &__back {
     position: absolute;
-    top: 20px;
+    top: v-bind(backTop);
     left: 14px;
     z-index: 10;
   }
@@ -89,6 +110,8 @@ const { detailData, playlist, active, toHome, handleClick } = useContent(cid)
   }
   &__content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
     padding: 0 12px;
     overflow: hidden;
   }

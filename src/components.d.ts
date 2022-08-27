@@ -7,7 +7,9 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    LoadingSkeleton: typeof import('./components/skeleton/loading-skeleton.vue')['default']
     PlayList: typeof import('./components/list/play-list.vue')['default']
+    RelateList: typeof import('./components/list/relate-list.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollWrap: typeof import('./components/scroll/scroll-wrap.vue')['default']

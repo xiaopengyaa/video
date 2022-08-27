@@ -35,7 +35,13 @@ service.interceptors.response.use(
   },
   (err) => {
     const data = err.response && err.response.data
-    Toast.fail('请求失败')
+
+    if (err && err.code === 'ECONNABORTED') {
+      Toast('兄弟，\n你这是网络不好呀=。=')
+    } else {
+      Toast.fail('请求失败')
+    }
+
     return Promise.reject(data || err)
   }
 )
