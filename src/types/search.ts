@@ -15,6 +15,7 @@ export interface PlayItem {
 export interface SearchItem {
   cid: string
   image: string
+  imageInfo: string
   mark: string
   title: string
   href: string
@@ -25,18 +26,7 @@ export interface SearchItem {
   btnlist: PlayItem[]
 }
 
-export interface RelateItem {
-  cid: string
-  image: string
-  imageInfo: string
-  mark: string
-  title: string
-  href: string
-  series: string
-  playlist: PlayItem[]
-}
-
 export interface SearchRes {
   list: SearchItem[]
-  relateList: RelateItem[]
+  relateList: SearchItem[]
 }

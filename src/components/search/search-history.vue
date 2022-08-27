@@ -2,7 +2,7 @@
   <div class="search-history">
     <div class="title">
       历史搜索
-      <van-icon name="delete-o" size="20" @click="delHistory" />
+      <van-icon name="delete-o" :size="px2vw(20)" @click="delHistory" />
     </div>
     <div class="list">
       <div
@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import useHistory from './use-history'
+import { px2vw } from '@/utils/common'
 
 interface Emits {
   (e: 'click', value: string): void

@@ -29,3 +29,27 @@ body {
   opacity: 0;
   transform: translateY(30%);
 }
+
+.image-info-wrap {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 106px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 2px;
+  border-radius: 0 0 4px 4px;
+  background: linear-gradient(
+    0deg,
+    rgba(45, 45, 45, 0.6),
+    rgba(45, 45, 45, 0.001) 90%,
+    rgba(45, 45, 45, 0)
+  );
+  color: #fff;
+}
+
+.image-info {
+  font-size: 12px;
+  transform: scale(0.9);
+  margin-top: -2px;
+}

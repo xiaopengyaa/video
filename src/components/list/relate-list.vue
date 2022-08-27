@@ -7,10 +7,13 @@
         class="item"
         @click="handleClick(item)"
       >
-        <van-image width="90" height="128" radius="4" :src="item.image" />
+        <van-image :width="px2vw(90)" radius="4" :src="item.image" />
         <div class="title van-multi-ellipsis--l2" v-html="item.title" />
         <div v-if="item.mark" class="mark">
-          <van-image :src="item.mark" />
+          <van-image :width="px2vw(37)" :src="item.mark" />
+        </div>
+        <div class="image-info-wrap">
+          <div class="image-info van-ellipsis">{{ item.imageInfo }}</div>
         </div>
       </div>
     </div>
@@ -18,16 +21,17 @@
 </template>
 
 <script setup lang="ts">
-import { RelateItem } from '@/types/search'
+import { SearchItem } from '@/types/search'
 import useScroll from '@/components/scroll/use-scroll'
+import { px2vw } from '@/utils/common'
 
 interface Props {
-  list: RelateItem[]
+  list: SearchItem[]
 }
 
 interface Emits {
   (event: 'scroll', ...args: unknown[]): void
-  (event: 'click', item: RelateItem): void
+  (event: 'click', item: SearchItem): void
 }
 
 const emit = defineEmits<Emits>()
@@ -44,7 +48,7 @@ const scroll = useScroll(
   emit
 )
 
-function handleClick(item: RelateItem) {
+function handleClick(item: SearchItem) {
   emit('click', item)
 }
 </script>
@@ -68,7 +72,7 @@ function handleClick(item: RelateItem) {
       margin-right: 8px;
     }
     .title {
-      height: 34px;
+      height: 32px;
       font-size: 14px;
       margin-top: 5px;
       .main {

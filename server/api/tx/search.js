@@ -22,7 +22,7 @@ function getRelateList($) {
   let list = []
   let match = $('.result_series_new')
     .attr('r-props')
-    .match(/totalData:\s*'(.*)'/)
+    ?.match(/totalData:\s*'(.*)'/)
   let data
   if (match) {
     data = JSON.parse(decodeURIComponent(match[1]))
@@ -70,8 +70,11 @@ function getRelateList($) {
           .replaceAll('\u0005', '<span class="main">')
           .replaceAll('\u0006', '</span>'),
         href,
+        sub: [],
+        desc: '',
         series,
         playlist,
+        btnlist: [],
       }
     })
   }
@@ -84,6 +87,7 @@ function getSearchList($) {
   $('.search_container .mix_warp .result_item_v').each((index, elem) => {
     const cid = $(elem).attr('data-id')
     const image = $(elem).find('._infos .figure_pic').attr('src')
+    const imageInfo = $(elem).find('._infos .figure_info').text() || ''
     const mark = $(elem).find('._infos .mark_v img').attr('src')
     const href = $(elem).find('._infos .result_title a').attr('href')
     const sub = $(elem).find('._infos .result_title .sub').text()
@@ -107,6 +111,7 @@ function getSearchList($) {
     list.push({
       cid,
       image,
+      imageInfo,
       mark,
       title,
       href,

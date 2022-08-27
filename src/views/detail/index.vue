@@ -4,7 +4,7 @@
       <van-icon
         class="detail__back"
         color="#fff"
-        size="20"
+        :size="px2vw(20)"
         name="arrow-left"
         @click="toHome"
       />
@@ -57,6 +57,7 @@ import PlayList from '@/components/list/play-list.vue'
 import LoadingSkeleton from '@/components/skeleton/loading-skeleton.vue'
 import useContent from './use-content'
 import { LOADING_DELAY } from '@/utils/constant'
+import { px2vw } from '@/utils/common'
 
 const route = useRoute()
 const playUrl = ref('')

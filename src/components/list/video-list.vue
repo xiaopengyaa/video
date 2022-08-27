@@ -3,9 +3,12 @@
     <div v-for="(item, index) in list" :key="index" class="video-item">
       <div class="main-content" @click="btnClick(item)">
         <div class="main-content__left">
-          <van-image width="90" height="128" radius="4" :src="item.image" />
+          <van-image :width="px2vw(90)" radius="4" :src="item.image" />
           <div v-if="item.mark" class="mark">
-            <van-image :src="item.mark" />
+            <van-image :width="px2vw(37)" :src="item.mark" />
+          </div>
+          <div class="image-info-wrap">
+            <div class="image-info van-ellipsis">{{ item.imageInfo }}</div>
           </div>
         </div>
         <div class="main-content__right">
@@ -78,7 +81,7 @@
     </div>
     <div v-show="relateList.length" class="video-item">
       <div class="relate-title">相关影视作品</div>
-      <relate-list :list="relateList" @click="relateClick" />
+      <relate-list :list="relateList" @click="btnClick" />
     </div>
   </div>
 </template>
@@ -86,22 +89,28 @@
 <script setup lang="ts">
 import PlayList from './play-list.vue'
 import RelateList from './relate-list.vue'
-import { PlayItem, SearchItem, RelateItem } from '@/types/search'
+import { PlayItem, SearchItem } from '@/types/search'
 import { Toast } from 'vant'
+import { px2vw } from '@/utils/common'
 import 'vant/es/toast/style'
 
 interface Props {
   list: SearchItem[]
-  relateList: RelateItem[]
+  relateList: SearchItem[]
 }
-interface popoverItem {
+interface PopoverItem {
   show: boolean
   actions: PlayItem[]
+}
+interface DetailParam {
+  href: string
+  cid: string
+  series: string
 }
 
 const router = useRouter()
 const props = defineProps<Props>()
-const popoverList = ref<popoverItem[]>([])
+const popoverList = ref<PopoverItem[]>([])
 
 watchEffect(() => {
   popoverList.value = props.list.map((item) => {
@@ -119,31 +128,38 @@ function btnClick(item: SearchItem) {
   } else if (item.btnlist.length) {
     href = item.btnlist[0].href
   }
-  toDetail(href, item.cid, item.series)
+
+  toDetail({
+    href,
+    cid: item.cid,
+    series: item.series,
+  })
 }
 
 function playClick(playItem: PlayItem, item: SearchItem) {
-  toDetail(playItem.href, item.cid, item.series)
+  toDetail({
+    href: playItem.href,
+    cid: item.cid,
+    series: item.series,
+  })
 }
 
-function relateClick(item: RelateItem) {
-  let href = item.href
-  if (item.playlist.length) {
-    href = item.playlist[0].href
-  }
-  toDetail(href, item.cid, item.series)
-}
-
-function toDetail(href: string, cid: string, series: string) {
+function toDetail({ href, cid, series }: DetailParam) {
   if (!href) {
     return
+  }
+  // 跳转其他网站的url作特殊处理
+  if (href.includes('search_redirect.html')) {
+    const params = href.split('?')[1]
+    const searchParams = new URLSearchParams(`?${params}`)
+    href = searchParams.get('url') || ''
   }
   router.push({
     path: '/detail',
     query: {
       url: href,
-      cid: cid,
-      series: series,
+      cid,
+      series,
     },
   })
 }
@@ -156,10 +172,11 @@ function download() {
 <style lang="scss" scoped>
 .video-item {
   padding: 12px;
-  &:not(:last-child) {
-    border-bottom: 8px solid #f6f8fa;
+  &:not(:first-child) {
+    border-top: 8px solid #f6f8fa;
   }
 }
+
 .main-content {
   display: flex;
   align-items: center;

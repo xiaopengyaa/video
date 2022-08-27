@@ -17,7 +17,7 @@
       >
         {{ item.text }}
         <div v-if="item.mark" class="mark">
-          <van-image :src="item.mark" />
+          <van-image :height="px2vw(14)" :src="item.mark" />
         </div>
       </div>
     </div>
@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import { PlayItem } from '@/types/search'
 import useScroll from '@/components/scroll/use-scroll'
+import { px2vw } from '@/utils/common'
 
 interface Props {
   active?: string
