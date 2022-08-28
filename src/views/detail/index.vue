@@ -18,21 +18,14 @@
         :src="playUrl"
       />
       <loading-skeleton :loading="loading">
-        <div class="detail__content">
+        <div v-show="playlist.length" class="detail__content">
           <div class="detail__title">
             <div class="title">{{ detailData.introduction.title }}</div>
             <div class="info" v-html="detailData.introduction.detail_info" />
           </div>
           <div class="detail__play">
             <div class="update">
-              <div
-                v-show="
-                  detailData.introduction.update_notify_desc || playlist.length
-                "
-                class="update__title"
-              >
-                剧集与更新
-              </div>
+              <div class="update__title">剧集与更新</div>
               <div class="update__desc">
                 {{ detailData.introduction.update_notify_desc }}
               </div>
@@ -47,6 +40,13 @@
             />
           </div>
         </div>
+        <van-empty
+          v-show="isEmpty"
+          class="detail__empty"
+          :image="getImageUrl('empty-image.png')"
+          image-size="25vw"
+          description="知我者，谓我心忧。"
+        />
       </loading-skeleton>
     </div>
   </transition>
@@ -57,7 +57,7 @@ import PlayList from '@/components/list/play-list.vue'
 import LoadingSkeleton from '@/components/skeleton/loading-skeleton.vue'
 import useContent from './use-content'
 import { LOADING_DELAY } from '@/utils/constant'
-import { px2vw } from '@/utils/common'
+import { px2vw, getImageUrl } from '@/utils/common'
 
 const route = useRoute()
 const playUrl = ref('')
@@ -67,13 +67,13 @@ const playlistRef = ref<typeof PlayList>()
 
 watchEffect(() => {
   // playUrl.value = `https://m2090.com/?url=${route.query.url}`
-  playUrl.value = `https://okjx.cc/?url=${route.query.url}`
+  // playUrl.value = `https://okjx.cc/?url=${route.query.url}`
   // playUrl.value = `https://jx.bozrc.com:4433/player/?url=${route.query.url}`
   cid.value = route.query.cid as string
   series.value = route.query.series as string
 })
 
-const { detailData, playlist, active, loading, toHome, handleClick } =
+const { detailData, playlist, active, loading, isEmpty, toHome, handleClick } =
   useContent(cid)
 
 const backTop = computed(() => {
@@ -108,6 +108,10 @@ watch(loading, () => {
     width: 100vw;
     height: 56.25vw;
     background: #000;
+  }
+  &__empty {
+    flex: 1;
+    overflow: hidden;
   }
   &__content {
     flex: 1;

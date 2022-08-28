@@ -6,14 +6,20 @@ const homeApi = {
     const html = await api.get(url)
     const reg = /window\.__pinia=(.*)<\/script>/
     const match = reg.exec(html)
+    let introduction = {}
+    let topList = []
+    let videoInfo = {}
     if (match) {
       const data = eval('(' + match[1] + ')')
-      return getResult({
-        introduction: data.introduction.introData.list[0].item_params,
-        topList: data.topList.data,
-        videoInfo: data.global.videoInfo,
-      })
+      introduction = data.introduction.introData.list[0].item_params
+      topList = data.topList.data
+      videoInfo = data.global.videoInfo
     }
+    return getResult({
+      introduction,
+      topList,
+      videoInfo,
+    })
   },
   async getPlaylist(cid, page_num = 0) {
     const list = await getList(cid, page_num)
@@ -66,11 +72,16 @@ async function getList(cid, page_num) {
       },
     }
   )
-  const params = res.data.module_list_datas[0].module_datas[0].module_params
-  let list =
-    res.data.module_list_datas[0].module_datas[0].item_data_lists.item_datas
-  if (params.has_next === 'true') {
-    list = list.concat(await getList(cid, ++page_num))
+
+  let list = []
+
+  if (res.data.module_list_datas.length) {
+    const params = res.data.module_list_datas[0].module_datas[0].module_params
+    list =
+      res.data.module_list_datas[0].module_datas[0].item_data_lists.item_datas
+    if (params.has_next === 'true') {
+      list = list.concat(await getList(cid, ++page_num))
+    }
   }
   return list
 }

@@ -7,7 +7,12 @@
         class="item"
         @click="handleClick(item)"
       >
-        <van-image :width="px2vw(90)" radius="4" :src="item.image" />
+        <van-image
+          :width="px2vw(90)"
+          :height="px2vw(126)"
+          radius="4"
+          :src="item.image"
+        />
         <div class="title van-multi-ellipsis--l2" v-html="item.title" />
         <div v-if="item.mark" class="mark">
           <van-image :width="px2vw(37)" :src="item.mark" />

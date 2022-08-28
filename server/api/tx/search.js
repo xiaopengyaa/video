@@ -28,14 +28,14 @@ function getRelateList($) {
     data = JSON.parse(decodeURIComponent(match[1]))
     list = data.itemList.slice(0, 20).map((item) => {
       const video = item.videoInfo
-      const href = video.url
       const playlist = []
-      const obj = getIdByUrl(href)
+      const obj = processUrl(video.url)
       let series = '0'
 
       if (video.firstBlockSites[0]?.episodeInfoList) {
         video.firstBlockSites[0]?.episodeInfoList.forEach((cItem, cIndex) => {
           const text = cItem.title
+          const cObj = processUrl(cItem.url)
           let mark = ''
 
           if (cIndex === 0 && isNaN(Number(text))) {
@@ -44,7 +44,7 @@ function getRelateList($) {
 
           if (cItem.markLabel) {
             const label = JSON.parse(cItem.markLabel)
-            if (label.tag_2.param) {
+            if (label.tag_2?.param) {
               const cMatch = label.tag_2.param.match(/1X=(.*);/)
               if (cMatch) {
                 mark = cMatch[1]
@@ -54,8 +54,8 @@ function getRelateList($) {
 
           playlist.push({
             cid: obj.cid,
-            vid: cItem.id,
-            href: cItem.url,
+            vid: cObj.vid,
+            href: cObj.href,
             text,
             mark,
           })
@@ -64,12 +64,12 @@ function getRelateList($) {
       return {
         cid: obj.cid,
         image: video.imgUrl,
-        imageInfo: video.imgTag?.tag_3.text || '',
-        mark: video.imgTag?.tag_2.param['1X'] || '',
+        imageInfo: video.imgTag?.tag_3?.text || '',
+        mark: video.imgTag?.tag_2?.param['1X'] || '',
         title: video.title
           .replaceAll('\u0005', '<span class="main">')
           .replaceAll('\u0006', '</span>'),
-        href,
+        href: obj.href,
         sub: [],
         desc: '',
         series,
@@ -105,6 +105,7 @@ function getSearchList($) {
       desc = $desc.prop('firstChild').nodeValue
     }
 
+    const obj = processUrl(href)
     const { series, playlist } = getPlaylist($, elem, cid)
     const btnlist = getBtnlist($, elem, cid)
 
@@ -114,7 +115,7 @@ function getSearchList($) {
       imageInfo,
       mark,
       title,
-      href,
+      href: obj.href,
       sub: [type].concat(sub.replace(/\(|\)/g, '').split('/')),
       desc,
       series,
@@ -147,12 +148,12 @@ function getPlaylist($, elem, cid) {
     if (href.includes('javascript')) {
       href = ''
     }
-    const obj = getIdByUrl(href)
+    const obj = processUrl(href)
 
     playlist.push({
       cid,
       vid: obj.vid,
-      href,
+      href: obj.href,
       text,
       mark,
     })
@@ -172,12 +173,12 @@ function getBtnlist($, elem, cid) {
     .each((cIndex, cElem) => {
       const text = $(cElem).find('.icon_text').text()
       const href = $(cElem).attr('href')
-      const obj = getIdByUrl(href)
+      const obj = processUrl(href)
 
       btnlist.push({
         cid,
         vid: obj.vid,
-        href,
+        href: obj.href,
         text,
         mark: '',
       })
@@ -186,17 +187,24 @@ function getBtnlist($, elem, cid) {
   return btnlist
 }
 
-function getIdByUrl(url) {
+function processUrl(url) {
   const reg = /cover\/(.*)\.html/
   const match = reg.exec(url)
+  let href = url
   let cid = ''
   let vid = ''
-  if (match) {
+  if (url.includes('search_redirect.html')) {
+    const params = href.split('?')[1]
+    const searchParams = new URLSearchParams(`?${params}`)
+    href = searchParams.get('url') || ''
+    cid = searchParams.get('cid') || ''
+  } else if (match) {
     const arr = match[1].split('/')
     cid = arr[0]
     vid = arr[1] || ''
   }
   return {
+    href,
     cid,
     vid,
   }

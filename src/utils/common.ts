@@ -13,3 +13,7 @@ export function round(num: number, decimal: number) {
   const p2 = Math.pow(10, decimal)
   return Math.round((num * p1) / 10) / p2
 }
+
+export function getImageUrl(name: string) {
+  return new URL(`../assets/images/${name}`, import.meta.url).href
+}

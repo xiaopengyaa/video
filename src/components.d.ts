@@ -17,6 +17,7 @@ declare module '@vue/runtime-core' {
     SearchSkeleton: typeof import('./components/search/search-skeleton.vue')['default']
     VanButton: typeof import('vant/es')['Button']
     VanCol: typeof import('vant/es')['Col']
+    VanEmpty: typeof import('vant/es')['Empty']
     VanIcon: typeof import('vant/es')['Icon']
     VanImage: typeof import('vant/es')['Image']
     VanPopover: typeof import('vant/es')['Popover']

@@ -3,7 +3,12 @@
     <div v-for="(item, index) in list" :key="index" class="video-item">
       <div class="main-content" @click="btnClick(item)">
         <div class="main-content__left">
-          <van-image :width="px2vw(90)" radius="4" :src="item.image" />
+          <van-image
+            :width="px2vw(90)"
+            :height="px2vw(126)"
+            radius="4"
+            :src="item.image"
+          />
           <div v-if="item.mark" class="mark">
             <van-image :width="px2vw(37)" :src="item.mark" />
           </div>
@@ -147,12 +152,6 @@ function playClick(playItem: PlayItem, item: SearchItem) {
 function toDetail({ href, cid, series }: DetailParam) {
   if (!href) {
     return
-  }
-  // 跳转其他网站的url作特殊处理
-  if (href.includes('search_redirect.html')) {
-    const params = href.split('?')[1]
-    const searchParams = new URLSearchParams(`?${params}`)
-    href = searchParams.get('url') || ''
   }
   router.push({
     path: '/detail',

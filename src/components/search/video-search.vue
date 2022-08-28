@@ -24,13 +24,20 @@
       </transition>
       <div v-show="keyword" class="search-list">
         <search-skeletom :loading="loading" :num="3">
-          <scroll-wrap ref="scrollRef">
+          <scroll-wrap v-show="!isEmpty" ref="scrollRef">
             <video-list
               :list="searchData.list"
               :relate-list="searchData.relateList"
               class="list"
             />
           </scroll-wrap>
+          <van-empty
+            v-show="isEmpty"
+            class="detail__empty"
+            :image="getImageUrl('empty-image.png')"
+            image-size="25vw"
+            description="知我者，谓我心忧。"
+          />
         </search-skeletom>
       </div>
     </div>
@@ -46,6 +53,7 @@ import ScrollWrap from '@/components/scroll/scroll-wrap.vue'
 import SearchSkeletom from './search-skeleton.vue'
 import type { SearchInstance } from 'vant'
 import { useRect } from '@vant/use'
+import { getImageUrl } from '@/utils/common'
 
 interface Props {
   visible: boolean
@@ -75,8 +83,15 @@ const searchVisible = computed({
 
 const { searchList } = useHistory()
 
-const { keyword, loading, searchData, onCancel, onSearch, getDefSearch } =
-  useSearch(searchVisible)
+const {
+  keyword,
+  loading,
+  isEmpty,
+  searchData,
+  onCancel,
+  onSearch,
+  getDefSearch,
+} = useSearch(searchVisible)
 
 watch(
   () => props.visible,

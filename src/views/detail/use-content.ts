@@ -12,12 +12,14 @@ export default function useContent(cid: Ref<string>) {
   const active = ref('')
   const playlist = ref<PlayItem[]>([])
   const loading = ref(false)
+  const isEmpty = ref(false)
 
   onMounted(async () => {
     if (!route.query.url) {
       toHome()
     }
 
+    isEmpty.value = false
     loading.value = true
     Promise.all([getDetail(route.query.url as string), getPlaylist(cid.value)])
       .then(([detail, list]) => {
@@ -25,9 +27,14 @@ export default function useContent(cid: Ref<string>) {
         playlist.value = list
         active.value = detailData.value.videoInfo.vid
         loading.value = false
+
+        if (list.length === 0) {
+          isEmpty.value = true
+        }
       })
       .catch(() => {
         loading.value = false
+        isEmpty.value = true
       })
   })
 
@@ -50,6 +57,7 @@ export default function useContent(cid: Ref<string>) {
     playlist,
     active,
     loading,
+    isEmpty,
     toHome,
     handleClick,
   }
