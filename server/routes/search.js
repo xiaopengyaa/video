@@ -5,7 +5,7 @@ const apiMap = {
   tx: txApi,
 }
 
-router.prefix('/video/search')
+router.prefix('/video/api/search')
 
 router.get('/', async (ctx) => {
   const { type = 'tx', keyword } = ctx.query

@@ -60,6 +60,7 @@ export default defineConfig(({ mode, command }) => {
       proxy: {
         '/video': {
           target: 'http://localhost:3111',
+          // target: 'http://182.254.140.237:3111',
           changeOrigin: true,
         },
       },
