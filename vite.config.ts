@@ -59,7 +59,7 @@ export default defineConfig(({ mode, command }) => {
       host: '0.0.0.0',
       proxy: {
         '/video': {
-          target: 'http://localhost:3000',
+          target: 'http://localhost:3111',
           changeOrigin: true,
         },
       },
