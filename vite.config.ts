@@ -15,12 +15,20 @@ export default defineConfig(({ mode, command }) => {
 
   const PUBLIC_PATH = getEnv('VITE_APP_PUBLIC_PATH')
   const SHOW_VCONSOLE = getEnv('VITE_APP_SHOW_VCONSOLE')
+  const CDN_URL = getEnv('VITE_APP_CDN_URL')
 
   return {
     base: PUBLIC_PATH,
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src'),
+      },
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `$cdn: '${CDN_URL}';`,
+        },
       },
     },
     plugins: [

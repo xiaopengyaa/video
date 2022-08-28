@@ -1,19 +1,3 @@
-# vue-video
+# vue3 + vite3 + ts
 
-## 依赖安装
-
-```
-pnpm install
-```
-
-### 项目启动
-
-```
-pnpm dev
-```
-
-### 项目打包
-
-```
-pnpm build
-```
+解析vip视频

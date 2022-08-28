@@ -12,13 +12,12 @@ cd dist
 # 如果你要部署到自定义域名
 # echo 'www.example.com' > CNAME
 
-# 检查git是否已初始化
-if git rev-parse --git-dir > /dev/null 2>&1; then
-  # git repo!
-  echo 'git initialized'
+git init
+
+if git rev-parse --verify main; then
+  # A branch named 'main' already exists
+  git checkout main
 else
-  # NOT a git repo!
-  git init
   git checkout -b main
 fi
 

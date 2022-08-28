@@ -52,7 +52,7 @@ function showSearch() {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('@/assets/images/starry.gif');
+  background: url($cdn + '/images/starry.gif');
   background-size: cover;
   z-index: -10;
 }
