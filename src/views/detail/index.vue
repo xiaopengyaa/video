@@ -18,10 +18,14 @@
         :src="playUrl"
       />
       <loading-skeleton :loading="loading">
-        <div v-show="playlist.length" class="detail__content">
-          <div class="detail__title">
+        <div v-show="playlist.length" ref="detailRef" class="detail__content">
+          <div class="detail__title" @click="showIntro = true">
             <div class="title">{{ detailData.introduction.title }}</div>
-            <div class="info" v-html="detailData.introduction.detail_info" />
+            <div class="info">
+              <span v-html="detailData.introduction.detail_info" />
+              <span>&nbsp;· 简介</span>
+              <van-icon class="arrow" name="arrow" :size="px2vw(12)" />
+            </div>
           </div>
           <div class="detail__play">
             <div class="update">
@@ -48,6 +52,11 @@
           description="知我者，谓我心忧。"
         />
       </loading-skeleton>
+      <show-intro
+        v-model:visible="showIntro"
+        :height="detailHeight"
+        :data="detailData.introduction"
+      />
     </div>
   </transition>
 </template>
@@ -55,15 +64,20 @@
 <script setup lang="ts" name="detail">
 import PlayList from '@/components/list/play-list.vue'
 import LoadingSkeleton from '@/components/skeleton/loading-skeleton.vue'
+import ShowIntro from './show-intro.vue'
 import useContent from './use-content'
 import { LOADING_DELAY } from '@/utils/constant'
 import { px2vw, getImageUrl } from '@/utils/common'
+import { useRect } from '@vant/use'
 
 const route = useRoute()
 const playUrl = ref('')
 const cid = ref('')
 const series = ref('')
 const playlistRef = ref<typeof PlayList>()
+const showIntro = ref(false)
+const detailRef = ref<HTMLElement>()
+const detailHeight = ref('')
 
 watchEffect(() => {
   // playUrl.value = `https://m2090.com/?url=${route.query.url}`
@@ -86,6 +100,8 @@ const backTop = computed(() => {
 
 watch(loading, () => {
   setTimeout(() => {
+    const { height } = useRect(detailRef)
+    detailHeight.value = height + 'px'
     playlistRef.value?.scrollToActive()
   }, LOADING_DELAY + 100)
 })
@@ -127,8 +143,13 @@ watch(loading, () => {
       font-weight: bold;
     }
     .info {
+      display: flex;
+      align-items: center;
       color: #848492;
       margin: 8px 0;
+      .arrow {
+        margin-top: 2px;
+      }
     }
   }
   &__play {

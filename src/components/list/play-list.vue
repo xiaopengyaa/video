@@ -115,6 +115,7 @@ function handleClick(item: PlayItem) {
       display: flex;
     }
     &.active {
+      color: #ec6a38;
       background: linear-gradient(to top right, #fcf0ea, #fef7f4);
     }
   }
