@@ -28,8 +28,16 @@
             </div>
           </div>
           <div class="detail__play">
-            <div class="update">
-              <div class="update__title">剧集与更新</div>
+            <div class="update" @click="showPlaylist = true">
+              <div class="update__title">
+                剧集与更新
+                <van-icon
+                  class="arrow"
+                  name="arrow"
+                  color="#848492"
+                  :size="px2vw(16)"
+                />
+              </div>
               <div class="update__desc">
                 {{ detailData.introduction.update_notify_desc }}
               </div>
@@ -52,10 +60,17 @@
           description="知我者，谓我心忧。"
         />
       </loading-skeleton>
-      <show-intro
+      <intro-dialog
         v-model:visible="showIntro"
         :height="detailHeight"
         :data="detailData.introduction"
+      />
+      <playlist-dialog
+        v-model:visible="showPlaylist"
+        v-model:active="active"
+        :list="playlist"
+        :height="detailHeight"
+        :desc="detailData.introduction.update_notify_desc"
       />
     </div>
   </transition>
@@ -64,7 +79,8 @@
 <script setup lang="ts" name="detail">
 import PlayList from '@/components/list/play-list.vue'
 import LoadingSkeleton from '@/components/skeleton/loading-skeleton.vue'
-import ShowIntro from './show-intro.vue'
+import IntroDialog from './intro-dialog.vue'
+import PlaylistDialog from './playlist-dialog.vue'
 import useContent from './use-content'
 import { LOADING_DELAY } from '@/utils/constant'
 import { px2vw, getImageUrl } from '@/utils/common'
@@ -76,6 +92,7 @@ const cid = ref('')
 const series = ref('')
 const playlistRef = ref<typeof PlayList>()
 const showIntro = ref(false)
+const showPlaylist = ref(false)
 const detailRef = ref<HTMLElement>()
 const detailHeight = ref('')
 
@@ -156,6 +173,9 @@ watch(loading, () => {
     margin-top: 50px;
     .update {
       &__title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         font-size: 16px;
         font-weight: bold;
       }

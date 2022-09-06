@@ -6,6 +6,9 @@ body,
 
 html {
   box-sizing: border-box;
+  &:root {
+    --van-animation-duration-base: 0.2s;
+  }
 }
 
 body {
@@ -17,6 +20,10 @@ body {
 *::before,
 *::after {
   box-sizing: inherit;
+}
+
+.overflow-hidden {
+  overflow: hidden !important;
 }
 
 .slide-fade-enter-active,

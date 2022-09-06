@@ -1,5 +1,11 @@
 <template>
-  <div ref="rootRef" class="play-list-wrap">
+  <div
+    ref="rootRef"
+    class="play-list-wrap"
+    :class="{
+      'play-list-wrap--vertical': direction === 'vertical',
+    }"
+  >
     <div
       class="play-list"
       :class="{
@@ -20,6 +26,7 @@
           <van-image :height="px2vw(14)" :src="item.mark" />
         </div>
       </div>
+      <div v-show="isVertical" class="item van-ellipsis" />
     </div>
   </div>
 </template>
@@ -33,6 +40,7 @@ interface Props {
   active?: string
   showActive?: boolean
   series?: string
+  direction?: 'vertical' | 'horizontal'
   list: PlayItem[]
 }
 
@@ -44,6 +52,7 @@ interface Emits {
 
 defineExpose({
   scrollToActive,
+  refreshScroll,
 })
 
 const emit = defineEmits<Emits>()
@@ -51,15 +60,18 @@ const props = withDefaults(defineProps<Props>(), {
   active: '',
   showActive: false,
   series: '0',
+  direction: 'horizontal',
 })
 
 const rootRef = ref<HTMLElement | null>(null)
+const isVertical = computed(() => props.direction === 'vertical')
+
 const scroll = useScroll(
   rootRef,
   {
     click: true,
-    scrollX: true,
-    scrollY: false,
+    scrollX: !isVertical.value,
+    scrollY: isVertical.value,
   },
   emit
 )
@@ -77,6 +89,10 @@ function scrollToActive() {
   }
 }
 
+function refreshScroll() {
+  scroll.value?.refresh()
+}
+
 function handleClick(item: PlayItem) {
   emit('click', item)
   if (props.showActive) {
@@ -89,40 +105,53 @@ function handleClick(item: PlayItem) {
 .play-list-wrap {
   width: 100%;
   overflow: hidden;
-}
-.play-list {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  .item {
-    position: relative;
-    min-width: 54px;
-    height: 54px;
-    line-height: 54px;
-    font-weight: bold;
-    padding: 0 12px;
-    background: #f6f8fa;
-    border-radius: 2px;
-    text-align: center;
-    &:not(:last-child) {
-      margin-right: 12px;
+  .play-list {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    .item {
+      position: relative;
+      min-width: 54px;
+      height: 54px;
+      line-height: 54px;
+      font-weight: bold;
+      padding: 0 12px;
+      background: #f6f8fa;
+      border-radius: 2px;
+      text-align: center;
+      &:not(:last-child) {
+        margin-right: 12px;
+      }
+      .mark {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+      }
+      &.active {
+        color: #ec6a38;
+        background: linear-gradient(to top right, #fcf0ea, #fef7f4);
+      }
     }
-    .mark {
-      position: absolute;
-      top: 0;
-      right: 0;
-      display: flex;
-    }
-    &.active {
-      color: #ec6a38;
-      background: linear-gradient(to top right, #fcf0ea, #fef7f4);
+    &.is-series {
+      .item {
+        width: 200px;
+        text-align: left;
+      }
     }
   }
-  &.is-series {
-    .item {
-      width: 200px;
-      text-align: left;
+  &--vertical {
+    height: 100%;
+    .play-list {
+      flex-wrap: wrap;
+      justify-content: space-between;
+      .item {
+        margin-bottom: 20px;
+        &:not(:last-child) {
+          margin-right: 6px;
+        }
+      }
     }
   }
 }

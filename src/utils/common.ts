@@ -17,3 +17,11 @@ export function round(num: number, decimal: number) {
 export function getImageUrl(name: string) {
   return new URL(`../assets/images/${name}`, import.meta.url).href
 }
+
+export function stopBodyScroll(isFixed: boolean) {
+  if (isFixed) {
+    document.body.classList.add('overflow-hidden')
+  } else {
+    document.body.classList.remove('overflow-hidden')
+  }
+}

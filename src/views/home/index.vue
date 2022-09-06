@@ -17,15 +17,15 @@
 
 <script setup lang="ts" name="home">
 import VideoSearch from '@/components/search/video-search.vue'
-import { getImageUrl } from '@/utils/common'
+// import { getImageUrl } from '@/utils/common'
 
 const visible = ref(false)
-const bgGif = getImageUrl('starry.gif')
-const bgJpg = getImageUrl('starry-pre.jpg')
-const { isLoading } = useImage({ src: bgGif })
-const bgImg = computed(() => {
-  return isLoading.value ? `url(${bgJpg})` : `url(${bgGif})`
-})
+// const bgGif = getImageUrl('starry.gif')
+// const bgJpg = getImageUrl('starry-pre.jpg')
+// const { isLoading } = useImage({ src: bgGif })
+// const bgImg = computed(() => {
+//   return isLoading.value ? `url(${bgJpg})` : `url(${bgGif})`
+// })
 
 function showSearch() {
   visible.value = true
@@ -59,18 +59,18 @@ function showSearch() {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('@/assets/images/starry-pre.jpg');
+  background: url('@/assets/images/bg1.jpg');
   background-size: cover;
   z-index: -10;
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: v-bind(bgImg);
-    background-size: cover;
-  }
+  // &::after {
+  //   content: '';
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: 100%;
+  //   background-image: v-bind(bgImg);
+  //   background-size: cover;
+  // }
 }
 </style>
