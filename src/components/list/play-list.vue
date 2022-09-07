@@ -3,10 +3,11 @@
     ref="rootRef"
     class="play-list-wrap"
     :class="{
-      'play-list-wrap--vertical': direction === 'vertical',
+      'play-list-wrap--vertical': isVertical,
     }"
   >
     <div
+      ref="playlistRef"
       class="play-list"
       :class="{
         'is-series': series === '1',
@@ -22,11 +23,21 @@
         @click="handleClick(item)"
       >
         {{ item.text }}
-        <div v-if="item.mark" class="mark">
-          <van-image :height="px2vw(14)" :src="item.mark" />
-        </div>
+        <div
+          v-if="item.mark"
+          :style="{
+            'background-image': `url(${item.mark})`,
+          }"
+          class="mark"
+        />
       </div>
-      <div v-show="isVertical" class="item van-ellipsis" />
+      <template v-if="isVertical">
+        <div
+          v-for="num in emptyItemLen"
+          :key="num"
+          class="item van-ellipsis item--empty"
+        />
+      </template>
     </div>
   </div>
 </template>
@@ -34,7 +45,6 @@
 <script setup lang="ts">
 import { PlayItem } from '@/types/search'
 import useScroll from '@/components/scroll/use-scroll'
-import { px2vw } from '@/utils/common'
 
 interface Props {
   active?: string
@@ -63,8 +73,13 @@ const props = withDefaults(defineProps<Props>(), {
   direction: 'horizontal',
 })
 
+const ITEM_ROW_LEN = 6
 const rootRef = ref<HTMLElement | null>(null)
+const playlistRef = ref<HTMLElement | null>(null)
 const isVertical = computed(() => props.direction === 'vertical')
+const emptyItemLen = computed(() => {
+  return ITEM_ROW_LEN - (props.list.length % ITEM_ROW_LEN)
+})
 
 const scroll = useScroll(
   rootRef,
@@ -127,7 +142,11 @@ function handleClick(item: PlayItem) {
         position: absolute;
         top: 0;
         right: 0;
-        display: flex;
+        width: 100%;
+        height: 14px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: right;
       }
       &.active {
         color: #ec6a38;
@@ -150,6 +169,9 @@ function handleClick(item: PlayItem) {
         margin-bottom: 20px;
         &:not(:last-child) {
           margin-right: 6px;
+        }
+        &--empty {
+          background: transparent;
         }
       }
     }

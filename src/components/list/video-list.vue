@@ -94,6 +94,7 @@
 <script setup lang="ts">
 import PlayList from './play-list.vue'
 import RelateList from './relate-list.vue'
+import useListClick from './use-list-click'
 import { PlayItem, SearchItem } from '@/types/search'
 import { Toast } from 'vant'
 import { px2vw } from '@/utils/common'
@@ -107,15 +108,11 @@ interface PopoverItem {
   show: boolean
   actions: PlayItem[]
 }
-interface DetailParam {
-  href: string
-  cid: string
-  series: string
-}
 
-const router = useRouter()
 const props = defineProps<Props>()
 const popoverList = ref<PopoverItem[]>([])
+
+const { btnClick, playClick } = useListClick()
 
 watchEffect(() => {
   popoverList.value = props.list.map((item) => {
@@ -125,43 +122,6 @@ watchEffect(() => {
     }
   })
 })
-
-function btnClick(item: SearchItem) {
-  let href = item.href
-  if (item.playlist.length) {
-    href = item.playlist[0].href
-  } else if (item.btnlist.length) {
-    href = item.btnlist[0].href
-  }
-
-  toDetail({
-    href,
-    cid: item.cid,
-    series: item.series,
-  })
-}
-
-function playClick(playItem: PlayItem, item: SearchItem) {
-  toDetail({
-    href: playItem.href,
-    cid: item.cid,
-    series: item.series,
-  })
-}
-
-function toDetail({ href, cid, series }: DetailParam) {
-  if (!href) {
-    return
-  }
-  router.push({
-    path: '/detail',
-    query: {
-      url: href,
-      cid,
-      series,
-    },
-  })
-}
 
 function download() {
   Toast('想什么呢，你还想下载=。=')

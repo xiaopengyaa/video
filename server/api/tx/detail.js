@@ -12,7 +12,7 @@ const homeApi = {
     if (match) {
       const data = eval('(' + match[1] + ')')
       introduction = data.introduction.introData.list[0].item_params
-      topList = data.topList.data
+      topList = processTopList(data.topList.data)
       videoInfo = data.global.videoInfo
     }
     return getResult({
@@ -84,6 +84,24 @@ async function getList(cid, page_num) {
     }
   }
   return list
+}
+
+function processTopList(list) {
+  return list.map((item) => {
+    return {
+      cid: item.id,
+      image: item.pic,
+      imageInfo: item.timelong,
+      mark: '',
+      title: item.title,
+      href: `https://v.qq.com/x/cover/${item.id}.html`,
+      sub: [],
+      desc: '',
+      series: '',
+      playlist: [],
+      btnlist: [],
+    }
+  })
 }
 
 module.exports = homeApi

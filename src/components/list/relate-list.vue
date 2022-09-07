@@ -8,9 +8,10 @@
         @click="handleClick(item)"
       >
         <van-image
-          :width="px2vw(90)"
-          :height="px2vw(126)"
           radius="4"
+          lazy-load
+          :width="px2vw(width)"
+          :height="px2vw(height)"
           :src="item.image"
         />
         <div class="title van-multi-ellipsis--l2" v-html="item.title" />
@@ -32,6 +33,8 @@ import { px2vw } from '@/utils/common'
 
 interface Props {
   list: SearchItem[]
+  width?: number
+  height?: number
 }
 
 interface Emits {
@@ -39,8 +42,13 @@ interface Emits {
   (event: 'click', item: SearchItem): void
 }
 
+const HEIGHT = 126
+const IMG_INFO_TOP = 106
 const emit = defineEmits<Emits>()
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  width: 90,
+  height: 126,
+})
 
 const rootRef = ref<HTMLElement | null>(null)
 const scroll = useScroll(
@@ -52,6 +60,13 @@ const scroll = useScroll(
   },
   emit
 )
+
+const itemWidth = computed(() => {
+  return `${px2vw(props.width)}px`
+})
+const imageInfoTop = computed(() => {
+  return `${px2vw(IMG_INFO_TOP - HEIGHT + props.height)}px`
+})
 
 function handleClick(item: SearchItem) {
   emit('click', item)
@@ -72,7 +87,7 @@ function handleClick(item: SearchItem) {
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 90px;
+    width: v-bind(itemWidth);
     &:not(:last-child) {
       margin-right: 8px;
     }
@@ -89,6 +104,9 @@ function handleClick(item: SearchItem) {
       top: 0;
       right: 0;
       display: flex;
+    }
+    .image-info-wrap {
+      top: v-bind(imageInfoTop);
     }
   }
 }

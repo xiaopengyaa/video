@@ -1,6 +1,8 @@
+import { SearchItem } from './search'
+
 export interface DetailRes {
   introduction: DetailIntro
-  topList: TopItem[]
+  topList: SearchItem[]
   videoInfo: VideoInfo
 }
 
