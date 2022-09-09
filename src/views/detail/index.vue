@@ -62,7 +62,7 @@
                 :list="detailData.topList"
                 :width="130"
                 :height="74"
-                @click="btnClick"
+                @click="relateClick"
               />
             </div>
           </div>
@@ -101,40 +101,28 @@ import RelateList from '@/components/list/relate-list.vue'
 import IntroDialog from './intro-dialog.vue'
 import PlaylistDialog from './playlist-dialog.vue'
 import useContent from './use-content'
-import useListClick from '@/components/list/use-list-click'
+import useVideo from './use-video'
 import { LOADING_DELAY } from '@/utils/constant'
 import { px2vw, getImageUrl } from '@/utils/common'
 import { useRect } from '@vant/use'
 
-const route = useRoute()
-const playUrl = ref('')
-const cid = ref('')
-const series = ref('')
 const playlistRef = ref<typeof PlayList>()
 const scrollRef = ref<typeof ScrollWrap>()
 const showIntro = ref(false)
 const showPlaylist = ref(false)
 const detailHeight = ref('')
 
-watchEffect(() => {
-  // playUrl.value = `https://m2090.com/?url=${route.query.url}`
-  playUrl.value = `https://okjx.cc/?url=${route.query.url}`
-  // playUrl.value = `https://jx.bozrc.com:4433/player/?url=${route.query.url}`
-  cid.value = route.query.cid as string
-  series.value = route.query.series as string
-})
-
-const { btnClick } = useListClick()
-const { detailData, playlist, active, loading, isEmpty, toHome, handleClick } =
-  useContent(cid)
-
-const backTop = computed(() => {
-  const urls = ['okjx.cc']
-  const flag = urls.some((url) => {
-    return playUrl.value.includes(url)
-  })
-  return flag ? '50px' : '20px'
-})
+const { playUrl, cid, series, backTop } = useVideo()
+const {
+  detailData,
+  playlist,
+  active,
+  loading,
+  isEmpty,
+  toHome,
+  handleClick,
+  relateClick,
+} = useContent(cid)
 
 watch(loading, () => {
   setTimeout(() => {

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "server": "npx nodemon server/bin/www",
-    "server-prd": "pm2 start server/bin/www",
+    "server-prd": "pm2 start server/bin/www --name vue-video",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix",
