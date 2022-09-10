@@ -3,13 +3,17 @@
     <h1 class="title">xiaopengyaa视频</h1>
     <van-button
       class="start-btn"
-      color="#7232dd"
+      color="#406e94"
       round
       plain
       size="large"
       @click="showSearch"
       >点我开始</van-button
     >
+    <a href="http://xiaopengyaa.cn" target="_blank" class="home-page">
+      <van-icon name="wap-home" />
+      <span class="text">HomePage</span>
+    </a>
   </div>
   <div class="home-bg" />
   <video-search v-model:visible="visible" />
@@ -34,23 +38,39 @@ function showSearch() {
 
 <style lang="scss">
 .home {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
   color: #fff;
-  text-shadow: 2px 2px 6px #d5ebe1;
   margin: 0 auto;
   overflow: hidden;
   .title {
     font-size: 2.5em;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 6px #d5ebe1;
   }
   .start-btn {
     width: 200px;
     font-size: 22px;
-    margin-bottom: 50px;
+    margin-bottom: 60px;
+  }
+  .home-page {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    color: #fff;
+    padding: 2px 2px 4px;
+    .text {
+      margin-left: 8px;
+      text-shadow: 2px 2px 6px #d5ebe1;
+    }
   }
 }
 .home-bg {

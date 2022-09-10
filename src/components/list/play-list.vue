@@ -10,7 +10,7 @@
       ref="playlistRef"
       class="play-list"
       :class="{
-        'is-series': series === '1',
+        'is-series': isSeries,
       }"
     >
       <div
@@ -80,6 +80,12 @@ const isVertical = computed(() => props.direction === 'vertical')
 const emptyItemLen = computed(() => {
   return ITEM_ROW_LEN - (props.list.length % ITEM_ROW_LEN)
 })
+const isSeries = computed<boolean>(() => {
+  if (!props.series && props.list.length) {
+    return isNaN(Number(props.list[0].text))
+  }
+  return props.series === '1'
+})
 
 const scroll = useScroll(
   rootRef,
@@ -135,9 +141,6 @@ function handleClick(item: PlayItem) {
       background: #f6f8fa;
       border-radius: 2px;
       text-align: center;
-      &:not(:last-child) {
-        margin-right: 12px;
-      }
       .mark {
         position: absolute;
         top: 0;
@@ -153,10 +156,18 @@ function handleClick(item: PlayItem) {
         background: linear-gradient(to top right, #fcf0ea, #fef7f4);
       }
     }
+    &:not(.is-series) {
+      .item:not(:last-child) {
+        margin-right: 12px;
+      }
+    }
     &.is-series {
       .item {
         width: 200px;
         text-align: left;
+        &:not(:last-child) {
+          margin-right: 12px;
+        }
       }
     }
   }
@@ -167,11 +178,24 @@ function handleClick(item: PlayItem) {
       justify-content: space-between;
       .item {
         margin-bottom: 20px;
-        &:not(:last-child) {
-          margin-right: 6px;
-        }
         &--empty {
           background: transparent;
+        }
+      }
+      &:not(.is-series) {
+        .item:not(:last-child) {
+          margin-right: 6px;
+        }
+      }
+      &.is-series {
+        .item {
+          width: 48%;
+          &:nth-child(2n) {
+            margin-right: 0;
+          }
+          &:nth-child(2n + 1) {
+            margin-right: 6px;
+          }
         }
       }
     }
