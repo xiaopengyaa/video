@@ -1,21 +1,21 @@
 const router = require('koa-router')()
-const txApi = require('../api/tx/detail')
+const qqApi = require('../api/qq/detail')
 
 const apiMap = {
-  tx: txApi,
+  qq: qqApi,
 }
 
 router.prefix('/video/api/detail')
 
 router.get('/getDetail', async (ctx) => {
-  const { type = 'tx', url } = ctx.query
-  const data = await apiMap[type].getDetail(url)
+  const { site = 'qq', url } = ctx.query
+  const data = await apiMap[site].getDetail(url)
   ctx.body = data
 })
 
 router.get('/getPlaylist', async (ctx) => {
-  const { type = 'tx', cid } = ctx.query
-  const data = await apiMap[type].getPlaylist(cid, 0)
+  const { site = 'qq', cid } = ctx.query
+  const data = await apiMap[site].getPlaylist(cid, 0)
   ctx.body = data
 })
 

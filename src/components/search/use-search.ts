@@ -15,7 +15,7 @@ export default function useSearch(visible: Ref<boolean>) {
       loading.value = true
       isEmpty.value = false
       addHistory(keyword)
-      searchData.value = await search({ keyword, type: 'tx' })
+      searchData.value = await search({ keyword, site: 'qq' })
 
       if (
         searchData.value.list.length === 0 &&

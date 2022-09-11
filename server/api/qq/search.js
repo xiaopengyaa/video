@@ -1,6 +1,7 @@
 const cheerio = require('cheerio')
 const qs = require('qs')
 const { api, getResult } = require('../../utils')
+const { COOKIE, REFERER } = require('./constant')
 
 const homeApi = {
   // 搜索
@@ -15,6 +16,42 @@ const homeApi = {
       list,
       relateList,
     })
+  },
+  async getRecommendList(keyword) {
+    const url = `https://nodeyun.video.qq.com/x/api/smartbox`
+    const now = +new Date()
+    const callback = `jQuery19105739095169365356_${now}`
+    const html = await api.get(
+      url,
+      {
+        query: keyword,
+        callback,
+        _: now,
+      },
+      {
+        headers: {
+          cookie: COOKIE,
+          referer: REFERER,
+        },
+      }
+    )
+    const reg = new RegExp(`${callback}\\((.*)\\)`)
+    const match = html.match(reg)
+    let list = []
+    if (match) {
+      const res = JSON.parse(match[1])
+      if (res.ret === 0 && res.data.smartboxItemList) {
+        list = res.data.smartboxItemList.map((item) => {
+          return {
+            title: item.basicDoc.title.replace(/em/g, 'strong'),
+            imgUrl: item.videoInfo.imgUrl,
+            videoType: item.videoInfo.videoType,
+            typeName: item.videoInfo.typeName,
+          }
+        })
+      }
+    }
+    return getResult(list)
   },
 }
 

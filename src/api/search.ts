@@ -1,7 +1,12 @@
 import http from '@/utils/http'
-import { SearchReq, SearchRes } from '@/types/search'
+import { SearchReq, SearchRes, RecommendItem } from '@/types/search'
 
 export async function search(params: SearchReq) {
   const data = await http.get<SearchRes>('/search', params)
+  return data
+}
+
+export async function recommend(params: SearchReq) {
+  const data = await http.get<RecommendItem[]>('/search/recommend', params)
   return data
 }

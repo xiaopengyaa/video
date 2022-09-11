@@ -6,5 +6,5 @@ export interface ResData<T> {
 }
 
 export interface BaseType {
-  type: 'tx' | 'aqy'
+  site: 'qq' | 'aqy'
 }

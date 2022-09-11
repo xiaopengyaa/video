@@ -11,8 +11,8 @@
       >点我开始</van-button
     >
     <a href="http://xiaopengyaa.cn" target="_blank" class="home-page">
-      <van-icon name="wap-home" />
-      <span class="text">HomePage</span>
+      <van-icon name="like" />
+      <span class="text">My Home</span>
     </a>
   </div>
   <div class="home-bg" />
@@ -66,7 +66,6 @@ function showSearch() {
     transform: translateX(-50%);
     font-size: 16px;
     color: #fff;
-    padding: 2px 2px 4px;
     .text {
       margin-left: 8px;
       text-shadow: 2px 2px 6px #d5ebe1;

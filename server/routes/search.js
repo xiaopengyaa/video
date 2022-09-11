@@ -1,15 +1,21 @@
 const router = require('koa-router')()
-const txApi = require('../api/tx/search')
+const qqApi = require('../api/qq/search')
 
 const apiMap = {
-  tx: txApi,
+  qq: qqApi,
 }
 
 router.prefix('/video/api/search')
 
 router.get('/', async (ctx) => {
-  const { type = 'tx', keyword } = ctx.query
-  const data = await apiMap[type].search(keyword)
+  const { site = 'qq', keyword } = ctx.query
+  const data = await apiMap[site].search(keyword)
+  ctx.body = data
+})
+
+router.get('/recommend', async (ctx) => {
+  const { site = 'qq', keyword } = ctx.query
+  const data = await apiMap[site].getRecommendList(keyword)
   ctx.body = data
 })
 

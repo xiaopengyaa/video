@@ -30,3 +30,10 @@ export interface SearchRes {
   list: SearchItem[]
   relateList: SearchItem[]
 }
+
+export interface RecommendItem {
+  title: string
+  imgUrl: string
+  videoType: number
+  typeName: string
+}
