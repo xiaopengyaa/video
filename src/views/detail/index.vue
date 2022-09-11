@@ -72,7 +72,7 @@
           class="detail__empty"
           :image="getImageUrl('empty-image.png')"
           image-size="25vw"
-          description="知我者，谓我心忧。"
+          description="什么都没得~"
         />
       </loading-skeleton>
       <intro-dialog

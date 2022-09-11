@@ -9,6 +9,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     LoadingSkeleton: typeof import('./components/skeleton/loading-skeleton.vue')['default']
     PlayList: typeof import('./components/list/play-list.vue')['default']
+    RecommendList: typeof import('./components/list/recommend-list.vue')['default']
     RelateList: typeof import('./components/list/relate-list.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -25,6 +26,7 @@ declare module '@vue/runtime-core' {
     VanRow: typeof import('vant/es')['Row']
     VanSearch: typeof import('vant/es')['Search']
     VanSkeleton: typeof import('vant/es')['Skeleton']
+    VanTag: typeof import('vant/es')['Tag']
     VideoList: typeof import('./components/list/video-list.vue')['default']
     VideoSearch: typeof import('./components/search/video-search.vue')['default']
   }

@@ -40,7 +40,7 @@ const homeApi = {
     let list = []
     if (match) {
       const res = JSON.parse(match[1])
-      if (res.ret === 0 && res.data.smartboxItemList) {
+      if (res.ret === 0 && res.data?.smartboxItemList) {
         list = res.data.smartboxItemList.map((item) => {
           return {
             title: item.basicDoc.title.replace(/em/g, 'strong'),

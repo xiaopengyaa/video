@@ -12,6 +12,8 @@
             placeholder="请输入视频名称"
             @search="onSearch"
             @cancel="onCancel"
+            @focus="isFocus = true"
+            @blur="isFocus = false"
           />
         </transition>
       </form>
@@ -24,7 +26,7 @@
       </transition>
       <div v-show="keyword" class="search-list">
         <search-skeletom :loading="loading" :num="3">
-          <scroll-wrap v-show="!isEmpty" ref="scrollRef">
+          <scroll-wrap v-show="!isEmpty">
             <video-list
               :list="searchData.list"
               :relate-list="searchData.relateList"
@@ -36,9 +38,18 @@
             class="detail__empty"
             :image="getImageUrl('empty-image.png')"
             image-size="25vw"
-            description="知我者，谓我心忧。"
+            description="什么都没得~"
           />
         </search-skeletom>
+      </div>
+      <div v-show="keyword && recommendList.length" class="search-list">
+        <scroll-wrap>
+          <recommend-list
+            :list="recommendList"
+            class="list"
+            @click="recommendClick"
+          />
+        </scroll-wrap>
       </div>
     </div>
   </transition>
@@ -46,11 +57,13 @@
 
 <script setup lang="ts">
 import VideoList from '@/components/list/video-list.vue'
+import RecommendList from '@/components/list/recommend-list.vue'
+import ScrollWrap from '@/components/scroll/scroll-wrap.vue'
+import SearchSkeletom from './search-skeleton.vue'
 import SearchHistory from './search-history.vue'
 import useSearch from './use-search'
 import useHistory from './use-history'
-import ScrollWrap from '@/components/scroll/scroll-wrap.vue'
-import SearchSkeletom from './search-skeleton.vue'
+import useRecommend from './use-recommend'
 import type { SearchInstance } from 'vant'
 import { useRect } from '@vant/use'
 import { getImageUrl } from '@/utils/common'
@@ -67,7 +80,6 @@ const props = withDefaults(defineProps<Props>(), {
   visible: false,
 })
 
-const scrollRef = ref<typeof ScrollWrap>()
 const searchRef = ref<SearchInstance>()
 const formRef = ref<HTMLElement>()
 const formHeight = ref('0px')
@@ -82,7 +94,6 @@ const searchVisible = computed({
 })
 
 const { searchList } = useHistory()
-
 const {
   keyword,
   loading,
@@ -92,6 +103,7 @@ const {
   onSearch,
   getDefSearch,
 } = useSearch(searchVisible)
+const { recommendList, isFocus } = useRecommend(keyword)
 
 watch(
   () => props.visible,
@@ -110,6 +122,12 @@ watch(keyword, () => {
   // 清空数据
   searchData.value = getDefSearch()
 })
+
+function recommendClick(value: string) {
+  keyword.value = value
+  isFocus.value = false
+  onSearch(value)
+}
 
 function echoSearch(value: string) {
   keyword.value = value

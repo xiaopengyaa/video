@@ -78,7 +78,11 @@ const rootRef = ref<HTMLElement | null>(null)
 const playlistRef = ref<HTMLElement | null>(null)
 const isVertical = computed(() => props.direction === 'vertical')
 const emptyItemLen = computed(() => {
-  return ITEM_ROW_LEN - (props.list.length % ITEM_ROW_LEN)
+  const extraLen = props.list.length % ITEM_ROW_LEN
+  if (extraLen === 0) {
+    return extraLen
+  }
+  return ITEM_ROW_LEN - extraLen
 })
 const isSeries = computed<boolean>(() => {
   if (!props.series && props.list.length) {
