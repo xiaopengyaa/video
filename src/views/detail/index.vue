@@ -199,6 +199,7 @@ watch(loading, () => {
   }
   &__top {
     margin-top: 40px;
+    margin-bottom: 20px;
     .title {
       margin-bottom: 12px;
     }
