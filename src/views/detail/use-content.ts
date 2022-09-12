@@ -1,12 +1,13 @@
 import { ref, Ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getPlaylist, getDetail } from '@/api/detail'
-import { DetailRes } from '@/types/detail'
+import { DetailReq, DetailRes } from '@/types/detail'
 import { PlayItem, SearchItem } from '@/types/search'
+import { Site } from '@/types/enum'
 import { getDefDetail } from './default'
 import useListClick from '@/components/list/use-list-click'
 
-export default function useContent(cid: Ref<string>) {
+export default function useContent(cid: Ref<string>, site: Ref<Site>) {
   const route = useRoute()
   const router = useRouter()
   const detailData = ref<DetailRes>(getDefDetail())
@@ -32,7 +33,13 @@ export default function useContent(cid: Ref<string>) {
 
     isEmpty.value = false
     loading.value = true
-    Promise.all([getDetail(route.query.url as string), getPlaylist(cid.value)])
+    const detailReq: DetailReq = {
+      url: route.query.url as string,
+      cid: cid.value,
+      site: site.value,
+    }
+
+    Promise.all([getDetail(detailReq), getPlaylist(detailReq)])
       .then(([detail, list]) => {
         detailData.value = detail
         playlist.value = list

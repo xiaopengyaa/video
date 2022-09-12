@@ -19,7 +19,7 @@ export function getDefDetail(): DetailRes {
       c_title_output: '',
       pioneer_tag: '',
       title: '',
-      type: 0,
+      type: -1,
       type_name: '',
       vid: '',
     },

@@ -1,9 +1,10 @@
-const cheerio = require('cheerio')
 const { api, getResult } = require('../../utils')
 const { COOKIE, REFERER } = require('./constant')
+const { SITE } = require('../../utils/constant')
 
 const homeApi = {
-  async getDetail(url) {
+  async getDetail(query) {
+    const { url } = query
     const html = await api.get(url)
     const reg = /window\.__pinia=(.*)<\/script>/
     const match = reg.exec(html)
@@ -22,7 +23,8 @@ const homeApi = {
       videoInfo,
     })
   },
-  async getPlaylist(cid, page_num = 0) {
+  async getPlaylist(query, page_num = 0) {
+    const { cid } = query
     const list = await getList(cid, page_num)
 
     return getResult(
@@ -89,6 +91,7 @@ async function getList(cid, page_num) {
 function processTopList(list) {
   return list.map((item) => {
     return {
+      site: SITE.qq,
       cid: item.id,
       image: item.pic,
       imageInfo: item.timelong,

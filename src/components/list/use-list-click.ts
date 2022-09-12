@@ -1,9 +1,11 @@
 import { PlayItem, SearchItem } from '@/types/search'
+import { Site } from '@/types/enum'
 
 interface DetailParam {
   href: string
   cid: string
   series: string
+  site: Site
 }
 
 export default function useListClick() {
@@ -21,18 +23,24 @@ export default function useListClick() {
       href,
       cid: item.cid,
       series: item.series,
+      site: item.site,
     })
   }
 
   function playClick(playItem: PlayItem, item: SearchItem) {
+    let href = playItem.href
+    if (!playItem.href) {
+      href = item.playlist[0].href
+    }
     toDetail({
-      href: playItem.href,
+      href,
       cid: item.cid,
       series: item.series,
+      site: item.site,
     })
   }
 
-  function toDetail({ href, cid, series }: DetailParam) {
+  function toDetail({ href, cid, series, site = Site.qq }: DetailParam) {
     if (!href) {
       return
     }
@@ -42,6 +50,7 @@ export default function useListClick() {
         url: href,
         cid,
         series,
+        site,
       },
     })
   }

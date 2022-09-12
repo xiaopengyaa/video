@@ -1,6 +1,6 @@
 const cheerio = require('cheerio')
 const qs = require('qs')
-const { api, getResult } = require('../../utils')
+const { api, getResult, getSiteByUrl } = require('../../utils')
 const { COOKIE, REFERER } = require('./constant')
 
 const homeApi = {
@@ -99,6 +99,7 @@ function getRelateList($) {
         })
       }
       return {
+        site: getSiteByUrl(obj.href),
         cid: obj.cid,
         image: video.imgUrl,
         imageInfo: video.imgTag?.tag_3?.text || '',
@@ -134,6 +135,7 @@ function getSearchList($) {
       .parse(params)
       .title_txt.replaceAll('\x05', '<span class="main">')
       .replaceAll('\x06', '</span>')
+    const site = qs.parse(params).site_id
 
     const $desc = $(elem).find('._infos .desc_text')
     let desc = ''
@@ -147,6 +149,7 @@ function getSearchList($) {
     const btnlist = getBtnlist($, elem, cid)
 
     list.push({
+      site,
       cid,
       image,
       imageInfo,

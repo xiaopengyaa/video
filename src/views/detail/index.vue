@@ -56,9 +56,10 @@
                 @click="handleClick"
               />
             </div>
-            <div class="detail__top">
-              <div class="title title-wrap">每周热播</div>
+            <div v-show="detailData.topList.length" class="detail__top">
+              <div class="title title-wrap">相关推荐</div>
               <relate-list
+                ref="relateRef"
                 :list="detailData.topList"
                 :width="130"
                 :height="74"
@@ -107,12 +108,13 @@ import { px2vw, getImageUrl } from '@/utils/common'
 import { useRect } from '@vant/use'
 
 const playlistRef = ref<typeof PlayList>()
+const relateRef = ref<typeof RelateList>()
 const scrollRef = ref<typeof ScrollWrap>()
 const showIntro = ref(false)
 const showPlaylist = ref(false)
 const detailHeight = ref('')
 
-const { playUrl, cid, series, backTop } = useVideo()
+const { playUrl, cid, site, series, backTop } = useVideo()
 const {
   detailData,
   playlist,
@@ -122,13 +124,14 @@ const {
   toHome,
   handleClick,
   relateClick,
-} = useContent(cid)
+} = useContent(cid, site)
 
 watch(loading, () => {
   setTimeout(() => {
     const { height } = useRect(scrollRef.value?.$el)
     detailHeight.value = height + 'px'
     playlistRef.value?.scrollToActive()
+    relateRef.value?.scroll?.scrollTo(0, 0, 800)
   }, LOADING_DELAY + 100)
 })
 </script>

@@ -61,6 +61,10 @@ const scroll = useScroll(
   emit
 )
 
+defineExpose({
+  scroll,
+})
+
 const itemWidth = computed(() => {
   return `${px2vw(props.width)}px`
 })

@@ -10,7 +10,7 @@
             class="van-hairline--bottom"
             show-action
             placeholder="请输入视频名称"
-            @search="onSearch"
+            @search="echoSearch"
             @cancel="onCancel"
             @focus="isFocus = true"
             @blur="isFocus = false"
@@ -47,7 +47,7 @@
           <recommend-list
             :list="recommendList"
             class="list"
-            @click="recommendClick"
+            @click="echoSearch"
           />
         </scroll-wrap>
       </div>
@@ -123,14 +123,10 @@ watch(keyword, () => {
   searchData.value = getDefSearch()
 })
 
-function recommendClick(value: string) {
-  keyword.value = value
-  isFocus.value = false
-  onSearch(value)
-}
-
 function echoSearch(value: string) {
   keyword.value = value
+  isFocus.value = false
+  recommendList.value = []
   onSearch(value)
 }
 </script>

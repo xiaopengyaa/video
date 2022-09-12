@@ -1,4 +1,11 @@
+import { Site } from './enum'
 import { SearchItem } from './search'
+
+export interface DetailReq {
+  url: string
+  cid: string
+  site: Site
+}
 
 export interface DetailRes {
   introduction: DetailIntro

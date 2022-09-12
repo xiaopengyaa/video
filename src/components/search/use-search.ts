@@ -1,6 +1,7 @@
 import { Ref, ref } from 'vue'
 import { search } from '@/api/search'
 import { SearchRes } from '@/types/search'
+import { Site } from '@/types/enum'
 import useHistory from './use-history'
 
 export default function useSearch(visible: Ref<boolean>) {
@@ -15,7 +16,7 @@ export default function useSearch(visible: Ref<boolean>) {
       loading.value = true
       isEmpty.value = false
       addHistory(keyword)
-      searchData.value = await search({ keyword, site: 'qq' })
+      searchData.value = await search({ keyword, site: Site.qq })
 
       if (
         searchData.value.list.length === 0 &&

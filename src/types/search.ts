@@ -1,4 +1,5 @@
 import { BaseType } from '@/types/base'
+import { Site } from '@/types/enum'
 
 export interface SearchReq extends BaseType {
   keyword: string
@@ -13,6 +14,7 @@ export interface PlayItem {
 }
 
 export interface SearchItem {
+  site: Site
   cid: string
   image: string
   imageInfo: string

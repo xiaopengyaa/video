@@ -1,4 +1,4 @@
-import { Code } from '@/types/enum'
+import { Code, Site } from '@/types/enum'
 
 export interface ResData<T> {
   code: Code
@@ -6,5 +6,5 @@ export interface ResData<T> {
 }
 
 export interface BaseType {
-  site: 'qq' | 'aqy'
+  site: Site
 }
