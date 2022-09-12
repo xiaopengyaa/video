@@ -16,7 +16,6 @@ declare module '@vue/runtime-core' {
     ScrollWrap: typeof import('./components/scroll/scroll-wrap.vue')['default']
     SearchHistory: typeof import('./components/search/search-history.vue')['default']
     SearchSkeleton: typeof import('./components/search/search-skeleton.vue')['default']
-    VanActionSheet: typeof import('vant/es')['ActionSheet']
     VanButton: typeof import('vant/es')['Button']
     VanCol: typeof import('vant/es')['Col']
     VanEmpty: typeof import('vant/es')['Empty']

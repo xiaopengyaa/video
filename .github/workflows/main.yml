@@ -16,6 +16,7 @@ jobs:
           password: ${{ secrets.MY_PASS }} # 服务器密码
           script: |
             cd /usr/frontend/video # 进入服务器中的端工程所在的目录
+            git restore src/* # 还原更改
             git pull # 拉取最新代码
             pnpm install # 安装项目依赖
             pnpm build # 项目打包
