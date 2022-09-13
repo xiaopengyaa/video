@@ -118,7 +118,8 @@ function handleClick(item: PlayItem) {
     justify-content: space-between;
     font-size: 16px;
     font-weight: bold;
-    line-height: 48px;
+    line-height: 20px;
+    height: 48px;
   }
   .desc {
     font-size: 14x;

@@ -17,6 +17,12 @@ module.exports = {
     })
     return site
   },
+  getImageUrl(url) {
+    if (url) {
+      return url.replace(/^(http)[s]*(:\/\/)/, 'https://images.weserv.nl/?url=')
+    }
+    return url
+  },
 }
 
 /**

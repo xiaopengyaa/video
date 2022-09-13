@@ -1,4 +1,4 @@
-const { api, getResult, addChineseUnit } = require('../../utils')
+const { api, getResult, addChineseUnit, getImageUrl } = require('../../utils')
 const { SITE } = require('../../utils/constant')
 
 const homeApi = {
@@ -77,7 +77,7 @@ async function getTopList(seasonId) {
       return {
         site: SITE.bilibili,
         cid: item.season_id.toString(),
-        image: item.new_ep.cover,
+        image: getImageUrl(item.new_ep.cover),
         imageInfo: item.new_ep.index_show,
         mark: '',
         title: item.title,

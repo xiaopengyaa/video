@@ -1,8 +1,13 @@
 <template>
   <router-view v-slot="{ Component, route }">
-    <keep-alive :include="route.meta.keepAlive || ''">
-      <component :is="Component" />
+    <keep-alive>
+      <component
+        :is="Component"
+        v-if="route.meta.keepAlive"
+        :key="route.name"
+      />
     </keep-alive>
+    <component :is="Component" v-if="!route.meta.keepAlive" :key="route.name" />
   </router-view>
 </template>
 

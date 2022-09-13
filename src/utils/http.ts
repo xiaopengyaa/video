@@ -3,7 +3,7 @@
  * @Date: 2020-03-02 11:47:04
  * @Description: axios封装
  */
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import { ResData } from '@/types/base'
 import { Code } from '@/types/enum'
 import { Toast } from 'vant'
@@ -48,7 +48,7 @@ service.interceptors.response.use(
 
 // 封装get、post方法
 const http = {
-  async get<T = unknown>(url: string, data = {}, config = {}) {
+  async get<T = unknown>(url: string, data = {}, config?: AxiosRequestConfig) {
     try {
       const res = await service.get<ResData<T>>(url, {
         params: data,
@@ -60,7 +60,7 @@ const http = {
       return Promise.reject(err)
     }
   },
-  async post<T = unknown>(url: string, data = {}, config = {}) {
+  async post<T = unknown>(url: string, data = {}, config?: AxiosRequestConfig) {
     try {
       const res = await service.post<ResData<T>>(url, data, config)
       const serverData = res.data

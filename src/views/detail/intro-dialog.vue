@@ -103,7 +103,8 @@ watch(visible, () => {
     justify-content: space-between;
     font-size: 16px;
     font-weight: bold;
-    line-height: 48px;
+    line-height: 20px;
+    height: 48px;
   }
   .content-wrap {
     flex: 1;

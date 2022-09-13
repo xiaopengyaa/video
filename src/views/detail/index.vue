@@ -68,6 +68,13 @@
             </div>
           </div>
         </scroll-wrap>
+        <play-util
+          v-show="utilTop"
+          class="detail__util"
+          :style="{
+            top: utilTop,
+          }"
+        />
         <van-empty
           v-show="isEmpty"
           class="detail__empty"
@@ -101,6 +108,7 @@ import ScrollWrap from '@/components/scroll/scroll-wrap.vue'
 import RelateList from '@/components/list/relate-list.vue'
 import IntroDialog from './intro-dialog.vue'
 import PlaylistDialog from './playlist-dialog.vue'
+import PlayUtil from './play-util.vue'
 import useContent from './use-content'
 import useVideo from './use-video'
 import { LOADING_DELAY } from '@/utils/constant'
@@ -113,6 +121,7 @@ const scrollRef = ref<typeof ScrollWrap>()
 const showIntro = ref(false)
 const showPlaylist = ref(false)
 const detailHeight = ref('')
+const utilTop = ref('')
 
 const { playUrl, cid, site, series, backTop } = useVideo()
 const {
@@ -129,7 +138,10 @@ const {
 watch(loading, () => {
   setTimeout(() => {
     const { height } = useRect(scrollRef.value?.$el)
+    const { width: winW } = useWindowSize()
     detailHeight.value = height + 'px'
+    utilTop.value = 0.5625 * winW.value + 12 + 'px'
+
     playlistRef.value?.scrollToActive()
     relateRef.value?.scroll?.scrollTo(0, 0, 800)
   }, LOADING_DELAY + 100)
@@ -161,6 +173,10 @@ watch(loading, () => {
     height: 56.25vw;
     background: #000;
   }
+  &__util {
+    position: absolute;
+    right: 20px;
+  }
   &__empty {
     flex: 1;
     overflow: hidden;
@@ -177,6 +193,7 @@ watch(loading, () => {
     .title {
       font-size: 18px;
       font-weight: bold;
+      margin-right: 90px;
     }
     .info {
       display: flex;
