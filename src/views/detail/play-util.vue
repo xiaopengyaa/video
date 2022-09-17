@@ -36,8 +36,13 @@ interface Props {
 const props = defineProps<Props>()
 const route = useRoute()
 const lines = [
+  'https://jx.aidouer.net/?url=',
   'https://okjx.cc/?url=',
   'https://jx.bozrc.com:4433/player/?url=',
+  'https://jx.m3u8.tv/jiexi/?url=',
+  'https://go.yh0523.cn/y.cy?url=',
+  'https://jx.4kdv.com/?url=',
+  'https://jx.ergan.top/?url=',
 ]
 const url = useVModel(props, 'url')
 const start = ref(false)

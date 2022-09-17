@@ -2,6 +2,7 @@
   <transition>
     <div class="detail">
       <van-icon
+        v-if="!hideBack"
         class="detail__back"
         color="#fff"
         :size="px2vw(20)"
@@ -25,7 +26,14 @@
         >
           <div>
             <div class="detail__title" @click="showIntro = true">
-              <div class="title">{{ detailData.introduction.title }}</div>
+              <div class="title">
+                <i
+                  v-if="hideBack"
+                  class="iconfont icon-fanhui"
+                  @click.stop="toHome"
+                />
+                {{ detailData.introduction.title }}
+              </div>
               <div class="info">
                 <span v-html="detailData.introduction.detail_info" />
                 <span>&nbsp;· 简介</span>
@@ -125,7 +133,7 @@ const showPlaylist = ref(false)
 const detailHeight = ref('')
 const utilTop = ref('')
 
-const { cid, site, series, backTop } = useVideo(playUrl)
+const { cid, site, series, backTop, hideBack } = useVideo(playUrl)
 const {
   detailData,
   playlist,
