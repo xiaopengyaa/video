@@ -70,6 +70,7 @@
         </scroll-wrap>
         <play-util
           v-show="utilTop"
+          v-model:url="playUrl"
           class="detail__util"
           :style="{
             top: utilTop,
@@ -115,6 +116,7 @@ import { LOADING_DELAY } from '@/utils/constant'
 import { px2vw, getImageUrl } from '@/utils/common'
 import { useRect } from '@vant/use'
 
+const playUrl = ref('')
 const playlistRef = ref<typeof PlayList>()
 const relateRef = ref<typeof RelateList>()
 const scrollRef = ref<typeof ScrollWrap>()
@@ -123,7 +125,7 @@ const showPlaylist = ref(false)
 const detailHeight = ref('')
 const utilTop = ref('')
 
-const { playUrl, cid, site, series, backTop } = useVideo()
+const { cid, site, series, backTop } = useVideo(playUrl)
 const {
   detailData,
   playlist,
@@ -140,7 +142,7 @@ watch(loading, () => {
     const { height } = useRect(scrollRef.value?.$el)
     const { width: winW } = useWindowSize()
     detailHeight.value = height + 'px'
-    utilTop.value = 0.5625 * winW.value + 12 + 'px'
+    utilTop.value = 0.5625 * winW.value + 8 + 'px'
 
     playlistRef.value?.scrollToActive()
     relateRef.value?.scroll?.scrollTo(0, 0, 800)
@@ -175,7 +177,7 @@ watch(loading, () => {
   }
   &__util {
     position: absolute;
-    right: 20px;
+    right: 10px;
   }
   &__empty {
     flex: 1;

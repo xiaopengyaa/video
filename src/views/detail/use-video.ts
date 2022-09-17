@@ -1,8 +1,8 @@
 import { Site } from '@/types/enum'
+import { Ref } from 'vue'
 
-export default function useVideo() {
+export default function useVideo(playUrl: Ref<string>) {
   const route = useRoute()
-  const playUrl = ref('')
   const cid = ref('')
   const series = ref('')
   const site = ref<Site>(Site.qq)
@@ -16,16 +16,12 @@ export default function useVideo() {
   })
 
   watchEffect(() => {
-    // playUrl.value = `https://m2090.com/?url=${route.query.url}`
-    playUrl.value = `https://okjx.cc/?url=${route.query.url}`
-    // playUrl.value = `https://jx.bozrc.com:4433/player/?url=${route.query.url}`
     cid.value = route.query.cid as string
     series.value = route.query.series as string
     site.value = route.query.site as Site
   })
 
   return {
-    playUrl,
     cid,
     series,
     site,
