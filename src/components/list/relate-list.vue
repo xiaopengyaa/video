@@ -92,6 +92,7 @@ function handleClick(item: SearchItem) {
     display: flex;
     flex-direction: column;
     width: v-bind(itemWidth);
+    cursor: pointer;
     &:not(:last-child) {
       margin-right: 8px;
     }

@@ -9,7 +9,7 @@
       :closeable="false"
       :round="false"
     >
-      <van-grid square>
+      <van-grid>
         <van-grid-item
           v-for="(line, index) in lines"
           :key="index"
@@ -88,6 +88,7 @@ function refreshUrl() {
   text-align: center;
   font-size: 24px;
   color: #848492;
+  cursor: pointer;
   &.start {
     animation: rotation 1s ease-in-out;
     animation-iteration-count: infinite;
@@ -109,19 +110,13 @@ function refreshUrl() {
     height: v-bind(sheetHeight);
   }
   .van-grid-item {
-    &--square {
-      height: auto;
-      padding-top: inherit !important;
-    }
+    cursor: pointer;
     .van-grid-item__content {
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
       height: 100%;
       padding: 16px 8px;
-      &--square {
-        position: static;
-      }
     }
     .van-grid-item__icon {
       font-size: 28px;

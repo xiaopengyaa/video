@@ -150,7 +150,7 @@ watch(loading, () => {
     const { height } = useRect(scrollRef.value?.$el)
     const { width: winW } = useWindowSize()
     detailHeight.value = height + 'px'
-    utilTop.value = 0.5625 * winW.value + 8 + 'px'
+    utilTop.value = 0.5625 * winW.value + 6 + 'px'
 
     playlistRef.value?.scrollToActive()
     relateRef.value?.scroll?.scrollTo(0, 0, 800)
@@ -200,6 +200,7 @@ watch(loading, () => {
   }
   &__title {
     margin-top: 16px;
+    cursor: pointer;
     .title {
       font-size: 18px;
       font-weight: bold;
@@ -218,6 +219,7 @@ watch(loading, () => {
   &__play {
     margin-top: 40px;
     .update {
+      cursor: pointer;
       &__desc {
         color: #848492;
         margin: 6px 0 12px;

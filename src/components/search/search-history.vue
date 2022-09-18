@@ -56,6 +56,7 @@ function handleClick(item: string) {
     margin-right: 8px;
     margin-top: 10px;
     border-radius: 2px;
+    cursor: pointer;
   }
 }
 </style>

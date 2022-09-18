@@ -145,6 +145,7 @@ function handleClick(item: PlayItem) {
       background: #f6f8fa;
       border-radius: 2px;
       text-align: center;
+      cursor: pointer;
       .mark {
         position: absolute;
         top: 0;

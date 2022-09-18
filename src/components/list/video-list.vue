@@ -139,6 +139,7 @@ function download() {
 .main-content {
   display: flex;
   align-items: center;
+  cursor: pointer;
   &__left {
     position: relative;
     .mark {

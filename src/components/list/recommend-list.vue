@@ -58,6 +58,7 @@ function handleClick(item: RecommendItem) {
   display: flex;
   align-items: center;
   padding: 12px 0;
+  cursor: pointer;
   .title {
     &--no-img {
       padding: 4px 0;
