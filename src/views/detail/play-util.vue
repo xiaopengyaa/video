@@ -109,6 +109,10 @@ function refreshUrl() {
     height: v-bind(sheetHeight);
   }
   .van-grid-item {
+    &--square {
+      height: auto;
+      padding-top: inherit !important;
+    }
     .van-grid-item__content {
       display: flex;
       flex-direction: column;
@@ -116,7 +120,7 @@ function refreshUrl() {
       height: 100%;
       padding: 16px 8px;
       &--square {
-        bottom: 0;
+        position: static;
       }
     }
     .van-grid-item__icon {
