@@ -115,6 +115,9 @@ function refreshUrl() {
       box-sizing: border-box;
       height: 100%;
       padding: 16px 8px;
+      &--square {
+        bottom: 0;
+      }
     }
     .van-grid-item__icon {
       font-size: 28px;
