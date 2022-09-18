@@ -109,6 +109,16 @@ function refreshUrl() {
     height: v-bind(sheetHeight);
   }
   .van-grid-item {
+    .van-grid-item__content {
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      height: 100%;
+      padding: 16px 8px;
+    }
+    .van-grid-item__icon {
+      font-size: 28px;
+    }
     &.active {
       .van-grid-item__content {
         color: #ec6a38;
