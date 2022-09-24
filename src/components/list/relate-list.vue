@@ -10,6 +10,7 @@
         <van-image
           radius="4"
           lazy-load
+          fit="cover"
           :width="px2vw(width)"
           :height="px2vw(height)"
           :src="item.image"

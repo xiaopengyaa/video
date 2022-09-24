@@ -1,11 +1,13 @@
 const router = require('koa-router')()
 const qqApi = require('../api/qq/detail')
 const bilibiliApi = require('../api/bilibili/detail')
+const qiyiApi = require('../api/qiyi/detail')
 const { SITE } = require('../utils/constant')
 
 const apiMap = {
   [SITE.qq]: qqApi,
   [SITE.bilibili]: bilibiliApi,
+  [SITE.qiyi]: qiyiApi,
 }
 
 router.prefix('/video/api/detail')
