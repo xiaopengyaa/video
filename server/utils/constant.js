@@ -3,6 +3,7 @@ const SITE = {
   qq: 'qq',
   bilibili: 'bilibili',
   qiyi: 'qiyi',
+  youku: 'youku',
 }
 
 // 视频类型

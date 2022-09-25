@@ -41,4 +41,5 @@ export enum Site {
   qq = 'qq',
   bilibili = 'bilibili',
   qiyi = 'qiyi',
+  youku = 'youku',
 }
