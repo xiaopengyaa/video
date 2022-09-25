@@ -100,7 +100,6 @@ function processTopList(list) {
       href: `https://v.qq.com/x/cover/${item.id}.html`,
       sub: [],
       desc: '',
-      series: '',
       playlist: [],
       btnlist: [],
     }

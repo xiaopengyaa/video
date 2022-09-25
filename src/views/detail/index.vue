@@ -59,7 +59,6 @@
                 ref="playlistRef"
                 v-model:active="active"
                 :list="playlist"
-                :series="series"
                 show-active
                 @click="handleClick"
               />
@@ -133,7 +132,7 @@ const showPlaylist = ref(false)
 const detailHeight = ref('')
 const utilTop = ref('')
 
-const { cid, site, series, backTop, hideBack } = useVideo(playUrl)
+const { cid, site, backTop, hideBack } = useVideo(playUrl)
 const {
   detailData,
   playlist,

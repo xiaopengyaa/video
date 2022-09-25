@@ -1,4 +1,4 @@
-const { api, getResult, getImageUrl } = require('../../utils')
+const { api, getResult, getImageUrl, dedupe } = require('../../utils')
 const { SITE } = require('../../utils/constant')
 const { SUCCESS_CODE } = require('./constant')
 const { getSign } = require('./md5')
@@ -38,68 +38,69 @@ const homeApi = {
     }
 
     const episodeData = await getEpisodeInfo(data.tvId)
-    if (episodeData?.template.pure_data.selector_bk) {
-      const playData = episodeData.template.pure_data.selector_bk.find(
+
+    if (episodeData) {
+      const pureData = episodeData.template.pure_data
+      const firstData = pureData.selector_bk || pureData.source_selector_bk
+      const secondData = pureData.film_feature_bk
+
+      const playData = firstData?.find(
         (item) => item.entity_id === data.albumId
       )
+
       if (playData) {
         if (playData.video_list_type === 'poster') {
           playData.videos = transVideos(playData.videos)
         }
         playData.videos.page_keys.forEach((key) => {
           playData.videos.feature_paged[key].forEach((item) => {
-            if (!item.page_url) {
-              return
+            const playItem = getPlayItem(item, data.albumId)
+
+            if (playItem) {
+              playList.push(playItem)
             }
-
-            let mark = ''
-            let text = item.album_order.toString()
-
-            if (item.content_type === 28) {
-              text = item.short_display_name
-            }
-
-            if (item.pay_mark > 0) {
-              mark = '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
-            } else if (item.content_type === 3) {
-              mark =
-                '//vfiles.gtimg.cn/vupload/20210322/tag_mini_trailerlite.png'
-            }
-
-            playList.push({
-              vid: item.qipu_id.toString(),
-              cid: data.albumId.toString(),
-              href: item.page_url,
-              text,
-              mark,
-            })
           })
         })
-      }
-    } else if (episodeData?.template.pure_data.film_feature_bk) {
-      const videos = episodeData.template.pure_data.film_feature_bk.videos
-      videos.forEach((item) => {
-        if (!item.page_url) {
-          return
-        }
+      } else if (secondData) {
+        secondData.videos.forEach((item) => {
+          const playItem = getPlayItem(item, data.albumId)
 
-        let mark = ''
-
-        if (item.pay_mark > 0) {
-          mark = '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
-        }
-
-        playList.push({
-          vid: item.qipu_id.toString(),
-          cid: data.albumId.toString(),
-          href: item.page_url,
-          text: item.title,
-          mark,
+          if (playItem) {
+            playList.push(playItem)
+          }
         })
-      })
+      }
     }
+
     return getResult(playList)
   },
+}
+
+function getPlayItem(item, albumId) {
+  if (!item.page_url) {
+    return
+  }
+
+  let mark = ''
+  let text = item.album_order || item.title
+
+  if (item.content_type === 28) {
+    text = item.short_display_name
+  }
+
+  if (item.pay_mark > 0) {
+    mark = '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
+  } else if (item.content_type === 3) {
+    mark = '//vfiles.gtimg.cn/vupload/20210322/tag_mini_trailerlite.png'
+  }
+
+  return {
+    vid: item.qipu_id.toString(),
+    cid: albumId.toString(),
+    href: item.page_url,
+    text: text.toString(),
+    mark,
+  }
 }
 
 async function getData(url) {
@@ -113,7 +114,10 @@ async function getData(url) {
 
 function getIntro(mediaInfo, baseData) {
   const categories =
-    mediaInfo?.categories.slice(0, 3).map((item) => item.name) || []
+    mediaInfo?.categories
+      .filter((item) => item.subType !== 4)
+      .slice(0, 3)
+      .map((item) => item.name) || []
   const splitStr = ' '
   const year = mediaInfo?.publishTime
     ? new Date(mediaInfo.publishTime).getFullYear().toString()
@@ -124,7 +128,7 @@ function getIntro(mediaInfo, baseData) {
     detail_info: getRateInfo(baseData),
     episode_all: mediaInfo?.videoCount.toString() || '',
     hotval: '',
-    main_genres: categories.join(splitStr),
+    main_genres: dedupe(categories).join(splitStr),
     title: baseData.title,
     update_notify_desc: mediaInfo?.updateStrategy || '',
     year,
@@ -154,7 +158,6 @@ function getTopList(pure_data) {
         href: item.page_url,
         sub: [],
         desc: '',
-        series: '',
         playlist: [],
         btnlist: [],
       }
@@ -206,11 +209,16 @@ function getVideoInfo(tvId, item) {
 }
 
 function getRateInfo(item) {
-  let str = ''
-  const score = `<font color="#FF6022">${item.score_info.sns_score}评分</font>`
-  const views = `${item.heat}热度`
-  str = [score, views].join(' · ')
-  return str
+  const arr = []
+  if (item.score_info.sns_score) {
+    arr.push(`<font color="#FF6022">${item.score_info.sns_score}评分</font>`)
+  }
+
+  if (item.heat) {
+    arr.push(`${item.heat}热度`)
+  }
+
+  return arr.join(' · ')
 }
 
 function transVideos(videos) {

@@ -23,7 +23,6 @@ export interface SearchItem {
   href: string
   sub: string[]
   desc: string
-  series: string
   playlist: PlayItem[]
   btnlist: PlayItem[]
 }

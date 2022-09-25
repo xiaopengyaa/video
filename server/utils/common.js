@@ -23,6 +23,9 @@ module.exports = {
     }
     return url
   },
+  dedupe(array) {
+    return Array.from(new Set(array))
+  },
 }
 
 /**

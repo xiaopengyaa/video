@@ -80,7 +80,6 @@
       <play-list
         v-show="item.playlist.length"
         :list="item.playlist"
-        :series="item.series"
         @click="(playItem: PlayItem) => playClick(playItem, item)"
       />
     </div>

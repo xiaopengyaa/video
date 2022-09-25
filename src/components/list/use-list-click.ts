@@ -4,7 +4,6 @@ import { Site } from '@/types/enum'
 interface DetailParam {
   href: string
   cid: string
-  series: string
   site: Site
 }
 
@@ -22,7 +21,6 @@ export default function useListClick() {
     toDetail({
       href,
       cid: item.cid,
-      series: item.series,
       site: item.site,
     })
   }
@@ -35,12 +33,11 @@ export default function useListClick() {
     toDetail({
       href,
       cid: item.cid,
-      series: item.series,
       site: item.site,
     })
   }
 
-  function toDetail({ href, cid, series, site = Site.qq }: DetailParam) {
+  function toDetail({ href, cid, site = Site.qq }: DetailParam) {
     if (!href) {
       return
     }
@@ -49,7 +46,6 @@ export default function useListClick() {
       query: {
         url: href,
         cid,
-        series,
         site,
       },
     })

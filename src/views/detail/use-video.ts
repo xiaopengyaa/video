@@ -4,7 +4,6 @@ import { Ref } from 'vue'
 export default function useVideo(playUrl: Ref<string>) {
   const route = useRoute()
   const cid = ref('')
-  const series = ref('')
   const site = ref<Site>(Site.qq)
 
   const hideBack = computed(() => {
@@ -29,13 +28,11 @@ export default function useVideo(playUrl: Ref<string>) {
 
   watchEffect(() => {
     cid.value = route.query.cid as string
-    series.value = route.query.series as string
     site.value = route.query.site as Site
   })
 
   return {
     cid,
-    series,
     site,
     backTop,
     hideBack,

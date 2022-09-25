@@ -67,17 +67,12 @@ function getRelateList($) {
       const video = item.videoInfo
       const playlist = []
       const obj = processUrl(video.url)
-      let series = '0'
 
       if (video.firstBlockSites[0]?.episodeInfoList) {
         video.firstBlockSites[0]?.episodeInfoList.forEach((cItem, cIndex) => {
           const text = cItem.title
           const cObj = processUrl(cItem.url)
           let mark = ''
-
-          if (cIndex === 0 && isNaN(Number(text))) {
-            series = '1'
-          }
 
           if (cItem.markLabel) {
             const label = JSON.parse(cItem.markLabel)
@@ -110,7 +105,6 @@ function getRelateList($) {
         href: obj.href,
         sub: [],
         desc: '',
-        series,
         playlist,
         btnlist: [],
       }
@@ -145,7 +139,7 @@ function getSearchList($) {
     }
 
     const obj = processUrl(href)
-    const { series, playlist } = getPlaylist($, elem, cid)
+    const { playlist } = getPlaylist($, elem, cid)
     const btnlist = getBtnlist($, elem, cid)
 
     list.push({
@@ -158,7 +152,6 @@ function getSearchList($) {
       href: obj.href,
       sub: [type].concat(sub.replace(/\(|\)/g, '').split('/')),
       desc,
-      series,
       playlist,
       btnlist,
     })
@@ -167,12 +160,10 @@ function getSearchList($) {
 }
 
 function getPlaylist($, elem, cid) {
-  let series = '0'
   const playlist = []
   let $item = $(elem).find('._playlist .result_episode_list .item')
 
   if (!$item.length) {
-    series = '1'
     $item = $(elem).find('._playlist .tmpinnerList ._series_list .item')
   }
 
@@ -200,7 +191,6 @@ function getPlaylist($, elem, cid) {
   })
 
   return {
-    series,
     playlist,
   }
 }

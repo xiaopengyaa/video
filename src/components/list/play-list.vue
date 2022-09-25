@@ -49,7 +49,6 @@ import useScroll from '@/components/scroll/use-scroll'
 interface Props {
   active?: string
   showActive?: boolean
-  series?: string
   direction?: 'vertical' | 'horizontal'
   list: PlayItem[]
 }
@@ -69,26 +68,27 @@ const emit = defineEmits<Emits>()
 const props = withDefaults(defineProps<Props>(), {
   active: '',
   showActive: false,
-  series: '0',
   direction: 'horizontal',
 })
 
 const ITEM_ROW_LEN = 6
+const SERIES_ROW_LEN = 2
 const rootRef = ref<HTMLElement | null>(null)
 const playlistRef = ref<HTMLElement | null>(null)
 const isVertical = computed(() => props.direction === 'vertical')
 const emptyItemLen = computed(() => {
-  const extraLen = props.list.length % ITEM_ROW_LEN
+  const rowLen = isSeries.value ? SERIES_ROW_LEN : ITEM_ROW_LEN
+  const extraLen = props.list.length % rowLen
   if (extraLen === 0) {
     return extraLen
   }
-  return ITEM_ROW_LEN - extraLen
+  return rowLen - extraLen
 })
 const isSeries = computed<boolean>(() => {
-  if (!props.series && props.list.length) {
+  if (props.list.length) {
     return isNaN(Number(props.list[0].text))
   }
-  return props.series === '1'
+  return false
 })
 
 const scroll = useScroll(
@@ -181,6 +181,7 @@ function handleClick(item: PlayItem) {
     .play-list {
       flex-wrap: wrap;
       justify-content: space-between;
+      width: 100%;
       .item {
         margin-bottom: 20px;
         &--empty {
@@ -188,8 +189,8 @@ function handleClick(item: PlayItem) {
         }
       }
       &:not(.is-series) {
-        .item:not(:last-child) {
-          margin-right: 6px;
+        .item {
+          margin-right: 6px !important;
         }
       }
       &.is-series {

@@ -84,7 +84,6 @@ async function getTopList(seasonId) {
         href: item.url,
         sub: [],
         desc: '',
-        series: '',
         playlist: [],
         btnlist: [],
       }

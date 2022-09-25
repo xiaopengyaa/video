@@ -6,7 +6,7 @@
       v-model:show="show"
       class="action-sheel"
       title="更换播放线路"
-      :closeable="false"
+      close-icon="arrow-down"
       :round="false"
     >
       <van-grid>
@@ -108,6 +108,19 @@ function refreshUrl() {
 :deep() {
   .action-sheel {
     height: v-bind(sheetHeight);
+  }
+  .van-action-sheet__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0 12px;
+  }
+  .van-action-sheet__close {
+    font-size: 16px;
+    color: #858593;
+    padding: 0 12px;
   }
   .van-grid-item {
     cursor: pointer;

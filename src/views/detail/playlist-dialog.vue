@@ -25,7 +25,6 @@
               ref="playlistRef"
               v-model:active="active"
               :list="list"
-              :series="series"
               direction="vertical"
               show-active
               @click="handleClick"
@@ -57,9 +56,6 @@ const route = useRoute()
 const router = useRouter()
 const playlistRef = ref<typeof PlayList>()
 
-const series = computed(() => {
-  return route.query.series as string
-})
 const detailStyle = computed(() => {
   const height = props.height || 'calc(100vh - 56.25vw)'
   return {
