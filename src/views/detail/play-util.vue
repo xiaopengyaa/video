@@ -2,11 +2,16 @@
   <div class="play-util">
     <i class="iconfont icon-shuaxin" :class="{ start }" @click="refreshUrl" />
     <i class="iconfont icon-shezhi1" @click="show = true" />
+    <i class="iconfont icon-backdelete" @click="toHome" />
     <van-action-sheet
       v-model:show="show"
-      class="action-sheel"
+      class="util-action-sheel"
       title="更换播放线路"
       close-icon="arrow-down"
+      teleport="body"
+      :style="{
+        height: sheetHeight,
+      }"
       :round="false"
     >
       <van-grid>
@@ -35,6 +40,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const route = useRoute()
+const router = useRouter()
 const lines = [
   'https://jx.aidouer.net/?url=',
   'https://okjx.cc/?url=',
@@ -77,6 +83,10 @@ function refreshUrl() {
     start.value = false
   }, 1000)
 }
+
+function toHome() {
+  router.push('/')
+}
 </script>
 
 <style lang="scss" scoped>
@@ -104,11 +114,10 @@ function refreshUrl() {
     transform: rotate(360deg);
   }
 }
+</style>
 
-:deep() {
-  .action-sheel {
-    height: v-bind(sheetHeight);
-  }
+<style lang="scss">
+.util-action-sheel {
   .van-action-sheet__header {
     display: flex;
     align-items: center;

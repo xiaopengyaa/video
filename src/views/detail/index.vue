@@ -1,14 +1,6 @@
 <template>
   <transition>
     <div class="detail">
-      <van-icon
-        v-if="!hideBack"
-        class="detail__back"
-        color="#fff"
-        :size="px2vw(20)"
-        name="arrow-left"
-        @click="toHome"
-      />
       <iframe
         class="detail__video"
         allowtransparency="true"
@@ -25,20 +17,18 @@
           class="detail__content"
         >
           <div>
-            <div class="detail__title" @click="showIntro = true">
-              <div class="title">
-                <i
-                  v-if="hideBack"
-                  class="iconfont icon-fanhui"
-                  @click.stop="toHome"
-                />
-                {{ detailData.introduction.title }}
+            <div class="detail__title-wrap">
+              <div class="detail__title" @click="showIntro = true">
+                <div class="title">
+                  {{ detailData.introduction.title }}
+                </div>
+                <div class="info">
+                  <span v-html="detailData.introduction.detail_info" />
+                  <span>&nbsp;· 简介</span>
+                  <van-icon class="arrow" name="arrow" :size="px2vw(12)" />
+                </div>
               </div>
-              <div class="info">
-                <span v-html="detailData.introduction.detail_info" />
-                <span>&nbsp;· 简介</span>
-                <van-icon class="arrow" name="arrow" :size="px2vw(12)" />
-              </div>
+              <play-util v-model:url="playUrl" class="detail__util" />
             </div>
             <div class="detail__play">
               <div class="update" @click="showPlaylist = true">
@@ -51,7 +41,7 @@
                     :size="px2vw(16)"
                   />
                 </div>
-                <div class="update__desc">
+                <div class="update__desc van-multi-ellipsis--l2">
                   {{ detailData.introduction.update_notify_desc }}
                 </div>
               </div>
@@ -75,14 +65,6 @@
             </div>
           </div>
         </scroll-wrap>
-        <play-util
-          v-show="utilTop"
-          v-model:url="playUrl"
-          class="detail__util"
-          :style="{
-            top: utilTop,
-          }"
-        />
         <van-empty
           v-show="isEmpty"
           class="detail__empty"
@@ -130,16 +112,14 @@ const scrollRef = ref<typeof ScrollWrap>()
 const showIntro = ref(false)
 const showPlaylist = ref(false)
 const detailHeight = ref('')
-const utilTop = ref('')
 
-const { cid, site, backTop, hideBack } = useVideo(playUrl)
+const { cid, site } = useVideo(playUrl)
 const {
   detailData,
   playlist,
   active,
   loading,
   isEmpty,
-  toHome,
   handleClick,
   relateClick,
 } = useContent(cid, site)
@@ -147,10 +127,7 @@ const {
 watch(loading, () => {
   setTimeout(() => {
     const { height } = useRect(scrollRef.value?.$el)
-    const { width: winW } = useWindowSize()
     detailHeight.value = height + 'px'
-    utilTop.value = 0.5625 * winW.value + 6 + 'px'
-
     playlistRef.value?.scrollToActive()
     relateRef.value?.scroll?.scrollTo(0, 0, 800)
   }, LOADING_DELAY + 100)
@@ -171,20 +148,10 @@ watch(loading, () => {
     font-size: 16px;
     font-weight: bold;
   }
-  &__back {
-    position: absolute;
-    top: v-bind(backTop);
-    left: 14px;
-    z-index: 10;
-  }
   &__video {
     width: 100vw;
     height: 56.25vw;
     background: #000;
-  }
-  &__util {
-    position: absolute;
-    right: 10px;
   }
   &__empty {
     flex: 1;
@@ -197,13 +164,17 @@ watch(loading, () => {
     padding: 0 12px 12px;
     overflow: hidden;
   }
+  &__title-wrap {
+    display: flex;
+  }
   &__title {
+    flex: 1;
     margin-top: 16px;
     cursor: pointer;
     .title {
       font-size: 18px;
       font-weight: bold;
-      margin-right: 90px;
+      margin-right: 10px;
     }
     .info {
       display: flex;
@@ -214,6 +185,9 @@ watch(loading, () => {
         margin-top: 2px;
       }
     }
+  }
+  &__util {
+    margin-top: 8px;
   }
   &__play {
     margin-top: 40px;

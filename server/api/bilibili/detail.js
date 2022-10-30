@@ -30,6 +30,8 @@ const homeApi = {
         const mark =
           item.badge === '会员'
             ? '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
+            : item.badge === '预告'
+            ? '//vfiles.gtimg.cn/vupload/20210322/tag_mini_trailerlite.png'
             : ''
         return {
           vid: item.id.toString(),

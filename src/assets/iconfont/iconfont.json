@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "240127",
+      "name": "back_delete",
+      "font_class": "backdelete",
+      "unicode": "e756",
+      "unicode_decimal": 59222
+    },
+    {
+      "icon_id": "778893",
+      "name": "back",
+      "font_class": "yooxi",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
       "icon_id": "7193674",
       "name": "返回",
       "font_class": "fanhui",
