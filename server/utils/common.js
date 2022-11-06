@@ -26,6 +26,31 @@ module.exports = {
   dedupe(array) {
     return Array.from(new Set(array))
   },
+  restoreHtmlText(str) {
+    return str.replace(/<span\sclass="main">(.*?)<\/span>/g, '$1')
+  },
+  processUrl(url) {
+    const reg = /cover\/(.*)\.html/
+    const match = reg.exec(url)
+    let href = url
+    let cid = ''
+    let vid = ''
+    if (url.includes('search_redirect.html')) {
+      const params = href.split('?')[1]
+      const searchParams = new URLSearchParams(`?${params}`)
+      href = searchParams.get('url') || ''
+      cid = searchParams.get('cid') || ''
+    } else if (match) {
+      const arr = match[1].split('/')
+      cid = arr[0]
+      vid = arr[1] || ''
+    }
+    return {
+      href,
+      cid,
+      vid,
+    }
+  },
 }
 
 /**

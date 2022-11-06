@@ -18,6 +18,10 @@ export function getImageUrl(name: string) {
   return new URL(`../assets/images/${name}`, import.meta.url).href
 }
 
+export function restoreHtmlText(str: string) {
+  return str.replace(/<span\sclass="main">(.*?)<\/span>/g, '$1')
+}
+
 export function stopBodyScroll(isFixed: boolean) {
   if (isFixed) {
     document.body.classList.add('overflow-hidden')

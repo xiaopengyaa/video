@@ -19,8 +19,15 @@
           </div>
           <scroll-wrap ref="scrollRef" class="content-wrap">
             <div>
-              <div class="desc" v-html="data.detail_info" />
-              <div class="desc">
+              <div
+                v-if="data.detail_info"
+                class="desc"
+                v-html="data.detail_info"
+              />
+              <div
+                v-if="data.area_name || data.year || data.main_genres"
+                class="desc"
+              >
                 {{ data.area_name }}
                 {{ data.year }}
                 {{ data.main_genres?.replace(/,/g, '/') }}

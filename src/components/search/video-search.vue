@@ -28,6 +28,7 @@
         <search-skeletom :loading="loading" :num="3">
           <scroll-wrap v-show="!isEmpty">
             <video-list
+              :query="keyword"
               :list="searchData.list"
               :relate-list="searchData.relateList"
               class="list"

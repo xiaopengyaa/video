@@ -5,6 +5,7 @@ export interface DetailReq {
   url: string
   cid: string
   site: Site
+  queryTxt: string
 }
 
 export interface DetailRes {

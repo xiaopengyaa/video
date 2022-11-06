@@ -6,6 +6,7 @@ import { PlayItem, SearchItem } from '@/types/search'
 import { Site } from '@/types/enum'
 import { getDefDetail } from './default'
 import useListClick from '@/components/list/use-list-click'
+import { restoreHtmlText } from '@/utils/common'
 
 export default function useContent(cid: Ref<string>, site: Ref<Site>) {
   const route = useRoute()
@@ -15,6 +16,10 @@ export default function useContent(cid: Ref<string>, site: Ref<Site>) {
   const playlist = ref<PlayItem[]>([])
   const loading = ref(false)
   const isEmpty = ref(false)
+
+  const queryTxt = computed<string>(() => {
+    return (route.query.queryTxt as string) || ''
+  })
   const { btnClick } = useListClick()
 
   watch(cid, () => {
@@ -37,6 +42,7 @@ export default function useContent(cid: Ref<string>, site: Ref<Site>) {
       url: route.query.url as string,
       cid: cid.value,
       site: site.value,
+      queryTxt: queryTxt.value,
     }
 
     Promise.all([getDetail(detailReq), getPlaylist(detailReq)])
@@ -78,7 +84,7 @@ export default function useContent(cid: Ref<string>, site: Ref<Site>) {
     if (item.cid === cid.value && playlist.value.length) {
       active.value = playlist.value[0].vid
     }
-    btnClick(item)
+    btnClick(item, restoreHtmlText(item.title))
   }
 
   return {

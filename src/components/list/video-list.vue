@@ -1,7 +1,7 @@
 <template>
   <div class="video-list">
     <div v-for="(item, index) in list" :key="index" class="video-item">
-      <div class="main-content" @click="btnClick(item)">
+      <div class="main-content" @click="btnClick(item, queryTxt)">
         <div class="main-content__left">
           <van-image
             :width="px2vw(90)"
@@ -40,7 +40,7 @@
             round
             block
             color="#ec6a38"
-            @click="btnClick(item)"
+            @click="btnClick(item, queryTxt)"
             >立即播放</van-button
           >
           <van-popover
@@ -49,7 +49,7 @@
             theme="dark"
             placement="top"
             :actions="popoverList[index].actions"
-            @select="(playItem: PlayItem) => playClick(playItem, item)"
+            @select="(playItem: PlayItem) => playClick(playItem, item,queryTxt)"
           >
             <template #reference>
               <van-button
@@ -80,12 +80,15 @@
       <play-list
         v-show="item.playlist.length"
         :list="item.playlist"
-        @click="(playItem: PlayItem) => playClick(playItem, item)"
+        @click="(playItem: PlayItem) => playClick(playItem, item, queryTxt)"
       />
     </div>
     <div v-show="relateList.length" class="video-item">
       <div class="relate-title">相关影视作品</div>
-      <relate-list :list="relateList" @click="btnClick" />
+      <relate-list
+        :list="relateList"
+        @click="(item) => btnClick(item, queryTxt)"
+      />
     </div>
   </div>
 </template>
@@ -100,6 +103,7 @@ import { px2vw } from '@/utils/common'
 import 'vant/es/toast/style'
 
 interface Props {
+  query: string
   list: SearchItem[]
   relateList: SearchItem[]
 }
@@ -110,6 +114,10 @@ interface PopoverItem {
 
 const props = defineProps<Props>()
 const popoverList = ref<PopoverItem[]>([])
+
+const queryTxt = computed<string>(() => {
+  return props.query
+})
 
 const { btnClick, playClick } = useListClick()
 

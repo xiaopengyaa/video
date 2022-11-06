@@ -41,7 +41,10 @@
                     :size="px2vw(16)"
                   />
                 </div>
-                <div class="update__desc van-multi-ellipsis--l2">
+                <div
+                  v-if="detailData.introduction.update_notify_desc"
+                  class="update__desc van-multi-ellipsis--l2"
+                >
                   {{ detailData.introduction.update_notify_desc }}
                 </div>
               </div>
@@ -193,9 +196,10 @@ watch(loading, () => {
     margin-top: 40px;
     .update {
       cursor: pointer;
+      margin-bottom: 12px;
       &__desc {
         color: #848492;
-        margin: 6px 0 12px;
+        margin-top: 6px;
       }
     }
   }

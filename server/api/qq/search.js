@@ -1,15 +1,15 @@
 const cheerio = require('cheerio')
 const qs = require('qs')
-const { api, getResult, getSiteByUrl } = require('../../utils')
+const { api, getResult, getSiteByUrl, processUrl } = require('../../utils')
 const { COOKIE, REFERER } = require('./constant')
 
 const homeApi = {
   // 搜索
-  async search(keyword) {
+  async search(keyword, cid) {
     const url = `https://v.qq.com/x/search/`
     const html = await api.get(url, { q: keyword })
     const $ = cheerio.load(html)
-    const list = getSearchList($)
+    const list = await getSearchList($, cid)
     const relateList = getRelateList($)
 
     return getResult({
@@ -114,10 +114,17 @@ function getRelateList($) {
   return list
 }
 
-function getSearchList($) {
+async function getSearchList($, targetCid = '') {
   const list = []
+  const arr = []
   $('.search_container .mix_warp .result_item_v').each((index, elem) => {
     const cid = $(elem).attr('data-id')
+
+    // 如果targetCid存在，则表示精准查找
+    if (targetCid && targetCid !== cid) {
+      return
+    }
+
     const image = $(elem).find('._infos .figure_pic').attr('src')
     const imageInfo = $(elem).find('._infos .figure_info').text() || ''
     const mark = $(elem).find('._infos .mark_v img').attr('src')
@@ -139,8 +146,15 @@ function getSearchList($) {
     }
 
     const obj = processUrl(href)
-    const { playlist } = getPlaylist($, elem, cid)
     const btnlist = getBtnlist($, elem, cid)
+
+    // 将异步请求存起来
+    arr.push({
+      $,
+      elem,
+      cid,
+      site,
+    })
 
     list.push({
       site,
@@ -152,47 +166,125 @@ function getSearchList($) {
       href: obj.href,
       sub: [type].concat(sub.replace(/\(|\)/g, '').split('/')),
       desc,
-      playlist,
+      playlist: [],
       btnlist,
     })
+  })
+  const data = await Promise.all(
+    arr.map(({ $, elem, cid, site }) => {
+      return getPlaylist($, elem, cid, site, !!targetCid)
+    })
+  )
+  data.forEach((item, index) => {
+    list[index].playlist = item.playlist
   })
   return list
 }
 
-function getPlaylist($, elem, cid) {
-  const playlist = []
-  let $item = $(elem).find('._playlist .result_episode_list .item')
+async function getPlaylist($, elem, cid, site, isAll = false) {
+  let playlist = []
 
-  if (!$item.length) {
-    $item = $(elem).find('._playlist .tmpinnerList ._series_list .item')
-  }
+  if (isAll) {
+    playlist = await getPlaylistAll(cid, site)
+  } else {
+    let $item = $(elem).find('._playlist .result_episode_list .item')
 
-  $item.each((cIndex, cElem) => {
-    if (cElem.attribs.class && cElem.attribs.class.includes('unfold')) {
-      return
+    if (!$item.length) {
+      $item = $(elem).find('._playlist .tmpinnerList ._series_list .item')
     }
-    const text = $(cElem).find('a').text()
-    const mark = $(cElem).find('.mark_v img').attr('src') || ''
-    let href = $(cElem).find('a').attr('href')
 
-    // 处理href
-    if (href.includes('javascript')) {
-      href = ''
-    }
-    const obj = processUrl(href)
+    $item.each((cIndex, cElem) => {
+      if (cElem.attribs.class && cElem.attribs.class.includes('unfold')) {
+        return
+      }
+      const text = $(cElem).find('a').text()
+      const mark = $(cElem).find('.mark_v img').attr('src') || ''
+      let href = $(cElem).find('a').attr('href')
 
-    playlist.push({
-      cid,
-      vid: obj.vid,
-      href: obj.href,
-      text,
-      mark,
+      // 处理href
+      if (href.includes('javascript')) {
+        href = ''
+      }
+      const obj = processUrl(href)
+
+      playlist.push({
+        cid,
+        vid: obj.vid,
+        href: obj.href,
+        text,
+        mark,
+      })
     })
-  })
+  }
 
   return {
     playlist,
   }
+}
+
+async function getPlaylistAll(cid, site, pageContext = '') {
+  let list = []
+  const url = `https://pbaccess.video.qq.com/trpc.videosearch.search_cgi.http/load_playsource_list_info`
+  const res = await api.get(
+    url,
+    {
+      pageNum: 0,
+      id: cid,
+      dataType: '2',
+      pageContext,
+      // 猜测sence为1返回部分，为2返回全部
+      scene: 2,
+      platform: 2,
+      appId: '10718',
+      site,
+      vappid: '34382579',
+      vsecret: 'e496b057758aeb04b3a2d623c952a1c47e04ffb0a01e19cf',
+    },
+    {
+      headers: {
+        cookie: COOKIE,
+        referer: REFERER,
+      },
+    }
+  )
+
+  if (res.data?.errorCode === 0) {
+    const firstBlockSites =
+      res.data.normalList.itemList?.[0].videoInfo.firstBlockSites?.[0]
+    const episodeInfoList = firstBlockSites.episodeInfoList
+    const tabs = firstBlockSites.tabs
+    episodeInfoList.forEach((item) => {
+      const obj = processUrl(item.url)
+      let mark = ''
+      if (item.markLabel) {
+        if (item.markLabel.includes('vip')) {
+          mark = '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
+        } else if (item.markLabel.includes('trailerlite')) {
+          mark = '//vfiles.gtimg.cn/vupload/20210322/tag_mini_trailerlite.png'
+        }
+      }
+
+      list.push({
+        cid,
+        vid: obj.vid,
+        href: obj.href,
+        text: item.title,
+        mark,
+      })
+    })
+    if (!pageContext && tabs?.length > 1) {
+      const promiseArr = []
+      tabs.forEach((tab, index) => {
+        // 获取除第一个的数据
+        if (index > 0) {
+          promiseArr.push(getPlaylistAll(cid, site, tab.asnycParams))
+        }
+      })
+      const dataArr = await Promise.all(promiseArr)
+      list = list.concat(dataArr.flat())
+    }
+  }
+  return list
 }
 
 function getBtnlist($, elem, cid) {
@@ -215,29 +307,6 @@ function getBtnlist($, elem, cid) {
     })
 
   return btnlist
-}
-
-function processUrl(url) {
-  const reg = /cover\/(.*)\.html/
-  const match = reg.exec(url)
-  let href = url
-  let cid = ''
-  let vid = ''
-  if (url.includes('search_redirect.html')) {
-    const params = href.split('?')[1]
-    const searchParams = new URLSearchParams(`?${params}`)
-    href = searchParams.get('url') || ''
-    cid = searchParams.get('cid') || ''
-  } else if (match) {
-    const arr = match[1].split('/')
-    cid = arr[0]
-    vid = arr[1] || ''
-  }
-  return {
-    href,
-    cid,
-    vid,
-  }
 }
 
 module.exports = homeApi

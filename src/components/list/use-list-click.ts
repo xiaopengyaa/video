@@ -5,12 +5,13 @@ interface DetailParam {
   href: string
   cid: string
   site: Site
+  queryTxt: string
 }
 
 export default function useListClick() {
   const router = useRouter()
 
-  function btnClick(item: SearchItem) {
+  function btnClick(item: SearchItem, queryTxt: string) {
     let href = item.href
     if (item.playlist.length) {
       href = item.playlist[0].href
@@ -22,10 +23,11 @@ export default function useListClick() {
       href,
       cid: item.cid,
       site: item.site,
+      queryTxt,
     })
   }
 
-  function playClick(playItem: PlayItem, item: SearchItem) {
+  function playClick(playItem: PlayItem, item: SearchItem, queryTxt: string) {
     let href = playItem.href
     if (!playItem.href) {
       href = item.playlist[0].href
@@ -34,10 +36,11 @@ export default function useListClick() {
       href,
       cid: item.cid,
       site: item.site,
+      queryTxt,
     })
   }
 
-  function toDetail({ href, cid, site = Site.qq }: DetailParam) {
+  function toDetail({ href, cid, site = Site.qq, queryTxt }: DetailParam) {
     if (!href) {
       return
     }
@@ -47,6 +50,7 @@ export default function useListClick() {
         url: href,
         cid,
         site,
+        queryTxt,
       },
     })
   }
