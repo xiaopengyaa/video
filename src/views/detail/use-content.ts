@@ -6,11 +6,12 @@ import { PlayItem, SearchItem } from '@/types/search'
 import { Site } from '@/types/enum'
 import { getDefDetail } from './default'
 import useListClick from '@/components/list/use-list-click'
-import { restoreHtmlText } from '@/utils/common'
+import { restoreHtmlText, setTitle } from '@/utils/common'
 
 export default function useContent(cid: Ref<string>, site: Ref<Site>) {
   const route = useRoute()
   const router = useRouter()
+  const title = useTitle()
   const detailData = ref<DetailRes>(getDefDetail())
   const active = ref('')
   const playlist = ref<PlayItem[]>([])
@@ -49,6 +50,7 @@ export default function useContent(cid: Ref<string>, site: Ref<Site>) {
       .then(([detail, list]) => {
         detailData.value = detail
         playlist.value = list
+        title.value = setTitle(detailData.value.introduction.title)
         if (detailData.value.videoInfo.vid) {
           active.value = detailData.value.videoInfo.vid
         } else if (list.length) {

@@ -40,6 +40,7 @@ module.exports = {
       const searchParams = new URLSearchParams(`?${params}`)
       href = searchParams.get('url') || ''
       cid = searchParams.get('cid') || ''
+      vid = getDefaultVid(href)
     } else if (match) {
       const arr = match[1].split('/')
       cid = arr[0]
@@ -110,4 +111,32 @@ function getDigit(integer) {
     integer = integer / 10
   }
   return digit
+}
+
+function getDefaultVid(url) {
+  let vid = ''
+  if (!url) {
+    return vid
+  }
+  const vidReg = [
+    {
+      site: SITE.youku,
+      reg: /youku.com\/v_show\/id_(.*?)\.html/,
+    },
+    {
+      site: SITE.migu,
+      reg: /miguvideo\.com.*detail\.html.*cid=(.*?)(&.*|$)/,
+    },
+    {
+      site: SITE.sohu,
+      reg: /tv\.sohu\.com\/v\/(.*)\.html/,
+    },
+  ]
+  vidReg.forEach((item) => {
+    const match = item.reg.exec(url)
+    if (match) {
+      vid = match[1]
+    }
+  })
+  return vid
 }

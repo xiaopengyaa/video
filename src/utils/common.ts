@@ -1,3 +1,5 @@
+import { Site } from '@/types/enum'
+
 export function px2vw(size: number, decimal = 0) {
   const width =
     document.documentElement.clientWidth || document.body.clientWidth
@@ -16,6 +18,23 @@ export function round(num: number, decimal: number) {
 
 export function getImageUrl(name: string) {
   return new URL(`../assets/images/${name}`, import.meta.url).href
+}
+
+export function setTitle(title: string) {
+  const defTitle = 'xiaopengyaa视频'
+  return title ? `${title} - ${defTitle}` : defTitle
+}
+
+export function getSiteLogo(site: Site) {
+  const logoMap = {
+    [Site.qq]: getImageUrl('qq.png'),
+    [Site.qiyi]: getImageUrl('qiyi.png'),
+    [Site.youku]: getImageUrl('youku.png'),
+    [Site.migu]: getImageUrl('migu.png'),
+    [Site.bilibili]: getImageUrl('bilibili.webp'),
+    [Site.sohu]: getImageUrl('sohu.webp'),
+  }
+  return logoMap[site] || ''
 }
 
 export function restoreHtmlText(str: string) {

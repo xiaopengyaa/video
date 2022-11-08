@@ -4,6 +4,8 @@ const SITE = {
   bilibili: 'bilibili',
   qiyi: 'qiyi',
   youku: 'youku',
+  migu: 'migu',
+  sohu: 'sohu',
 }
 
 // 视频类型

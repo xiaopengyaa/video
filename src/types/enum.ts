@@ -42,4 +42,6 @@ export enum Site {
   bilibili = 'bilibili',
   qiyi = 'qiyi',
   youku = 'youku',
+  migu = 'migu',
+  sohu = 'sohu',
 }

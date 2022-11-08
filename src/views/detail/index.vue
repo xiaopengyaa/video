@@ -20,12 +20,22 @@
             <div class="detail__title-wrap">
               <div class="detail__title" @click="showIntro = true">
                 <div class="title">
-                  {{ detailData.introduction.title }}
+                  <van-image
+                    v-show="getSiteLogo(site)"
+                    class="logo"
+                    :width="px2vw(22)"
+                    :src="getSiteLogo(site)"
+                  />
+                  <span class="van-ellipsis">{{
+                    detailData.introduction.title
+                  }}</span>
                 </div>
                 <div class="info">
-                  <span v-html="detailData.introduction.detail_info" />
-                  <span>&nbsp;· 简介</span>
-                  <van-icon class="arrow" name="arrow" :size="px2vw(12)" />
+                  <span
+                    class="van-ellipsis"
+                    v-html="detailData.introduction.detail_info"
+                  />
+                  <van-icon class="arrow" name="arrow" :size="px2vw(14)" />
                 </div>
               </div>
               <play-util v-model:url="playUrl" class="detail__util" />
@@ -68,13 +78,15 @@
             </div>
           </div>
         </scroll-wrap>
-        <van-empty
-          v-show="isEmpty"
-          class="detail__empty"
-          :image="getImageUrl('empty-image.png')"
-          image-size="25vw"
-          description="什么都没得~"
-        />
+        <div v-show="isEmpty" class="detail__empty-wrap">
+          <van-empty
+            class="detail__empty"
+            :image="getImageUrl('empty-image.png')"
+            image-size="25vw"
+            description="什么都没得~"
+          />
+          <play-util v-model:url="playUrl" class="detail__empty-util" />
+        </div>
       </loading-skeleton>
       <intro-dialog
         v-if="!isEmpty"
@@ -105,7 +117,7 @@ import PlayUtil from './play-util.vue'
 import useContent from './use-content'
 import useVideo from './use-video'
 import { LOADING_DELAY } from '@/utils/constant'
-import { px2vw, getImageUrl } from '@/utils/common'
+import { px2vw, getImageUrl, getSiteLogo } from '@/utils/common'
 import { useRect } from '@vant/use'
 
 const playUrl = ref('')
@@ -156,9 +168,18 @@ watch(loading, () => {
     height: 56.25vw;
     background: #000;
   }
-  &__empty {
+  &__empty-wrap {
+    position: relative;
     flex: 1;
     overflow: hidden;
+  }
+  &__empty-util {
+    position: absolute;
+    right: 12px;
+    top: 8px;
+  }
+  &__empty {
+    height: 100%;
   }
   &__content {
     flex: 1;
@@ -173,20 +194,24 @@ watch(loading, () => {
   &__title {
     flex: 1;
     margin-top: 16px;
+    overflow: hidden;
     cursor: pointer;
     .title {
+      display: flex;
+      align-items: center;
       font-size: 18px;
       font-weight: bold;
       margin-right: 10px;
+      .logo {
+        flex-shrink: 0;
+        margin-right: 6px;
+      }
     }
     .info {
       display: flex;
       align-items: center;
       color: #848492;
       margin: 8px 0;
-      .arrow {
-        margin-top: 2px;
-      }
     }
   }
   &__util {

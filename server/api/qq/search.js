@@ -10,7 +10,7 @@ const homeApi = {
     const html = await api.get(url, { q: keyword })
     const $ = cheerio.load(html)
     const list = await getSearchList($, cid)
-    const relateList = getRelateList($)
+    const relateList = getRelateList($, cid)
 
     return getResult({
       list,
@@ -55,7 +55,7 @@ const homeApi = {
   },
 }
 
-function getRelateList($) {
+function getRelateList($, targetCid) {
   let list = []
   let match = $('.result_series_new')
     .attr('r-props')
@@ -63,52 +63,58 @@ function getRelateList($) {
   let data
   if (match) {
     data = JSON.parse(decodeURIComponent(match[1]))
-    list = data.itemList.slice(0, 20).map((item) => {
-      const video = item.videoInfo
-      const playlist = []
-      const obj = processUrl(video.url)
+    list = data.itemList
+      .filter((item) => {
+        const obj = processUrl(item.videoInfo.url)
+        return targetCid !== obj.cid
+      })
+      .slice(0, 20)
+      .map((item) => {
+        const video = item.videoInfo
+        const obj = processUrl(video.url)
+        const playlist = []
 
-      if (video.firstBlockSites[0]?.episodeInfoList) {
-        video.firstBlockSites[0]?.episodeInfoList.forEach((cItem, cIndex) => {
-          const text = cItem.title
-          const cObj = processUrl(cItem.url)
-          let mark = ''
+        if (video.firstBlockSites[0]?.episodeInfoList) {
+          video.firstBlockSites[0]?.episodeInfoList.forEach((cItem, cIndex) => {
+            const text = cItem.title
+            const cObj = processUrl(cItem.url)
+            let mark = ''
 
-          if (cItem.markLabel) {
-            const label = JSON.parse(cItem.markLabel)
-            if (label.tag_2?.param) {
-              const cMatch = label.tag_2.param.match(/1X=(.*);/)
-              if (cMatch) {
-                mark = cMatch[1]
+            if (cItem.markLabel) {
+              const label = JSON.parse(cItem.markLabel)
+              if (label.tag_2?.param) {
+                const cMatch = label.tag_2.param.match(/1X=(.*);/)
+                if (cMatch) {
+                  mark = cMatch[1]
+                }
               }
             }
-          }
 
-          playlist.push({
-            cid: obj.cid,
-            vid: cObj.vid,
-            href: cObj.href,
-            text,
-            mark,
+            playlist.push({
+              cid: obj.cid,
+              vid: cObj.vid,
+              href: cObj.href,
+              text,
+              mark,
+            })
           })
-        })
-      }
-      return {
-        site: getSiteByUrl(obj.href),
-        cid: obj.cid,
-        image: video.imgUrl,
-        imageInfo: video.imgTag?.tag_3?.text || '',
-        mark: video.imgTag?.tag_2?.param['1X'] || '',
-        title: video.title
-          .replaceAll('\u0005', '<span class="main">')
-          .replaceAll('\u0006', '</span>'),
-        href: obj.href,
-        sub: [],
-        desc: '',
-        playlist,
-        btnlist: [],
-      }
-    })
+        }
+        return {
+          site: getSiteByUrl(obj.href),
+          cid: obj.cid,
+          image: video.imgUrl,
+          imageInfo: video.imgTag?.tag_3?.text || '',
+          mark: video.imgTag?.tag_2?.param['1X'] || '',
+          title: video.title
+            .replaceAll('\u0005', '<span class="main">')
+            .replaceAll('\u0006', '</span>'),
+          href: obj.href,
+          sub: [],
+          desc: '',
+          playlist,
+          btnlist: [],
+        }
+      })
   }
 
   return list
@@ -117,11 +123,13 @@ function getRelateList($) {
 async function getSearchList($, targetCid = '') {
   const list = []
   const arr = []
-  $('.search_container .mix_warp .result_item_v').each((index, elem) => {
+  const $resultItem = $('.search_container .mix_warp .result_item_v')
+  $resultItem.each((index, elem) => {
     const cid = $(elem).attr('data-id')
 
     // 如果targetCid存在，则表示精准查找
-    if (targetCid && targetCid !== cid) {
+    // 模糊判断：如果结果只有一条，也通过
+    if ($resultItem.length !== 1 && targetCid && targetCid !== cid) {
       return
     }
 
