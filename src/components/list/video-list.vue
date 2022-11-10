@@ -49,7 +49,7 @@
             theme="dark"
             placement="top"
             :actions="popoverList[index].actions"
-            @select="(playItem: PlayItem) => playClick(playItem, item,queryTxt)"
+            @select="(playItem: PlayItem) => playClick(playItem, item, queryTxt)"
           >
             <template #reference>
               <van-button
@@ -87,7 +87,7 @@
       <div class="relate-title">相关影视作品</div>
       <relate-list
         :list="relateList"
-        @click="(item) => btnClick(item, queryTxt)"
+        @click="(item) => btnClick(item, restoreHtmlText(item.title))"
       />
     </div>
   </div>
@@ -99,7 +99,7 @@ import RelateList from './relate-list.vue'
 import useListClick from './use-list-click'
 import { PlayItem, SearchItem } from '@/types/search'
 import { Toast } from 'vant'
-import { px2vw } from '@/utils/common'
+import { px2vw, restoreHtmlText } from '@/utils/common'
 import 'vant/es/toast/style'
 
 interface Props {

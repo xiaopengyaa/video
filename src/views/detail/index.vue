@@ -30,7 +30,7 @@
                     detailData.introduction.title
                   }}</span>
                 </div>
-                <div class="info">
+                <div v-if="detailData.introduction.detail_info" class="info">
                   <span
                     class="van-ellipsis"
                     v-html="detailData.introduction.detail_info"
@@ -38,7 +38,11 @@
                   <van-icon class="arrow" name="arrow" :size="px2vw(14)" />
                 </div>
               </div>
-              <play-util v-model:url="playUrl" class="detail__util" />
+              <play-util
+                v-if="!isEmpty"
+                v-model:url="playUrl"
+                class="detail__util"
+              />
             </div>
             <div class="detail__play">
               <div class="update" @click="showPlaylist = true">
@@ -78,7 +82,7 @@
             </div>
           </div>
         </scroll-wrap>
-        <div v-show="isEmpty" class="detail__empty-wrap">
+        <div v-if="isEmpty" class="detail__empty-wrap">
           <van-empty
             class="detail__empty"
             :image="getImageUrl('empty-image.png')"
@@ -100,7 +104,7 @@
         v-model:active="active"
         :list="playlist"
         :height="detailHeight"
-        :desc="detailData.introduction.update_notify_desc"
+        :desc="detailData.introduction.update_notify_desc || ''"
       />
     </div>
   </transition>
@@ -128,7 +132,7 @@ const showIntro = ref(false)
 const showPlaylist = ref(false)
 const detailHeight = ref('')
 
-const { cid, site } = useVideo(playUrl)
+const { cid, site } = useVideo()
 const {
   detailData,
   playlist,

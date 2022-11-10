@@ -131,6 +131,34 @@ function getDefaultVid(url) {
       site: SITE.sohu,
       reg: /tv\.sohu\.com\/v\/(.*)\.html/,
     },
+    {
+      site: SITE.yangshipin,
+      reg: /yangshipin\.cn\/video.*vid=(.*?)(&.*|$)/,
+    },
+    {
+      site: SITE.cntv,
+      reg: /cctv\.com.*VIDE(.*)\.shtml/,
+    },
+    {
+      site: SITE.vip1905,
+      reg: /vip\.1905\.com\/play\/(.*)\.shtml/,
+    },
+    {
+      site: SITE.hunantv,
+      reg: /mgtv\.com.*\/(.*?)\.html/,
+    },
+    {
+      site: SITE.letv,
+      reg: /le\.com\/ptv\/vplay\/(.*)\.html/,
+    },
+    {
+      site: SITE.pptv,
+      reg: /pptv\.com\/page\/(.*)\.html/,
+    },
+    {
+      site: SITE.acfun,
+      reg: /acfun\.cn.*\/(.*)/,
+    },
   ]
   vidReg.forEach((item) => {
     const match = item.reg.exec(url)

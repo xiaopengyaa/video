@@ -6,6 +6,13 @@ const SITE = {
   youku: 'youku',
   migu: 'migu',
   sohu: 'sohu',
+  yangshipin: 'yangshipin',
+  cntv: 'cntv',
+  vip1905: '1905',
+  hunantv: 'hunantv',
+  letv: 'letv',
+  pptv: 'pptv',
+  acfun: 'acfun',
 }
 
 // 视频类型

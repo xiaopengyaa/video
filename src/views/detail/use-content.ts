@@ -69,6 +69,7 @@ export default function useContent(cid: Ref<string>, site: Ref<Site>) {
   }
 
   function toHome() {
+    title.value = setTitle('')
     router.push('/')
   }
 

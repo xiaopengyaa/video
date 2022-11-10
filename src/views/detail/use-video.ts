@@ -1,7 +1,6 @@
 import { Site } from '@/types/enum'
-import { Ref } from 'vue'
 
-export default function useVideo(playUrl: Ref<string>) {
+export default function useVideo() {
   const route = useRoute()
   const cid = ref('')
   const site = ref<Site>(Site.qq)

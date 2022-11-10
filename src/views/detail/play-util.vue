@@ -18,8 +18,8 @@
         <van-grid-item
           v-for="(line, index) in lines"
           :key="index"
-          :class="{ active: url === getPlayUrl(line) }"
-          :icon="url === getPlayUrl(line) ? 'star' : 'star-o'"
+          :class="{ active: isActiveLine(line) }"
+          :icon="isActiveLine(line) ? 'star' : 'star-o'"
           @click="handleClick(line)"
         >
           <template #text>
@@ -33,6 +33,7 @@
 
 <script setup lang="ts">
 import { LINE_KEY } from '@/utils/constant'
+import { setTitle } from '@/utils/common'
 
 interface Props {
   url: string
@@ -41,6 +42,7 @@ interface Props {
 const props = defineProps<Props>()
 const route = useRoute()
 const router = useRouter()
+const title = useTitle()
 const lines = [
   'https://jx.aidouer.net/?url=',
   'https://jx.bozrc.com:4433/player/?url=',
@@ -70,6 +72,10 @@ function getPlayUrl(line: string) {
   return line + route.query.url
 }
 
+function isActiveLine(line: string) {
+  return url.value.includes(line)
+}
+
 function refreshUrl() {
   const temp = url.value
   url.value = ''
@@ -81,6 +87,7 @@ function refreshUrl() {
 }
 
 function toHome() {
+  title.value = setTitle('')
   router.push('/')
 }
 </script>

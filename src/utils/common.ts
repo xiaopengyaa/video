@@ -31,6 +31,13 @@ export function getSiteLogo(site: Site) {
     [Site.qiyi]: getImageUrl('qiyi.png'),
     [Site.youku]: getImageUrl('youku.png'),
     [Site.migu]: getImageUrl('migu.png'),
+    [Site.yangshipin]: getImageUrl('yangshipin.png'),
+    [Site.cntv]: getImageUrl('cntv.png'),
+    [Site.vip1905]: getImageUrl('1905.png'),
+    [Site.hunantv]: getImageUrl('hunantv.png'),
+    [Site.letv]: getImageUrl('letv.png'),
+    [Site.pptv]: getImageUrl('pptv.png'),
+    [Site.acfun]: getImageUrl('acfun.png'),
     [Site.bilibili]: getImageUrl('bilibili.webp'),
     [Site.sohu]: getImageUrl('sohu.webp'),
   }
