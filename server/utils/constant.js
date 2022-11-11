@@ -15,6 +15,23 @@ const SITE = {
   acfun: 'acfun',
 }
 
+const SITE_SORT = {
+  [SITE.qq]: 1,
+  [SITE.bilibili]: 2,
+  [SITE.qiyi]: 3,
+  [SITE.youku]: 4,
+  [SITE.migu]: 5,
+  [SITE.sohu]: 6,
+  [SITE.vip1905]: 7,
+  [SITE.hunantv]: 8,
+  [SITE.letv]: 9,
+  [SITE.acfun]: 10,
+  [SITE.pptv]: 11,
+  [SITE.cntv]: 12,
+  [SITE.yangshipin]: 13,
+  default: 99,
+}
+
 // 视频类型
 const TYPE = {
   MOVIE: 1,
@@ -53,5 +70,6 @@ const TYPE = {
 
 module.exports = {
   SITE,
+  SITE_SORT,
   TYPE,
 }

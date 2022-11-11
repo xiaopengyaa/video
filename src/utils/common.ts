@@ -38,8 +38,8 @@ export function getSiteLogo(site: Site) {
     [Site.letv]: getImageUrl('letv.png'),
     [Site.pptv]: getImageUrl('pptv.png'),
     [Site.acfun]: getImageUrl('acfun.png'),
-    [Site.bilibili]: getImageUrl('bilibili.webp'),
-    [Site.sohu]: getImageUrl('sohu.webp'),
+    [Site.bilibili]: getImageUrl('bilibili.png'),
+    [Site.sohu]: getImageUrl('sohu.png'),
   }
   return logoMap[site] || ''
 }
