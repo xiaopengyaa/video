@@ -45,7 +45,8 @@ const router = useRouter()
 const title = useTitle()
 const lines = [
   'https://jx.aidouer.net/?url=',
-  'https://jx.bozrc.com:4433/player/?url=',
+  // 'https://jx.bozrc.com:4433/player/?url=',
+  'https://okjx.cc/?url=',
   'https://jx.4kdv.com/?url=',
 ]
 const url = useVModel(props, 'url')
@@ -55,7 +56,11 @@ const sheetHeight = ref('')
 const storageLine = useStorage<string>(LINE_KEY, '')
 
 watchEffect(() => {
-  url.value = getPlayUrl(storageLine.value || lines[0])
+  let line = lines[0]
+  if (storageLine.value && lines.includes(storageLine.value)) {
+    line = storageLine.value
+  }
+  url.value = getPlayUrl(line)
 })
 
 onMounted(() => {

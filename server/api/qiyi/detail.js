@@ -1,6 +1,6 @@
 const { api, getResult, getImageUrl, dedupe } = require('../../utils')
 const { SITE } = require('../../utils/constant')
-const { SUCCESS_CODE } = require('./constant')
+const { SUCCESS_CODE, USER_AGENT } = require('./constant')
 const { getSign } = require('./md5')
 
 const homeApi = {
@@ -104,7 +104,11 @@ function getPlayItem(item, albumId) {
 }
 
 async function getData(url) {
-  const html = await api.get(url)
+  const html = await api.get(url, null, {
+    headers: {
+      'User-Agent': USER_AGENT,
+    },
+  })
   const reg = /window\.Q\.PageInfo\.playPageInfo=(.*?);/
   const match = reg.exec(html)
   if (match) {
