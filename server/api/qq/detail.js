@@ -6,7 +6,7 @@ const homeApi = {
   async getDetail(query) {
     const { url } = query
     const html = await api.get(url)
-    const reg = /window\.__pinia=(.*)<\/script>/
+    const reg = /window\.__pinia=(.*?)<\/script>/
     const match = reg.exec(html)
     let introduction = {}
     let topList = []
