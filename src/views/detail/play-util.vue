@@ -45,7 +45,6 @@ const router = useRouter()
 const title = useTitle()
 const lines = [
   'https://jx.xyflv.com/?url=',
-  'https://jx.bozrc.com:4433/player/?url=',
   // 'https://okjx.cc/?url=',
   'https://jx.jsonplayer.com/player/?url=',
 ]
