@@ -44,10 +44,10 @@ const route = useRoute()
 const router = useRouter()
 const title = useTitle()
 const lines = [
-  'https://jx.aidouer.net/?url=',
-  // 'https://jx.bozrc.com:4433/player/?url=',
-  'https://okjx.cc/?url=',
-  'https://jx.4kdv.com/?url=',
+  'https://jx.xyflv.com/?url=',
+  'https://jx.bozrc.com:4433/player/?url=',
+  // 'https://okjx.cc/?url=',
+  'https://jx.jsonplayer.com/player/?url=',
 ]
 const url = useVModel(props, 'url')
 const start = ref(false)
