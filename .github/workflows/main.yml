@@ -1,7 +1,7 @@
 name: Auto Deploy # 当前工作流程的名称
-on: 
-  push: 
-    branches: 
+on:
+  push:
+    branches:
       - main # 只要push到main分支，就会触发该工作流程
 jobs:
   build-and-deploy:
@@ -15,7 +15,7 @@ jobs:
           username: ${{ secrets.MY_USER }} # 服务器用户名
           password: ${{ secrets.MY_PASS }} # 服务器密码
           script: |
-            cd /usr/frontend/video # 进入服务器中的端工程所在的目录
+            cd /www/wwwroot/video # 进入服务器中的端工程所在的目录
             git restore src/* # 还原更改
             git pull # 拉取最新代码
             pnpm install # 安装项目依赖
