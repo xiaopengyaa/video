@@ -7,11 +7,7 @@ import browser from './utils/page-check'
 // 判断是否是移动设备打开
 if (import.meta.env.PROD && !browser.versions.mobile) {
   const mobileUrl = `${import.meta.env.VITE_APP_TO_PC}`
-  if (window.top) {
-    window.top.location.href = mobileUrl
-  } else {
-    location.href = mobileUrl
-  }
+  location.href = mobileUrl
 }
 
 // 全局引入css
