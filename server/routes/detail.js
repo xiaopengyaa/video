@@ -20,10 +20,10 @@ router.get('/getDetail', async (ctx) => {
   ctx.body = data
 })
 
-router.get('/getPlaylist', async (ctx) => {
-  const { site } = ctx.query
+router.post('/getPlaylist', async (ctx) => {
+  const { site } = ctx.request.body
   const obj = apiMap[site] || defaultApi
-  const data = await obj.getPlaylist(ctx.query, 0)
+  const data = await obj.getPlaylist(ctx.request.body)
   ctx.body = data
 })
 

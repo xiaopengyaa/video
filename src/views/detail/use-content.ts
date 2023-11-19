@@ -31,7 +31,7 @@ export default function useContent(cid: Ref<string>, site: Ref<Site>) {
     initDetail()
   })
 
-  function initDetail() {
+  async function initDetail() {
     if (!route.query.url) {
       toHome()
       return
@@ -44,28 +44,31 @@ export default function useContent(cid: Ref<string>, site: Ref<Site>) {
       cid: cid.value,
       site: site.value,
       queryTxt: queryTxt.value,
+      tabs: [],
     }
 
-    Promise.all([getDetail(detailReq), getPlaylist(detailReq)])
-      .then(([detail, list]) => {
-        detailData.value = detail
-        playlist.value = list
-        title.value = setTitle(detailData.value.introduction.title)
-        if (detailData.value.videoInfo.vid) {
-          active.value = detailData.value.videoInfo.vid
-        } else if (list.length) {
-          active.value = list[0].vid
-        }
+    try {
+      const detail = await getDetail(detailReq)
+      detailReq.tabs = detail.tabs
+      const list = await getPlaylist(detailReq)
 
-        loading.value = false
-        if (list.length === 0) {
-          isEmpty.value = true
-        }
-      })
-      .catch(() => {
-        loading.value = false
+      detailData.value = detail
+      playlist.value = list
+      title.value = setTitle(detailData.value.introduction.title)
+      if (detailData.value.videoInfo.vid) {
+        active.value = detailData.value.videoInfo.vid
+      } else if (list.length) {
+        active.value = list[0].vid
+      }
+
+      loading.value = false
+      if (list.length === 0) {
         isEmpty.value = true
-      })
+      }
+    } catch {
+      loading.value = false
+      isEmpty.value = true
+    }
   }
 
   function toHome() {

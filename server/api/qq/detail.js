@@ -16,16 +16,29 @@ const homeApi = {
       introduction = data.introduction.introData.list[0].item_params
       topList = processTopList(data.topList.data)
       videoInfo = data.global.videoInfo
+      tabs = data.episodeMain.listData[0].tabs
     }
     return getResult({
       introduction,
       topList,
       videoInfo,
+      tabs,
     })
   },
-  async getPlaylist(query, page_num = 0) {
-    const { cid } = query
-    const list = await getList(cid, page_num)
+  async getPlaylist(query) {
+    const { cid, tabs } = query
+    const promiseArr = []
+
+    // 如果有tabs，则依次请求，没有的话，就请求1次。
+    if (tabs && tabs.length) {
+      tabs.forEach((tab) => {
+        promiseArr.push(getList(cid, tab.pageContext))
+      })
+    } else {
+      promiseArr.push(getList(cid, ''))
+    }
+
+    const list = (await Promise.all(promiseArr)).flat()
 
     return getResult(
       list.map((item) => {
@@ -48,7 +61,7 @@ const homeApi = {
   },
 }
 
-async function getList(cid, page_num) {
+async function getList(cid, page_context) {
   const res = await api.post(
     'https://pbaccess.video.qq.com/trpc.universal_backend_service.page_server_rpc.PageServer/GetPageData?video_appid=3000010&vplatform=2',
     {
@@ -61,9 +74,9 @@ async function getList(cid, page_num) {
         vid: '',
         lid: '',
         page_num: '',
-        page_size: '100',
+        page_size: '',
         detail_page_type: '1',
-        page_context: `lid=&cid=${cid}&page_num=${page_num}&page_size=100&id_type=1&req_type=6&req_from=web_vsite&req_from_second_type=&detail_page_type=1`,
+        page_context,
       },
       has_cache: 0,
     },
@@ -78,12 +91,8 @@ async function getList(cid, page_num) {
   let list = []
 
   if (res.data.module_list_datas.length) {
-    const params = res.data.module_list_datas[0].module_datas[0].module_params
     list =
       res.data.module_list_datas[0].module_datas[0].item_data_lists.item_datas
-    if (params.has_next === 'true') {
-      list = list.concat(await getList(cid, ++page_num))
-    }
   }
   return list
 }

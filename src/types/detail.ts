@@ -1,17 +1,25 @@
 import { Site } from './enum'
 import { SearchItem } from './search'
 
+export interface PageTab {
+  text: string
+  isSelected: boolean
+  pageContext: string
+}
+
 export interface DetailReq {
   url: string
   cid: string
   site: Site
   queryTxt: string
+  tabs: PageTab[]
 }
 
 export interface DetailRes {
   introduction: DetailIntro
   topList: SearchItem[]
   videoInfo: VideoInfo
+  tabs: PageTab[]
 }
 
 export interface DetailIntro {

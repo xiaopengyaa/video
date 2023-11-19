@@ -8,6 +8,6 @@ export async function getDetail(data: DetailReq) {
 }
 
 export async function getPlaylist(data: DetailReq) {
-  const res = await http.get<PlayItem[]>('/detail/getPlaylist', data)
+  const res = await http.post<PlayItem[]>('/detail/getPlaylist', data)
   return res
 }
