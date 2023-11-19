@@ -109,7 +109,7 @@ function getRelateList($, targetCid) {
           cid: obj.cid,
           image: video.imgUrl,
           imageInfo: video.imgTag?.tag_3?.text || '',
-          mark: video.imgTag?.tag_2?.param['1X'] || '',
+          mark: video.imgTag?.tag_2?.param?.['1X'] || '',
           title: video.title
             .replaceAll('\u0005', '<span class="main">')
             .replaceAll('\u0006', '</span>'),

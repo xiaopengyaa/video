@@ -16,7 +16,7 @@ const homeApi = {
       introduction = data.introduction.introData.list[0].item_params
       topList = processTopList(data.topList.data)
       videoInfo = data.global.videoInfo
-      tabs = data.episodeMain.listData[0].tabs
+      tabs = data.episodeMain.listData[data.episodeMain.currentEpTabIndex].tabs
     }
     return getResult({
       introduction,
@@ -41,22 +41,27 @@ const homeApi = {
     const list = (await Promise.all(promiseArr)).flat()
 
     return getResult(
-      list.map((item) => {
-        const vid = item.item_params.vid
-        const text = item.item_params.title
-        const isTrailer = item.item_params.is_trailer
-        const mark =
-          isTrailer === '0'
-            ? '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
-            : '//vfiles.gtimg.cn/vupload/20210322/tag_mini_trailerlite.png'
-        return {
-          vid,
-          cid,
-          href: `https://v.qq.com/x/cover/${cid}/${vid}.html`,
-          text,
-          mark: item.item_params.imgtag_all ? mark : '',
-        }
-      })
+      list
+        .filter((item) => {
+          // '1'为video，'28'为tab
+          return item.item_type === '1'
+        })
+        .map((item) => {
+          const vid = item.item_params.vid
+          const text = item.item_params.title
+          const isTrailer = item.item_params.is_trailer
+          const mark =
+            isTrailer === '0'
+              ? '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
+              : '//vfiles.gtimg.cn/vupload/20210322/tag_mini_trailerlite.png'
+          return {
+            vid,
+            cid,
+            href: `https://v.qq.com/x/cover/${cid}/${vid}.html`,
+            text,
+            mark: item.item_params.imgtag_all ? mark : '',
+          }
+        })
     )
   },
 }
