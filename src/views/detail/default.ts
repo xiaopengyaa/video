@@ -23,5 +23,6 @@ export function getDefDetail(): DetailRes {
       type_name: '',
       vid: '',
     },
+    tabs: [],
   }
 }
