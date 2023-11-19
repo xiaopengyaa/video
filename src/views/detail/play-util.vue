@@ -44,6 +44,7 @@ const route = useRoute()
 const router = useRouter()
 const title = useTitle()
 const lines = [
+  'https://jx.yangtu.top/?url=',
   'https://jx.jsonplayer.com/player/?url=',
   'https://jx.xyflv.com/?url=',
 ]
