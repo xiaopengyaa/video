@@ -44,10 +44,8 @@ const route = useRoute()
 const router = useRouter()
 const title = useTitle()
 const lines = [
-  'https://jx.qqqjx.com/?url=',
-  'https://jx.xyflv.com/?url=',
-  // 'https://okjx.cc/?url=',
   'https://jx.jsonplayer.com/player/?url=',
+  'https://jx.xyflv.com/?url=',
 ]
 const url = useVModel(props, 'url')
 const start = ref(false)

@@ -3,11 +3,12 @@
     <div class="detail">
       <iframe
         class="detail__video"
-        allowtransparency="true"
-        frameborder="0"
         scrolling="no"
-        allowfullscreen="true"
-        autoplay="true"
+        allowtransparency
+        allowfullscreen
+        autoplay
+        sandbox="allow-scripts allow-same-origin"
+        :frameborder="0"
         :src="playUrl"
       />
       <loading-skeleton :loading="loading">
