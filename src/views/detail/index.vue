@@ -161,6 +161,7 @@ watch(loading, () => {
   flex-direction: column;
   width: 100%;
   height: 100%;
+  background: #fff;
   .title-wrap {
     display: flex;
     align-items: center;

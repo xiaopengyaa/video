@@ -136,6 +136,7 @@ function toHome() {
     font-size: 16px;
     color: #858593;
     padding: 0 12px;
+    cursor: pointer;
   }
   .van-grid-item {
     cursor: pointer;

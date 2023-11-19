@@ -112,6 +112,11 @@ watch(visible, () => {
     font-weight: bold;
     line-height: 20px;
     height: 48px;
+    :deep(.van-icon) {
+      line-height: 48px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
   }
   .content-wrap {
     flex: 1;
