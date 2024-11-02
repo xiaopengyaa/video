@@ -43,11 +43,7 @@ const props = defineProps<Props>()
 const route = useRoute()
 const router = useRouter()
 const title = useTitle()
-const lines = [
-  'https://jx.yangtu.top/?url=',
-  'https://jx.jsonplayer.com/player/?url=',
-  'https://jx.xyflv.com/?url=',
-]
+const lines = ['https://www.yemu.xyz/?url=']
 const url = useVModel(props, 'url')
 const start = ref(false)
 const show = ref(false)

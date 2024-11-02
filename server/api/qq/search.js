@@ -139,10 +139,11 @@ async function getSearchList($, targetCid = '') {
       return
     }
 
+    const rData = $(elem).attr('r-data')
     const image = $(elem).find('._infos .figure_pic').attr('src')
     const imageInfo = $(elem).find('._infos .figure_info').text() || ''
     const mark = $(elem).find('._infos .mark_v img').attr('src')
-    const href = $(elem).find('._infos .result_title a').attr('href')
+    // const href = $(elem).find('._infos .result_title a').attr('href')
     const sub = $(elem).find('._infos .result_title .sub').text()
     const type = $(elem).find('._infos .result_title .type').text()
     const params = $(elem).find('.result_title').attr('dt-params')
@@ -155,6 +156,14 @@ async function getSearchList($, targetCid = '') {
 
     let site = qs.parse(params).site_id
     let desc = ''
+    let href = ''
+
+    try {
+      rData = JSON.parse(rData)
+      href = rData.playurl
+    } catch (e) {
+      //
+    }
 
     if ($playSourceList.length) {
       const sourceList = []
