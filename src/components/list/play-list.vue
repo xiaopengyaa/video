@@ -26,10 +26,13 @@
         <div
           v-if="item.mark"
           :style="{
-            'background-image': `url(${item.mark})`,
+            backgroundColor: item.mark.backgroundColor,
+            color: item.mark.fontColor,
           }"
           class="mark"
-        />
+        >
+          {{ item.mark.text }}
+        </div>
       </div>
       <template v-if="isVertical">
         <div
@@ -150,11 +153,13 @@ function handleClick(item: PlayItem) {
         position: absolute;
         top: 0;
         right: 0;
-        width: 100%;
         height: 14px;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: right;
+        line-height: 14px;
+        font-size: 10px;
+        font-weight: normal;
+        padding-left: 3px;
+        padding-right: 3px;
+        border-bottom-left-radius: 4px;
       }
       &.active {
         color: #ec6a38;

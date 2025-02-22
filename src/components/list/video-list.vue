@@ -6,11 +6,18 @@
           <van-image
             :width="px2vw(90)"
             :height="px2vw(126)"
-            radius="4"
+            :radius="px2vw(4)"
             :src="item.image"
           />
-          <div v-if="item.mark" class="mark">
-            <van-image :width="px2vw(37)" :src="item.mark" />
+          <div
+            v-if="item.mark"
+            class="mark"
+            :style="{
+              backgroundColor: item.mark.backgroundColor,
+              color: item.mark.fontColor,
+            }"
+          >
+            <div>{{ item.mark.text }}</div>
           </div>
           <div class="image-info-wrap">
             <div class="image-info van-ellipsis">{{ item.imageInfo }}</div>
@@ -73,7 +80,7 @@
             icon="star"
             @click="download"
           >
-            缓存
+            下载
           </van-button>
         </van-col>
       </van-row>
@@ -153,6 +160,12 @@ function download() {
       position: absolute;
       top: 0;
       right: 0;
+      padding-left: 6px;
+      padding-right: 6px;
+      height: 16px;
+      line-height: 16px;
+      border-bottom-left-radius: 4px;
+      border-top-right-radius: 4px;
     }
   }
   &__right {

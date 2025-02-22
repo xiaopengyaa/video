@@ -10,7 +10,13 @@ export interface PlayItem {
   cid: string
   href: string
   text: string
-  mark: string
+  mark: MarkItem | null
+}
+
+export interface MarkItem {
+  backgroundColor: string
+  fontColor: string
+  text: string
 }
 
 export interface SearchItem {
@@ -18,7 +24,7 @@ export interface SearchItem {
   cid: string
   image: string
   imageInfo: string
-  mark: string
+  mark: MarkItem | null
   title: string
   href: string
   sub: string[]

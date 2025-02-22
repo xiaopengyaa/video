@@ -49,17 +49,23 @@ const homeApi = {
         .map((item) => {
           const vid = item.item_params.vid
           const text = item.item_params.title
-          const isTrailer = item.item_params.is_trailer
-          const mark =
-            isTrailer === '0'
-              ? '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
-              : '//vfiles.gtimg.cn/vupload/20210322/tag_mini_trailerlite.png'
+          let mark = null
+          try {
+            const obj = JSON.parse(item.item_params.uni_imgtag)
+            mark = {
+              backgroundColor: obj.tag_2.background_color,
+              fontColor: obj.tag_2.font_color,
+              text: obj.tag_2.text,
+            }
+          } catch (e) {
+            console.log(e)
+          }
           return {
             vid,
             cid,
             href: `https://v.qq.com/x/cover/${cid}/${vid}.html`,
             text,
-            mark: item.item_params.imgtag_all ? mark : '',
+            mark,
           }
         })
     )

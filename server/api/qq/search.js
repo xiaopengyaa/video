@@ -3,15 +3,46 @@ const qs = require('qs')
 const { api, getResult, getSiteByUrl, processUrl } = require('../../utils')
 const { COOKIE, REFERER } = require('./constant')
 const { SITE_SORT } = require('../../utils/constant')
+const { generateUuid } = require('../../utils/searchUtil')
 
 const homeApi = {
   // 搜索
   async search(keyword, cid) {
-    const url = `https://v.qq.com/x/search/`
-    const html = await api.get(url, { q: keyword })
-    const $ = cheerio.load(html)
-    const list = await getSearchList($, cid)
-    const relateList = getRelateList($, cid)
+    const params = {
+      version: '24072901',
+      clientType: 1,
+      filterValue: '',
+      retry: 0,
+      query: keyword,
+      pagenum: 0,
+      pagesize: 30,
+      queryFrom: 0,
+      searchDatakey: '',
+      transInfo: '',
+      isneedQc: true,
+      preQid: '',
+      adClientInfo: '',
+      extraInfo: { isNewMarkLabel: '1', multi_terminal_pc: '1' },
+      uuid: generateUuid(),
+    }
+    const url = `https://pbaccess.video.qq.com/trpc.videosearch.mobile_search.MultiTerminalSearch/MbSearch?vplatform=2`
+    const res = await api.post(url, params, {
+      headers: {
+        cookie: COOKIE,
+        origin: REFERER,
+        referer: REFERER,
+        'content-type': 'application/json',
+        'trpc-trans-info': '{"trpc-env":""}',
+      },
+    })
+
+    let list = []
+
+    if (res.ret === 0) {
+      list = getSearchList(res.data)
+    }
+
+    // const relateList = getRelateList($, cid)
 
     if (!list.length) {
       console.log(`搜索结果【${keyword}】为空`)
@@ -19,7 +50,7 @@ const homeApi = {
 
     return getResult({
       list,
-      relateList,
+      relateList: [],
     })
   },
   async getRecommendList(keyword) {
@@ -125,103 +156,75 @@ function getRelateList($, targetCid) {
   return list
 }
 
-async function getSearchList($, targetCid = '') {
+function getSearchList(data) {
   const list = []
-  const arr = []
-  const isAll = !!targetCid
-  const $resultItem = $('.search_container .mix_warp .result_item_v')
-  $resultItem.each((index, elem) => {
-    const cid = $(elem).attr('data-id')
+  const itemList = data.normalList.itemList
+  const areaBoxList = data.areaBoxList.map((item) => {
+    return item.itemList.filter(
+      (cItem) => cItem?.videoInfo?.episodeSites?.length
+    )
+  })
+  const allList = itemList.concat(areaBoxList.flat())
 
-    // 如果targetCid存在，则表示精准查找
-    // 模糊判断：如果结果只有一条，也通过
-    if ($resultItem.length !== 1 && targetCid && targetCid !== cid) {
-      return
-    }
-
-    const rData = $(elem).attr('r-data')
-    const image = $(elem).find('._infos .figure_pic').attr('src')
-    const imageInfo = $(elem).find('._infos .figure_info').text() || ''
-    const mark = $(elem).find('._infos .mark_v img').attr('src')
-    // const href = $(elem).find('._infos .result_title a').attr('href')
-    const sub = $(elem).find('._infos .result_title .sub').text()
-    const type = $(elem).find('._infos .result_title .type').text()
-    const params = $(elem).find('.result_title').attr('dt-params')
-    const title = qs
-      .parse(params)
-      .title_txt.replaceAll('\x05', '<span class="main">')
-      .replaceAll('\x06', '</span>')
-    const $desc = $(elem).find('._infos .desc_text')
-    const $playSourceList = $('.play_source_list > li')
-
-    let site = qs.parse(params).site_id
-    let desc = ''
-    let href = ''
-
-    try {
-      rData = JSON.parse(rData)
-      href = rData.playurl
-    } catch (e) {
-      //
-    }
-
-    if ($playSourceList.length) {
-      const sourceList = []
-      $playSourceList.each((sIndex, sElem) => {
-        const site_id = $(sElem).attr('data-realname')
-        sourceList.push({
-          site_id,
-          cid: $(sElem).attr('data-id'),
-          sort: SITE_SORT[site_id] || SITE_SORT.default,
-        })
-      })
-      // 获取优先级最高的站点
-      if (sourceList[0].sort > 8) {
-        sourceList.sort((a, b) => {
-          return a.sort - b.sort
-        })
-        site = sourceList[0].site_id
+  if (allList && allList.length > 0) {
+    allList.forEach((item) => {
+      if (item.videoInfo) {
+        const videoInfo = item.videoInfo
+        const cid = item?.doc?.id || ''
+        const episodeSites = videoInfo.episodeSites
+        if (episodeSites && episodeSites.length > 0) {
+          const episodeSite = episodeSites[0]
+          const imgTag = videoInfo.imgTag
+          let mark = null
+          let imageInfo = ''
+          try {
+            const obj = JSON.parse(imgTag)
+            imageInfo = obj.tag_4.text
+            mark = obj.tag_2
+          } catch (e) {
+            console.log(e)
+          }
+          const item = {
+            site: episodeSite.enName,
+            cid,
+            image: videoInfo.imgUrl,
+            imageInfo,
+            mark,
+            title: videoInfo.title,
+            href: '',
+            sub: [videoInfo.typeName, videoInfo.area],
+            desc: videoInfo.descrip,
+            playlist: [],
+            btnlist: [],
+          }
+          if (
+            episodeSite.episodeInfoList &&
+            episodeSite.episodeInfoList.length > 0
+          ) {
+            episodeSite.episodeInfoList.forEach((cItem) => {
+              let mark = null
+              try {
+                const obj = JSON.parse(cItem.markLabel)
+                mark = obj.tag_2
+              } catch (e) {
+                console.log(e)
+              }
+              const playItem = {
+                cid,
+                vid: cItem.id,
+                href: cItem.url,
+                text: cItem.title,
+                mark,
+              }
+              item.playlist.push(playItem)
+            })
+          }
+          list.push(item)
+        }
       }
-    }
-
-    if ($desc.length) {
-      desc = $desc.prop('firstChild').nodeValue
-    }
-
-    const obj = processUrl(href)
-
-    // 将异步请求存起来
-    arr.push({
-      cid,
-      site,
     })
+  }
 
-    list.push({
-      site,
-      cid,
-      image,
-      imageInfo,
-      mark,
-      title,
-      href: obj.href,
-      sub: [type].concat(sub.replace(/\(|\)/g, '').split('/')),
-      desc,
-      playlist: [],
-      btnlist: [],
-    })
-  })
-  const dataArr = await Promise.all(
-    arr.map(({ cid, site }) => {
-      return getPlaylist(cid, site, isAll)
-    })
-  )
-  dataArr.forEach((data, index) => {
-    if (!isAll && data.uiType === 3) {
-      list[index].btnlist = data.list
-    } else {
-      list[index].playlist = data.list
-    }
-  })
   return list
 }
 
