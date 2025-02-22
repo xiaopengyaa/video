@@ -16,8 +16,15 @@
           :src="item.image"
         />
         <div class="title van-multi-ellipsis--l2" v-html="item.title" />
-        <div v-if="item.mark" class="mark">
-          <van-image :width="px2vw(37)" :src="item.mark" />
+        <div
+          v-if="item.mark"
+          :style="{
+            backgroundColor: item.mark.backgroundColor,
+            color: item.mark.fontColor,
+          }"
+          class="mark"
+        >
+          {{ item.mark.text }}
         </div>
         <div class="image-info-wrap">
           <div class="image-info van-ellipsis">{{ item.imageInfo }}</div>
@@ -109,7 +116,13 @@ function handleClick(item: SearchItem) {
       position: absolute;
       top: 0;
       right: 0;
-      display: flex;
+      height: 14px;
+      line-height: 14px;
+      font-size: 10px;
+      font-weight: normal;
+      padding-left: 3px;
+      padding-right: 3px;
+      border-bottom-left-radius: 4px;
     }
     .image-info-wrap {
       top: v-bind(imageInfoTop);
