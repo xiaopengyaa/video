@@ -171,9 +171,20 @@ function getSearchList(data) {
       if (item.videoInfo) {
         const videoInfo = item.videoInfo
         const cid = item?.doc?.id || ''
-        const episodeSites = videoInfo.episodeSites
+        const episodeSites = videoInfo.episodeSites?.filter(
+          (site) => site?.episodeInfoList?.length
+        )
+        const playSites = videoInfo.playSites
+        let allSites = []
+        let isPlaySite = false
         if (episodeSites && episodeSites.length > 0) {
-          const episodeSite = episodeSites[0]
+          allSites = episodeSites
+        } else if (playSites && playSites.length > 0) {
+          allSites = playSites
+          isPlaySite = true
+        }
+        if (allSites && allSites.length > 0) {
+          const episodeSite = allSites[0]
           const imgTag = videoInfo.imgTag
           let mark = null
           let imageInfo = ''
@@ -202,6 +213,7 @@ function getSearchList(data) {
             episodeSite.episodeInfoList.length > 0
           ) {
             episodeSite.episodeInfoList.forEach((cItem) => {
+              const urlObj = processUrl(cItem.url)
               let mark = null
               try {
                 const obj = JSON.parse(cItem.markLabel)
@@ -210,13 +222,17 @@ function getSearchList(data) {
                 console.log(e)
               }
               const playItem = {
-                cid,
-                vid: cItem.id,
-                href: cItem.url,
+                cid: urlObj.cid,
+                vid: urlObj.vid,
+                href: urlObj.href,
                 text: cItem.title,
                 mark,
               }
-              item.playlist.push(playItem)
+              if (episodeSite.uiType === 3 || isPlaySite) {
+                item.btnlist.push(playItem)
+              } else {
+                item.playlist.push(playItem)
+              }
             })
           }
           list.push(item)

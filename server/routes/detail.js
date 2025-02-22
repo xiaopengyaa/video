@@ -2,11 +2,13 @@ const router = require('koa-router')()
 const qqApi = require('../api/qq/detail')
 const bilibiliApi = require('../api/bilibili/detail')
 const qiyiApi = require('../api/qiyi/detail')
+const hunantvApi = require('../api/hunantv/detail')
 const defaultApi = require('../api/default/detail')
 const { SITE } = require('../utils/constant')
 
 const apiMap = {
   [SITE.qq]: qqApi,
+  [SITE.hunantv]: hunantvApi,
   // [SITE.bilibili]: bilibiliApi,
   // [SITE.qiyi]: qiyiApi,
 }

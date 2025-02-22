@@ -52,6 +52,7 @@ module.exports = {
       vid,
     }
   },
+  getDefaultVid,
 }
 
 /**
