@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <h1 class="title">
-      xiaopengyaa视频
+      {{ appName }}
     </h1>
     <van-button
       class="start-btn"
@@ -24,8 +24,10 @@
 
 <script setup lang="ts" name="home">
 import VideoSearch from '@/components/search/video-search.vue'
+import { APP_NAME } from '@/utils/constant'
 
 const visible = ref(false)
+const appName = ref(APP_NAME)
 
 function showSearch() {
   visible.value = true

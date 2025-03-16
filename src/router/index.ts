@@ -1,19 +1,30 @@
-import { createRouter, createWebHashHistory } from 'vue-router/auto'
-import { handleHotUpdate, routes } from 'vue-router/auto-routes'
+import type { RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 NProgress.configure({ showSpinner: true, parent: '#app' })
 
+const routes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    name: 'home',
+    component: () => import('@/views/home/index.vue'),
+    meta: {
+      keepAlive: 'home',
+    },
+  },
+  {
+    path: '/detail',
+    name: 'detail',
+    component: () => import('@/views/detail/index.vue'),
+  },
+]
+
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
 })
-
-// 自动加载pages目录下的vue文件
-if (import.meta.hot) {
-  handleHotUpdate(router)
-}
 
 router.beforeEach(async () => {
   NProgress.start()

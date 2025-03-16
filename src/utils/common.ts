@@ -1,3 +1,4 @@
+import { APP_NAME } from '@/utils/constant'
 import { Site } from '@/types/enum'
 
 export function px2vw(size: number, decimal = 0) {
@@ -25,8 +26,7 @@ export function getSvgUrl(name: string) {
 }
 
 export function setTitle(title: string) {
-  const defTitle = 'xiaopengyaa视频'
-  return title ? `${title} - ${defTitle}` : defTitle
+  return title ? `${title} - ${APP_NAME}` : APP_NAME
 }
 
 export function getSiteLogo(site: Site) {

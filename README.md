@@ -1,3 +1,3 @@
-# vue3 + vite3 + ts
+# vue3 + vite6 + ts
 
 解析vip视频

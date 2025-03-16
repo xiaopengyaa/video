@@ -1,6 +1,5 @@
 const include = [
   'axios',
-  'echarts',
   'lodash-es',
   'resize-detector',
   'vant/es',
@@ -22,9 +21,6 @@ const include = [
   'vant/es/nav-bar/style/index',
   'vant/es/tabbar/style/index',
   'vant/es/tabbar-item/style/index',
-  'unplugin-vue-router/runtime',
-  'unplugin-vue-router/data-loaders',
-  'unplugin-vue-router/data-loaders/basic',
 ]
 
 export { include }

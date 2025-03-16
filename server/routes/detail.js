@@ -7,7 +7,7 @@ const qiyiApi = require('../api/qiyi/detail')
 const hunantvApi = require('../api/hunantv/detail')
 const defaultApi = require('../api/default/detail')
 const { SITE } = require('../utils/constant')
-const { XMlayEr } = require('../utils/XMlayEr')
+const { xmflv } = require('../utils/xmflv')
 
 const apiMap = {
   [SITE.qq]: qqApi,
@@ -34,7 +34,7 @@ router.post('/getPlaylist', async (ctx) => {
 
 router.get('/getVurl', async (ctx) => {
   const { url } = ctx.query
-  const data = await XMlayEr.XMlayEr(url)
+  const data = await xmflv.getUrl(url)
   ctx.body = data
 })
 

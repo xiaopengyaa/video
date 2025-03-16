@@ -4,7 +4,7 @@ const api = require('./axios')
 const { getResult } = require('./common')
 const debugRequest = require('debug')('request')
 
-var iｉl = 'jsjiami.com.v7'
+var key = 'jsjiami.com.v7'
 var hexcase = 0
 var chrsz = 8
 const i1ilIl1 = IlI11IIi
@@ -84,8 +84,8 @@ const i1ilIl1 = IlI11IIi
     )
   )
 })(0x32c0, 0x2065b, iI11IIl, 0xcd),
-iI11IIl) && (iｉl = 0xcd)
-let XMlayEr = {
+iI11IIl) && (key = 0xcd)
+let xmflv = {
   decrypt: function (iliiIiii, ill1lII, iil1IIII) {
     const iIi1iI1 = IlI11IIi
     let i1i1i1lI = CryptoJS['AES']['decrypt'](
@@ -103,7 +103,7 @@ let XMlayEr = {
       CryptoJS['enc'][iIi1iI1(0x751, '^0zu')]
     )
   },
-  XMlayEr: async function (url, retry = 0) {
+  getUrl: async function (url, retry = 0) {
     const I1Il1i1I = IlI11IIi,
       l11llIl = {
         qYWWE: function (lllIIl, lIilI1ll) {
@@ -149,7 +149,7 @@ let XMlayEr = {
       if (IIillilI['code'] === 200) {
         aes_key = IIillilI[iIl11ill(0x729, 'dqw]')]
         aes_iv = IIillilI['aes_iv']
-        const url = XMlayEr['decrypt'](IIillilI['url'], aes_key, aes_iv)
+        const url = xmflv['decrypt'](IIillilI['url'], aes_key, aes_iv)
         return getResult(url)
       } else if (retry <= 5) {
         retry++
@@ -169,7 +169,7 @@ let XMlayEr = {
 
     async function _retryRequest() {
       debugRequest(`接口第${retry}次重试: ${url}`)
-      const data = await XMlayEr.XMlayEr(url, retry)
+      const data = await xmflv.getUrl(url, retry)
       return data
     }
   },
@@ -401,7 +401,7 @@ function encrypt(ill1Il1) {
 function iI11IIl() {
   const iIIlilli = (function () {
     return [
-      iｉl,
+      key,
       'dejksjiPagmixV.cHoMgmRRu.vL7SrQIhtNYhKyb==',
       'WOddS3SjWRy',
       'W6dcQ8kPuMK',
@@ -2735,5 +2735,5 @@ function binl2hex(binarray) {
 }
 
 module.exports = {
-  XMlayEr,
+  xmflv,
 }

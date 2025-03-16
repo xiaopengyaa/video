@@ -15,7 +15,7 @@ export default function useScroll(
   const scroll = shallowRef<BScrollConstructor | null>(null)
 
   onMounted(() => {
-    if (!wrapperRef.value || wrapperRef.value.clientHeight === 0) {
+    if (!wrapperRef.value) {
       return
     }
     scroll.value = new BScroll(wrapperRef.value, {

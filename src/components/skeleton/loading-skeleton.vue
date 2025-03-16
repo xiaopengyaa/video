@@ -1,20 +1,21 @@
 <template>
   <div v-if="debounced" class="loading-skeleton">
     <div class="text loading-skeleton--animate">
-      xiaopengyaa视频
+      {{ appName }}
     </div>
   </div>
   <slot v-else />
 </template>
 
 <script setup lang="ts">
-import { LOADING_DELAY } from '@/utils/constant'
+import { APP_NAME, LOADING_DELAY } from '@/utils/constant'
 
 interface Props {
   loading: boolean
 }
 
 const props = defineProps<Props>()
+const appName = ref(APP_NAME)
 const debounced = refDebounced(
   computed(() => props.loading),
   LOADING_DELAY,
