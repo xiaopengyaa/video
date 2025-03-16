@@ -34,7 +34,7 @@ const homeApi = {
       10: '#222',
     }
     const result = list.map((item) => {
-      const corner = item.corner?.find((c) => c.area === 'rightUp')
+      const corner = item.corner?.find(c => c.area === 'rightUp')
       let mark = null
       if (corner) {
         mark = {
@@ -46,7 +46,7 @@ const homeApi = {
       return {
         vid: item.video_id,
         cid: item.clip_id,
-        href: 'https://www.mgtv.com' + item.url,
+        href: `https://www.mgtv.com${item.url}`,
         text: item.t1,
         mark,
       }
@@ -81,6 +81,7 @@ async function getData(url) {
   const reg = /window\.__NUXT__\s*=\s*\((.*?)\);/
   const match = reg.exec(html)
   if (match) {
+    // eslint-disable-next-line no-new-func
     return new Function(`return ${match[1]}`)()
   }
 }

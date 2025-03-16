@@ -1,7 +1,7 @@
 <template>
   <div class="recommend-list">
     <div
-      v-for="(item, index) in list"
+      v-for="(item, index) in props.list"
       :key="index"
       class="recommend-item van-hairline--bottom"
       @click="handleClick(item)"
@@ -16,9 +16,9 @@
         />
         <div class="recommend-item__content">
           <div class="title van-ellipsis" v-html="item.title" />
-          <van-tag class="tag" color="#e7f4fc" text-color="#5ea1e0">{{
-            item.typeName
-          }}</van-tag>
+          <van-tag class="tag" color="#e7f4fc" text-color="#5ea1e0">
+            {{ item.typeName }}
+          </van-tag>
         </div>
       </template>
       <div
@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { RecommendItem } from '@/types/search'
+import type { RecommendItem } from '@/types/search'
 import { px2vw } from '@/utils/common'
 
 interface Emits {
@@ -46,7 +46,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 function handleClick(item: RecommendItem) {
-  emit('click', item.title.replace(/<\/?[^>]+(>|$)/g, ''))
+  emit('click', item.title.replace(/<[^>]+(>|$)/g, ''))
 }
 </script>
 

@@ -1,9 +1,10 @@
 const Koa = require('koa')
+
 const app = new Koa()
 const json = require('koa-json')
-const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const { onerror } = require('koa-onerror')
 
 const search = require('./routes/search')
 const detail = require('./routes/detail')
@@ -15,7 +16,7 @@ onerror(app)
 app.use(
   bodyparser({
     enableTypes: ['json', 'form', 'text'],
-  })
+  }),
 )
 app.use(json())
 app.use(logger())

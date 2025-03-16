@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <h1 class="title">xiaopengyaa视频</h1>
+    <h1 class="title">
+      xiaopengyaa视频
+    </h1>
     <van-button
       class="start-btn"
       color="#406e94"
@@ -8,28 +10,22 @@
       plain
       size="large"
       @click="showSearch"
-      >点我开始</van-button
     >
+      点我开始
+    </van-button>
     <a href="http://xiaopengyaa.cn" target="_blank" class="home-page">
       <van-icon name="like" />
       <span class="text">My Home</span>
     </a>
   </div>
   <div class="home-bg" />
-  <video-search v-model:visible="visible" />
+  <VideoSearch v-model:visible="visible" />
 </template>
 
 <script setup lang="ts" name="home">
 import VideoSearch from '@/components/search/video-search.vue'
-// import { getImageUrl } from '@/utils/common'
 
 const visible = ref(false)
-// const bgGif = getImageUrl('starry.gif')
-// const bgJpg = getImageUrl('starry-pre.jpg')
-// const { isLoading } = useImage({ src: bgGif })
-// const bgImg = computed(() => {
-//   return isLoading.value ? `url(${bgJpg})` : `url(${bgGif})`
-// })
 
 function showSearch() {
   visible.value = true
@@ -81,15 +77,5 @@ function showSearch() {
   background: url('@/assets/images/bg1.jpg');
   background-size: cover;
   z-index: -10;
-  // &::after {
-  //   content: '';
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   width: 100%;
-  //   height: 100%;
-  //   background-image: v-bind(bgImg);
-  //   background-size: cover;
-  // }
 }
 </style>

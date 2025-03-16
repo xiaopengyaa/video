@@ -19,7 +19,7 @@ module.exports = {
   },
   getImageUrl(url) {
     if (url) {
-      return url.replace(/^(http)[s]*(:\/\/)/, 'https://images.weserv.nl/?url=')
+      return url.replace(/^(http)s*(:\/\/)/, 'https://images.weserv.nl/?url=')
     }
     return url
   },
@@ -41,7 +41,8 @@ module.exports = {
       href = searchParams.get('url') || ''
       cid = searchParams.get('cid') || ''
       vid = getDefaultVid(href)
-    } else if (match) {
+    }
+    else if (match) {
       const arr = match[1].split('/')
       cid = arr[0]
       vid = arr[1] || ''
@@ -70,16 +71,18 @@ function addChineseUnit(number, decimalDigit) {
   if (digit > 3) {
     const multiple = Math.floor(digit / 8)
     if (multiple >= 1) {
-      const tmp = Math.round(integer / Math.pow(10, 8 * multiple))
+      const tmp = Math.round(integer / 10 ** (8 * multiple))
       unit.push(addWan(tmp, number, 8 * multiple, decimalDigit))
       for (let i = 0; i < multiple; i++) {
         unit.push('亿')
       }
       return unit.join('')
-    } else {
+    }
+    else {
       return addWan(integer, number, 0, decimalDigit)
     }
-  } else {
+  }
+  else {
     return number
   }
 }
@@ -93,14 +96,15 @@ function addWan(integer, number, mutiple, decimalDigit) {
       remainder = 4
     }
     return (
-      Math.round(number / Math.pow(10, remainder + mutiple - decimalDigit)) /
-        Math.pow(10, decimalDigit) +
-      '万'
+      `${Math.round(number / 10 ** (remainder + mutiple - decimalDigit))
+      / 10 ** decimalDigit
+      }万`
     )
-  } else {
+  }
+  else {
     return (
-      Math.round(number / Math.pow(10, mutiple - decimalDigit)) /
-      Math.pow(10, decimalDigit)
+      Math.round(number / 10 ** (mutiple - decimalDigit))
+      / 10 ** decimalDigit
     )
   }
 }

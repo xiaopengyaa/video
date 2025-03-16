@@ -1,9 +1,10 @@
-import { ref, Ref, onMounted } from 'vue'
+import type { Ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getPlaylist, getDetail } from '@/api/detail'
-import { DetailReq, DetailRes } from '@/types/detail'
-import { PlayItem, SearchItem } from '@/types/search'
-import { Site } from '@/types/enum'
+import { getDetail, getPlaylist } from '@/api/detail'
+import type { DetailReq, DetailRes } from '@/types/detail'
+import type { PlayItem, SearchItem } from '@/types/search'
+import type { Site } from '@/types/enum'
 import { getDefDetail } from './default'
 import useListClick from '@/components/list/use-list-click'
 import { restoreHtmlText, setTitle } from '@/utils/common'
@@ -57,7 +58,8 @@ export default function useContent(cid: Ref<string>, site: Ref<Site>) {
       title.value = setTitle(detailData.value.introduction.title)
       if (detailData.value.videoInfo.vid) {
         active.value = detailData.value.videoInfo.vid
-      } else if (list.length) {
+      }
+      else if (list.length) {
         active.value = list[0].vid
       }
 
@@ -65,7 +67,8 @@ export default function useContent(cid: Ref<string>, site: Ref<Site>) {
       if (list.length === 0) {
         isEmpty.value = true
       }
-    } catch {
+    }
+    catch {
       loading.value = false
       isEmpty.value = true
     }

@@ -1,4 +1,6 @@
-const router = require('koa-router')()
+const KoaRouter = require('koa-router')
+
+const router = new KoaRouter()
 const qqApi = require('../api/qq/detail')
 const bilibiliApi = require('../api/bilibili/detail')
 const qiyiApi = require('../api/qiyi/detail')

@@ -31,7 +31,7 @@ const homeApi = {
   async getPlaylist(query) {
     const { url } = query
     const data = await getData(url)
-    let playList = []
+    const playList = []
 
     if (!data) {
       return getResult(playList)
@@ -45,7 +45,7 @@ const homeApi = {
       const secondData = pureData.film_feature_bk
 
       const playData = firstData?.find(
-        (item) => item.entity_id === data.albumId
+        item => item.entity_id === data.albumId,
       )
 
       if (playData) {
@@ -61,7 +61,8 @@ const homeApi = {
             }
           })
         })
-      } else if (secondData) {
+      }
+      else if (secondData) {
         secondData.videos.forEach((item) => {
           const playItem = getPlayItem(item, data.albumId)
 
@@ -90,7 +91,8 @@ function getPlayItem(item, albumId) {
 
   if (item.pay_mark > 0) {
     mark = '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
-  } else if (item.content_type === 3) {
+  }
+  else if (item.content_type === 3) {
     mark = '//vfiles.gtimg.cn/vupload/20210322/tag_mini_trailerlite.png'
   }
 
@@ -117,11 +119,10 @@ async function getData(url) {
 }
 
 function getIntro(mediaInfo, baseData) {
-  const categories =
-    mediaInfo?.categories
-      .filter((item) => item.subType !== 4)
-      .slice(0, 3)
-      .map((item) => item.name) || []
+  const categories = mediaInfo?.categories
+    .filter(item => item.subType !== 4)
+    .slice(0, 3)
+    .map(item => item.name) || []
   const splitStr = ' '
   const year = mediaInfo?.publishTime
     ? new Date(mediaInfo.publishTime).getFullYear().toString()
@@ -149,7 +150,8 @@ function getTopList(pure_data) {
         imageInfo = item.is_series_done
           ? `${item.latest_episode_num}集全`
           : `更新至${item.latest_episode_num}集`
-      } else if (item.score) {
+      }
+      else if (item.score) {
         imageInfo = `${item.score}评分`
       }
       return {
@@ -193,7 +195,7 @@ async function getEpisodeInfo(tvId) {
 
 async function getBaseInfo(albumId) {
   const res = await api.get(
-    `https://pcw-api.iqiyi.com/album/album/baseinfo/${albumId}`
+    `https://pcw-api.iqiyi.com/album/album/baseinfo/${albumId}`,
   )
   if (res.code === SUCCESS_CODE) {
     return res.data
@@ -228,7 +230,7 @@ function getRateInfo(item) {
 function transVideos(videos) {
   const page_keys = []
   const feature_paged = {}
-  videos.forEach(function (item) {
+  videos.forEach((item) => {
     page_keys.push(item.title)
     feature_paged[item.title] = item.data
   })

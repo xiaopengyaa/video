@@ -17,7 +17,7 @@
               @click="visible = false"
             />
           </div>
-          <scroll-wrap ref="scrollRef" class="content-wrap">
+          <ScrollWrap ref="scrollRef" class="content-wrap">
             <div>
               <div
                 v-if="data.detail_info"
@@ -36,13 +36,15 @@
                 v-if="data.cover_description"
                 class="content van-hairline--top"
               >
-                <div class="title">简介</div>
+                <div class="title">
+                  简介
+                </div>
                 <div class="text">
                   {{ data.cover_description }}
                 </div>
               </div>
             </div>
-          </scroll-wrap>
+          </ScrollWrap>
         </div>
       </transition>
     </div>
@@ -51,7 +53,7 @@
 
 <script setup lang="ts">
 import ScrollWrap from '@/components/scroll/scroll-wrap.vue'
-import { DetailIntro } from '@/types/detail'
+import type { DetailIntro } from '@/types/detail'
 import { px2vw, stopBodyScroll } from '@/utils/common'
 
 interface Props {
@@ -62,7 +64,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const visible = useVModel(props, 'visible')
-const scrollRef = ref<typeof ScrollWrap>()
+const scrollRef = shallowRef<typeof ScrollWrap>()
 const detailStyle = computed(() => {
   const height = props.height || 'calc(100vh - 56.25vw)'
   return {
@@ -76,7 +78,8 @@ watch(visible, () => {
     setTimeout(() => {
       scrollRef.value?.scroll?.refresh()
     }, 300)
-  } else {
+  }
+  else {
     stopBodyScroll(false)
   }
 })

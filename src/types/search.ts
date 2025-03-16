@@ -1,5 +1,5 @@
-import { BaseType } from '@/types/base'
-import { Site } from '@/types/enum'
+import type { BaseType } from '@/types/base'
+import type { Site } from '@/types/enum'
 
 export interface SearchReq extends BaseType {
   keyword: string

@@ -1,8 +1,8 @@
 import axios from 'axios'
 import http from '@/utils/http'
-import { PlayItem } from '@/types/search'
-import { DetailReq, DetailRes } from '@/types/detail'
-import { ResData } from '@/types/base'
+import type { PlayItem } from '@/types/search'
+import type { DetailReq, DetailRes } from '@/types/detail'
+import type { ResData } from '@/types/base'
 
 export async function getDetail(data: DetailReq) {
   const res = await http.get<DetailRes>('/detail/getDetail', data)
@@ -16,10 +16,10 @@ export async function getPlaylist(data: DetailReq) {
 
 export async function getVurl(url: string) {
   const res = await axios.get<ResData<string>>(
-    import.meta.env.VITE_APP_BASE_URL + '/detail/getVurl',
+    `${import.meta.env.VITE_APP_BASE_URL}/detail/getVurl`,
     {
       params: { url },
-    }
+    },
   )
   return res.data
 }

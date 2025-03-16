@@ -27,7 +27,9 @@
           {{ item.mark.text }}
         </div>
         <div class="image-info-wrap">
-          <div class="image-info van-ellipsis">{{ item.imageInfo }}</div>
+          <div class="image-info van-ellipsis">
+            {{ item.imageInfo }}
+          </div>
         </div>
       </div>
     </div>
@@ -35,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { SearchItem } from '@/types/search'
+import type { SearchItem } from '@/types/search'
 import useScroll from '@/components/scroll/use-scroll'
 import { px2vw } from '@/utils/common'
 
@@ -50,15 +52,14 @@ interface Emits {
   (event: 'click', item: SearchItem): void
 }
 
-const HEIGHT = 126
-const IMG_INFO_TOP = 106
-const emit = defineEmits<Emits>()
 const props = withDefaults(defineProps<Props>(), {
   width: 90,
   height: 126,
 })
-
-const rootRef = ref<HTMLElement | null>(null)
+const emit = defineEmits<Emits>()
+const HEIGHT = 126
+const IMG_INFO_TOP = 106
+const rootRef = shallowRef<HTMLElement | null>(null)
 const scroll = useScroll(
   rootRef,
   {
@@ -66,7 +67,7 @@ const scroll = useScroll(
     scrollX: true,
     scrollY: false,
   },
-  emit
+  emit,
 )
 
 defineExpose({

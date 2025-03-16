@@ -6,7 +6,7 @@
     </div>
     <div class="list">
       <div
-        v-for="(item, index) in list"
+        v-for="(item, index) in props.list"
         :key="index"
         class="item"
         @click="handleClick(item)"
@@ -28,9 +28,8 @@ interface Props {
   list: string[]
 }
 
-const emit = defineEmits<Emits>()
 const props = defineProps<Props>()
-
+const emit = defineEmits<Emits>()
 const { delHistory } = useHistory()
 
 function handleClick(item: string) {

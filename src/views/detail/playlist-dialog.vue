@@ -21,7 +21,7 @@
             {{ desc }}
           </div>
           <div class="content">
-            <play-list
+            <PlayList
               ref="playlistRef"
               v-model:active="active"
               :list="list"
@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import PlayList from '@/components/list/play-list.vue'
-import { PlayItem } from '@/types/search'
+import type { PlayItem } from '@/types/search'
 import { px2vw, stopBodyScroll } from '@/utils/common'
 
 interface Props {
@@ -54,7 +54,7 @@ const visible = useVModel(props, 'visible')
 const active = useVModel(props, 'active')
 const route = useRoute()
 const router = useRouter()
-const playlistRef = ref<typeof PlayList>()
+const playlistRef = shallowRef<typeof PlayList>()
 
 const detailStyle = computed(() => {
   const height = props.height || 'calc(100vh - 56.25vw)'
@@ -70,7 +70,8 @@ watch(visible, () => {
       playlistRef.value?.refreshScroll()
       playlistRef.value?.scrollToActive()
     }, 300)
-  } else {
+  }
+  else {
     stopBodyScroll(false)
   }
 })

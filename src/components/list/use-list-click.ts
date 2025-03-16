@@ -1,4 +1,4 @@
-import { PlayItem, SearchItem } from '@/types/search'
+import type { PlayItem, SearchItem } from '@/types/search'
 import { Site } from '@/types/enum'
 
 interface DetailParam {
@@ -15,7 +15,8 @@ export default function useListClick() {
     let href = item.href
     if (item.playlist.length) {
       href = item.playlist[0].href
-    } else if (item.btnlist.length) {
+    }
+    else if (item.btnlist.length) {
       href = item.btnlist[0].href
     }
 

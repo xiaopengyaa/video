@@ -27,10 +27,9 @@ const homeApi = {
     if (data) {
       const cid = data.mediaInfo.season_id.toString()
       playList = data.mediaInfo.episodes.map((item) => {
-        const mark =
-          item.badge === '会员'
-            ? '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
-            : item.badge === '预告'
+        const mark = item.badge === '会员'
+          ? '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
+          : item.badge === '预告'
             ? '//vfiles.gtimg.cn/vupload/20210322/tag_mini_trailerlite.png'
             : ''
         return {
@@ -71,7 +70,7 @@ async function getIntro(mediaInfo) {
 
 async function getTopList(seasonId) {
   const res = await api.get(
-    `https://api.bilibili.com/pgc/season/web/related/recommend?season_id=${seasonId}`
+    `https://api.bilibili.com/pgc/season/web/related/recommend?season_id=${seasonId}`,
   )
   let list = []
   if (res.code === 0 && res.data.season?.length) {
@@ -108,7 +107,7 @@ function getVideoInfo(epInfo, seasonId) {
 
 async function getRateInfo(item) {
   const res = await api.get(
-    `https://api.bilibili.com/pgc/web/season/stat?season_id=${item.season_id}`
+    `https://api.bilibili.com/pgc/web/season/stat?season_id=${item.season_id}`,
   )
   let str = ''
   if (res.code === 0) {

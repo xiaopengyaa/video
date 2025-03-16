@@ -11,8 +11,10 @@ const homeApi = {
     let introduction = {}
     let topList = []
     let videoInfo = {}
+    let tabs = []
     if (match) {
-      const data = eval('(' + match[1] + ')')
+      // eslint-disable-next-line no-eval
+      const data = eval(`(${match[1]})`)
       introduction = data.introduction.introData.list[0].item_params
       topList = processTopList(data.topList.data)
       videoInfo = data.global.videoInfo
@@ -34,7 +36,8 @@ const homeApi = {
       tabs.forEach((tab) => {
         promiseArr.push(getList(cid, tab.pageContext))
       })
-    } else {
+    }
+    else {
       promiseArr.push(getList(cid, ''))
     }
 
@@ -57,7 +60,8 @@ const homeApi = {
               fontColor: obj.tag_2.font_color,
               text: obj.tag_2.text,
             }
-          } catch (e) {
+          }
+          catch (e) {
             console.log(e)
           }
           return {
@@ -67,7 +71,7 @@ const homeApi = {
             text,
             mark,
           }
-        })
+        }),
     )
   },
 }
@@ -96,14 +100,14 @@ async function getList(cid, page_context) {
         cookie: COOKIE,
         referer: REFERER,
       },
-    }
+    },
   )
 
   let list = []
 
   if (res.data.module_list_datas.length) {
-    list =
-      res.data.module_list_datas[0].module_datas[0].item_data_lists.item_datas
+    list
+      = res.data.module_list_datas[0].module_datas[0].item_data_lists.item_datas
   }
   return list
 }

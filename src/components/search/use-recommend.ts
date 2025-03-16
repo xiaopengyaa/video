@@ -1,5 +1,6 @@
-import { Ref, ref } from 'vue'
-import { RecommendItem } from '@/types/search'
+import type { Ref } from 'vue'
+import { ref } from 'vue'
+import type { RecommendItem } from '@/types/search'
 import { Site } from '@/types/enum'
 import { recommend } from '@/api/search'
 
@@ -29,7 +30,8 @@ export default function useRecommend(keyword: Ref<string>) {
 async function getRecommendList(keyword: string) {
   if (storeMap[keyword]) {
     return storeMap[keyword]
-  } else {
+  }
+  else {
     const list = await recommend({
       keyword,
       site: Site.qq,

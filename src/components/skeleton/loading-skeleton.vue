@@ -1,6 +1,8 @@
 <template>
   <div v-if="debounced" class="loading-skeleton">
-    <div class="text loading-skeleton--animate">xiaopengyaa视频</div>
+    <div class="text loading-skeleton--animate">
+      xiaopengyaa视频
+    </div>
   </div>
   <slot v-else />
 </template>
@@ -15,7 +17,7 @@ interface Props {
 const props = defineProps<Props>()
 const debounced = refDebounced(
   computed(() => props.loading),
-  LOADING_DELAY
+  LOADING_DELAY,
 )
 </script>
 

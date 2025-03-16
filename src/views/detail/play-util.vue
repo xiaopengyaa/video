@@ -45,7 +45,7 @@ const router = useRouter()
 const title = useTitle()
 const lines = ['https://www.yemu.xyz/?url=']
 const url = useVModel(props, 'url')
-const start = ref(false)
+// const start = ref(false)
 const show = ref(false)
 const sheetHeight = ref('')
 const storageLine = useStorage<string>(LINE_KEY, '')
@@ -76,15 +76,15 @@ function isActiveLine(line: string) {
   return url.value.includes(line)
 }
 
-function refreshUrl() {
-  const temp = url.value
-  url.value = ''
-  start.value = true
-  setTimeout(() => {
-    url.value = temp
-    start.value = false
-  }, 1000)
-}
+// function refreshUrl() {
+//   const temp = url.value
+//   url.value = ''
+//   start.value = true
+//   setTimeout(() => {
+//     url.value = temp
+//     start.value = false
+//   }, 1000)
+// }
 
 function toHome() {
   title.value = setTitle('')

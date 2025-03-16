@@ -1,5 +1,5 @@
-import { Site } from './enum'
-import { SearchItem } from './search'
+import type { Site } from './enum'
+import type { SearchItem } from './search'
 
 export interface PageTab {
   text: string

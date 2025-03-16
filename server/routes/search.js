@@ -1,4 +1,6 @@
-const router = require('koa-router')()
+const KoaRouter = require('koa-router')
+
+const router = new KoaRouter()
 const qqApi = require('../api/qq/search')
 const { SITE } = require('../utils/constant')
 

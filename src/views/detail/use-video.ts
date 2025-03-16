@@ -1,21 +1,21 @@
-import { Ref } from 'vue'
+import type { ShallowRef } from 'vue'
 import { Site } from '@/types/enum'
 import { getVurl } from '@/api/detail'
 import Artplayer from 'artplayer'
 import Hls from 'hls.js'
 import flvjs from 'flv.js'
-import { getAssetsUrl } from '@/utils/common'
+import { getImageUrl, getSvgUrl } from '@/utils/common'
 
 const NOT_SUPPORTED = '播放失败，有问题请联系最帅的那位。'
 Artplayer.SETTING_WIDTH = 180
 Artplayer.SETTING_ITEM_WIDTH = 180
 
-export default function useVideo(video: Ref<HTMLDivElement | undefined>) {
+export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>) {
   const route = useRoute()
   const url = ref('')
   const cid = ref('')
   const site = ref<Site>(Site.qq)
-  const art = ref<Artplayer | null>(null)
+  const art = shallowRef<Artplayer | null>(null)
 
   watchEffect(() => {
     cid.value = route.query.cid as string
@@ -31,18 +31,19 @@ export default function useVideo(video: Ref<HTMLDivElement | undefined>) {
   })
 
   async function initVideo() {
-    if (!video.value) return
+    if (!video.value)
+      return
     const data = await getVurl(url.value)
     if (!art.value) {
-      const stateSvg = getAssetsUrl('svgs/state.svg')
-      const indicatorSvg = getAssetsUrl('svgs/indicator.svg')
+      const stateSvg = getSvgUrl('state.svg')
+      const indicatorSvg = getSvgUrl('indicator.svg')
       const stateImg = `<img width="150" heigth="150" src="${stateSvg}">`
       const indicatorImg = `<img width="16" heigth="16" src="${indicatorSvg}">`
       art.value = new Artplayer({
         container: video.value,
         url: '',
         theme: '#23ade5',
-        poster: getAssetsUrl('images/poster.png'),
+        poster: getImageUrl('poster.png'),
         autoplay: false,
         pip: true,
         autoMini: true,
@@ -87,16 +88,18 @@ function playM3u8(video: HTMLVideoElement, url: string, art: Artplayer) {
     hls.attachMedia(video)
     art.hls = hls
     art.on('destroy', () => hls.destroy())
-    hls.on(Hls.Events.ERROR, (event, data) => {
+    hls.on(Hls.Events.ERROR, (_event, data) => {
       // 网络错误类型
       if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
         art.notice.show = NOT_SUPPORTED
         art.loading.show = false
       }
     })
-  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+  }
+  else if (video.canPlayType('application/vnd.apple.mpegurl')) {
     video.src = url
-  } else {
+  }
+  else {
     art.notice.show = NOT_SUPPORTED
   }
 }
@@ -108,7 +111,8 @@ function playFlv(video: HTMLVideoElement, url: string, art: Artplayer) {
     flv.load()
     art.flv = flv
     art.on('destroy', () => flv.destroy())
-  } else {
+  }
+  else {
     art.notice.show = NOT_SUPPORTED
   }
 }

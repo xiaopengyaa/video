@@ -3,10 +3,11 @@
  * @Date: 2020-03-02 11:47:04
  * @Description: axios封装
  */
-import axios, { AxiosRequestConfig } from 'axios'
-import { ResData } from '@/types/base'
+import type { AxiosRequestConfig } from 'axios'
+import axios from 'axios'
+import type { ResData } from '@/types/base'
 import { Code } from '@/types/enum'
-import { Toast } from 'vant'
+import { showToast } from 'vant'
 import 'vant/es/toast/style'
 
 // 创建axios实例
@@ -22,14 +23,14 @@ service.interceptors.request.use(
   },
   (err) => {
     return Promise.reject(err)
-  }
+  },
 )
 
 // response拦截器
 service.interceptors.response.use(
   (response) => {
-    if (response.status != 200 || response.data.code !== Code.ERR_OK) {
-      Toast.fail('请求失败')
+    if (response.status !== 200 || response.data.code !== Code.ERR_OK) {
+      showToast('请求失败')
     }
     return response
   },
@@ -37,13 +38,14 @@ service.interceptors.response.use(
     const data = err.response && err.response.data
 
     if (err && err.code === 'ECONNABORTED') {
-      Toast('兄弟，\n你这是网络不好呀=。=')
-    } else {
-      Toast.fail('请求失败')
+      showToast('兄弟，\n你这是网络不好呀=。=')
+    }
+    else {
+      showToast('请求失败')
     }
 
     return Promise.reject(data || err)
-  }
+  },
 )
 
 // 封装get、post方法
@@ -56,7 +58,8 @@ const http = {
       })
       const serverData = res.data
       return Promise.resolve(serverData.result)
-    } catch (err) {
+    }
+    catch (err) {
       return Promise.reject(err)
     }
   },
@@ -65,7 +68,8 @@ const http = {
       const res = await service.post<ResData<T>>(url, data, config)
       const serverData = res.data
       return Promise.resolve(serverData.result)
-    } catch (err) {
+    }
+    catch (err) {
       return Promise.reject(err)
     }
   },

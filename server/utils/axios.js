@@ -11,7 +11,8 @@ const api = {
       return new Promise((resolve) => {
         resolve(res.data)
       })
-    } catch (err) {
+    }
+    catch (err) {
       throw new Error(err)
     }
   },
@@ -21,7 +22,8 @@ const api = {
       return new Promise((resolve) => {
         resolve(res.data)
       })
-    } catch (err) {
+    }
+    catch (err) {
       throw new Error(err)
     }
   },

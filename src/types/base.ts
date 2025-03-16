@@ -1,4 +1,4 @@
-import { Code, Site } from '@/types/enum'
+import type { Code, Site } from '@/types/enum'
 
 export interface ResData<T> {
   code: Code

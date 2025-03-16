@@ -1,33 +1,29 @@
-import BScroll, { Options } from '@better-scroll/core'
-import { BScrollConstructor } from '@better-scroll/core/dist/types/BScroll'
+import BScroll from '@better-scroll/core'
 import ObserveDOM from '@better-scroll/observe-dom'
-import { Position } from '@better-scroll/slide/dist/types/SlidePages'
-import {
-  onActivated,
-  onDeactivated,
-  onMounted,
-  onUnmounted,
-  ref,
-  Ref,
-} from 'vue'
+import type { Options } from '@better-scroll/core'
+import type { BScrollConstructor } from '@better-scroll/core/dist/types/BScroll'
+import type { Position } from '@better-scroll/slide/dist/types/SlidePages'
+import type { ShallowRef } from 'vue'
 
 BScroll.use(ObserveDOM)
 
 export default function useScroll(
-  wrapperRef: Ref<HTMLElement | null>,
+  wrapperRef: ShallowRef<HTMLElement | null>,
   options: Options,
-  emit: (event: 'scroll', ...args: unknown[]) => void
+  emit: (event: 'scroll', ...args: unknown[]) => void,
 ) {
-  const scroll = ref<BScrollConstructor | null>(null)
+  const scroll = shallowRef<BScrollConstructor | null>(null)
 
   onMounted(() => {
-    scroll.value = new BScroll(wrapperRef.value as HTMLElement, {
+    if (!wrapperRef.value || wrapperRef.value.clientHeight === 0) {
+      return
+    }
+    scroll.value = new BScroll(wrapperRef.value, {
       observeDOM: true,
       useTransition: false,
       ...options,
     })
-
-    const scrollVal: BScrollConstructor = scroll.value
+    const scrollVal = scroll.value
 
     if (Number(options.probeType) > 0) {
       scrollVal.on('scroll', (pos: Position) => {

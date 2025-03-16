@@ -17,15 +17,14 @@ interface Props {
   scrollY?: boolean
 }
 
-const emit = defineEmits<Emits>()
 const props = withDefaults(defineProps<Props>(), {
   click: true,
   probeType: 0,
   scrollX: false,
   scrollY: true,
 })
-
-const rootRef = ref<HTMLElement | null>(null)
+const emit = defineEmits<Emits>()
+const rootRef = shallowRef<HTMLElement | null>(null)
 const scroll = useScroll(rootRef, props, emit)
 
 defineExpose({

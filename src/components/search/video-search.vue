@@ -18,22 +18,22 @@
         </transition>
       </form>
       <transition name="slide-fade">
-        <search-history
+        <SearchHistory
           v-show="searchVisible && !keyword && searchList.length > 0"
           :list="searchList"
           @click="echoSearch"
         />
       </transition>
       <div v-show="keyword" class="search-list">
-        <search-skeletom :loading="loading" :num="3">
-          <scroll-wrap v-show="!isEmpty">
-            <video-list
+        <SearchSkeletom :loading="loading" :num="3">
+          <ScrollWrap v-show="!isEmpty">
+            <VideoList
               :query="keyword"
               :list="searchData.list"
               :relate-list="searchData.relateList"
               class="list"
             />
-          </scroll-wrap>
+          </ScrollWrap>
           <van-empty
             v-show="isEmpty"
             class="detail__empty"
@@ -41,16 +41,16 @@
             image-size="25vw"
             description="什么都没得~"
           />
-        </search-skeletom>
+        </SearchSkeletom>
       </div>
       <div v-show="keyword && recommendList.length" class="search-list">
-        <scroll-wrap>
-          <recommend-list
+        <ScrollWrap>
+          <RecommendList
             :list="recommendList"
             class="list"
             @click="echoSearch"
           />
-        </scroll-wrap>
+        </ScrollWrap>
       </div>
     </div>
   </transition>
@@ -76,13 +76,12 @@ interface Emits {
   (e: 'update:visible', value: boolean): void
 }
 
-const emit = defineEmits<Emits>()
 const props = withDefaults(defineProps<Props>(), {
   visible: false,
 })
-
-const searchRef = ref<SearchInstance>()
-const formRef = ref<HTMLElement>()
+const emit = defineEmits<Emits>()
+const searchRef = shallowRef<SearchInstance>()
+const formRef = shallowRef<HTMLElement>()
 const formHeight = ref('0px')
 
 const searchVisible = computed({
@@ -116,7 +115,7 @@ watch(
         formHeight.value = `${height}px`
       }, 500)
     }
-  }
+  },
 )
 
 watch(keyword, () => {

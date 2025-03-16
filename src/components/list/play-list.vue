@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { PlayItem } from '@/types/search'
+import type { PlayItem } from '@/types/search'
 import useScroll from '@/components/scroll/use-scroll'
 
 interface Props {
@@ -62,23 +62,30 @@ interface Emits {
   (event: 'update:active', text: string): void
 }
 
-defineExpose({
-  scrollToActive,
-  refreshScroll,
-})
-
-const emit = defineEmits<Emits>()
 const props = withDefaults(defineProps<Props>(), {
   active: '',
   showActive: false,
   direction: 'horizontal',
 })
 
+const emit = defineEmits<Emits>()
+
+defineExpose({
+  scrollToActive,
+  refreshScroll,
+})
+
 const ITEM_ROW_LEN = 6
 const SERIES_ROW_LEN = 2
-const rootRef = ref<HTMLElement | null>(null)
-const playlistRef = ref<HTMLElement | null>(null)
+const rootRef = shallowRef<HTMLElement | null>(null)
+const playlistRef = shallowRef<HTMLElement | null>(null)
 const isVertical = computed(() => props.direction === 'vertical')
+const isSeries = computed<boolean>(() => {
+  if (props.list.length) {
+    return Number.isNaN(Number(props.list[0].text))
+  }
+  return false
+})
 const emptyItemLen = computed(() => {
   const rowLen = isSeries.value ? SERIES_ROW_LEN : ITEM_ROW_LEN
   const extraLen = props.list.length % rowLen
@@ -87,13 +94,6 @@ const emptyItemLen = computed(() => {
   }
   return rowLen - extraLen
 })
-const isSeries = computed<boolean>(() => {
-  if (props.list.length) {
-    return isNaN(Number(props.list[0].text))
-  }
-  return false
-})
-
 const scroll = useScroll(
   rootRef,
   {
@@ -101,7 +101,7 @@ const scroll = useScroll(
     scrollX: !isVertical.value,
     scrollY: isVertical.value,
   },
-  emit
+  emit,
 )
 
 onUpdated(() => {

@@ -1,20 +1,32 @@
 import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import { Lazyload } from 'vant'
-import browser from './utils/page-check'
+import { createHead } from '@unhead/vue'
+import App from '@/App.vue'
+import router from '@/router'
+import browser from '@/utils/page-check'
+// Vant桌面端适配
+import '@vant/touch-emulator'
+// Vant手动引入样式
+import 'vant/es/toast/style'
+import 'vant/es/dialog/style'
+import 'vant/es/notify/style'
+import 'vant/es/image-preview/style'
+// 全局引入css
+import '@/assets/css/index.scss'
 
 // 判断是否pc设备打开
 if (
-  import.meta.env.PROD &&
-  !browser.versions.mobile &&
-  window.top === window.self
+  import.meta.env.PROD
+    && !browser.versions.mobile
+    && window.top === window.self
 ) {
   const mobileUrl = `${import.meta.env.VITE_APP_TO_PC}`
   location.href = mobileUrl
 }
 
-// 全局引入css
-import '@/assets/css/index.scss'
+const app = createApp(App)
+const head = createHead()
 
-createApp(App).use(Lazyload).use(router).mount('#app')
+app.use(head)
+app.use(router)
+
+app.mount('#app')

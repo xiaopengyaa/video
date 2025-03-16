@@ -20,7 +20,9 @@
             <div>{{ item.mark.text }}</div>
           </div>
           <div class="image-info-wrap">
-            <div class="image-info van-ellipsis">{{ item.imageInfo }}</div>
+            <div class="image-info van-ellipsis">
+              {{ item.imageInfo }}
+            </div>
           </div>
         </div>
         <div class="main-content__right">
@@ -48,8 +50,9 @@
             block
             color="#ec6a38"
             @click="btnClick(item, queryTxt)"
-            >立即播放</van-button
           >
+            立即播放
+          </van-button>
           <van-popover
             v-else-if="popoverList[index]"
             v-model:show="popoverList[index].show"
@@ -66,8 +69,9 @@
                 color="#ec6a38"
                 icon="arrow-down"
                 icon-position="right"
-                >立即播放</van-button
               >
+                立即播放
+              </van-button>
             </template>
           </van-popover>
         </van-col>
@@ -84,15 +88,17 @@
           </van-button>
         </van-col>
       </van-row>
-      <play-list
+      <PlayList
         v-show="item.playlist.length"
         :list="item.playlist"
         @click="(playItem: PlayItem) => playClick(playItem, item, queryTxt)"
       />
     </div>
     <div v-show="relateList.length" class="video-item">
-      <div class="relate-title">相关影视作品</div>
-      <relate-list
+      <div class="relate-title">
+        相关影视作品
+      </div>
+      <RelateList
         :list="relateList"
         @click="(item) => btnClick(item, restoreHtmlText(item.title))"
       />
@@ -104,8 +110,8 @@
 import PlayList from './play-list.vue'
 import RelateList from './relate-list.vue'
 import useListClick from './use-list-click'
-import { PlayItem, SearchItem } from '@/types/search'
-import { Toast } from 'vant'
+import type { PlayItem, SearchItem } from '@/types/search'
+import { showToast } from 'vant'
 import { px2vw, restoreHtmlText } from '@/utils/common'
 import 'vant/es/toast/style'
 
@@ -138,7 +144,7 @@ watchEffect(() => {
 })
 
 function download() {
-  Toast('想什么呢，你还想下载=。=')
+  showToast('想什么呢，你还想下载=。=')
 }
 </script>
 

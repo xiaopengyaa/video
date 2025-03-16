@@ -1,8 +1,5 @@
-const cheerio = require('cheerio')
-const qs = require('qs')
 const { api, getResult, getSiteByUrl, processUrl } = require('../../utils')
 const { COOKIE, REFERER } = require('./constant')
-const { SITE_SORT } = require('../../utils/constant')
 const { generateUuid } = require('../../utils/searchUtil')
 
 const homeApi = {
@@ -28,9 +25,9 @@ const homeApi = {
     const url = `https://pbaccess.video.qq.com/trpc.videosearch.mobile_search.MultiTerminalSearch/MbSearch?vplatform=2`
     const res = await api.post(url, params, {
       headers: {
-        cookie: COOKIE,
-        origin: REFERER,
-        referer: REFERER,
+        'cookie': COOKIE,
+        'origin': REFERER,
+        'referer': REFERER,
         'content-type': 'application/json',
         'trpc-trans-info': '{"trpc-env":""}',
       },
@@ -69,7 +66,7 @@ const homeApi = {
           cookie: COOKIE,
           referer: REFERER,
         },
-      }
+      },
     )
     const reg = new RegExp(`${callback}\\((.*)\\)`)
     const match = html.match(reg)
@@ -93,7 +90,7 @@ const homeApi = {
 
 function getRelateList($, targetCid) {
   let list = []
-  let match = $('.result_series_new')
+  const match = $('.result_series_new')
     .attr('r-props')
     ?.match(/totalData:\s*'(.*)'/)
   let data
@@ -161,7 +158,7 @@ function getSearchList(data) {
   const itemList = data.normalList.itemList
   const areaBoxList = data.areaBoxList.map((item) => {
     return item.itemList.filter(
-      (cItem) => cItem?.videoInfo?.episodeSites?.length
+      cItem => cItem?.videoInfo?.episodeSites?.length,
     )
   })
   const allList = itemList.concat(areaBoxList.flat())
@@ -172,14 +169,15 @@ function getSearchList(data) {
         const videoInfo = item.videoInfo
         const cid = item?.doc?.id || ''
         const episodeSites = videoInfo.episodeSites?.filter(
-          (site) => site?.episodeInfoList?.length
+          site => site?.episodeInfoList?.length,
         )
         const playSites = videoInfo.playSites
         let allSites = []
         let isPlaySite = false
         if (episodeSites && episodeSites.length > 0) {
           allSites = episodeSites
-        } else if (playSites && playSites.length > 0) {
+        }
+        else if (playSites && playSites.length > 0) {
           allSites = playSites
           isPlaySite = true
         }
@@ -192,7 +190,8 @@ function getSearchList(data) {
             const obj = JSON.parse(imgTag)
             imageInfo = obj.tag_4.text
             mark = obj.tag_2
-          } catch (e) {
+          }
+          catch (e) {
             console.log(e)
           }
           const item = {
@@ -209,16 +208,19 @@ function getSearchList(data) {
             btnlist: [],
           }
           if (
-            episodeSite.episodeInfoList &&
-            episodeSite.episodeInfoList.length > 0
+            episodeSite.episodeInfoList
+            && episodeSite.episodeInfoList.length > 0
           ) {
             episodeSite.episodeInfoList.forEach((cItem) => {
               const urlObj = processUrl(cItem.url)
               let mark = null
               try {
-                const obj = JSON.parse(cItem.markLabel)
-                mark = obj.tag_2
-              } catch (e) {
+                if (cItem.markLabel) {
+                  const obj = JSON.parse(cItem.markLabel)
+                  mark = obj.tag_2
+                }
+              }
+              catch (e) {
                 console.log(e)
               }
               const playItem = {
@@ -230,7 +232,8 @@ function getSearchList(data) {
               }
               if (episodeSite.uiType === 3 || isPlaySite) {
                 item.btnlist.push(playItem)
-              } else {
+              }
+              else {
                 item.playlist.push(playItem)
               }
             })
@@ -268,12 +271,12 @@ async function getPlaylist(cid, site, isAll, pageContext = '') {
         cookie: COOKIE,
         referer: REFERER,
       },
-    }
+    },
   )
 
   if (res.data?.errorCode === 0) {
-    const firstBlockSites =
-      res.data.normalList.itemList?.[0].videoInfo.firstBlockSites?.[0]
+    const firstBlockSites
+      = res.data.normalList.itemList?.[0].videoInfo.firstBlockSites?.[0]
     const episodeInfoList = firstBlockSites.episodeInfoList
     const tabs = firstBlockSites.tabs
 
@@ -284,7 +287,8 @@ async function getPlaylist(cid, site, isAll, pageContext = '') {
       if (item.markLabel) {
         if (item.markLabel.includes('vip')) {
           mark = '//vfiles.gtimg.cn/vupload/20210322/tag_mini_vip.png'
-        } else if (item.markLabel.includes('trailerlite')) {
+        }
+        else if (item.markLabel.includes('trailerlite')) {
           mark = '//vfiles.gtimg.cn/vupload/20210322/tag_mini_trailerlite.png'
         }
       }

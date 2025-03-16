@@ -1,9 +1,9 @@
 <template>
   <transition>
-    <div class="detail">
-      <div ref="videoRef" class="detail__video"></div>
-      <loading-skeleton :loading="loading">
-        <scroll-wrap
+    <div v-show="true" class="detail">
+      <div ref="videoRef" class="detail__video" />
+      <LoadingSkeleton :loading="loading">
+        <ScrollWrap
           v-show="playlist.length"
           ref="scrollRef"
           class="detail__content"
@@ -30,7 +30,7 @@
                   <van-icon class="arrow" name="arrow" :size="px2vw(14)" />
                 </div>
               </div>
-              <play-util
+              <PlayUtil
                 v-if="!isEmpty"
                 v-model:url="playUrl"
                 class="detail__util"
@@ -54,7 +54,7 @@
                   {{ detailData.introduction.update_notify_desc }}
                 </div>
               </div>
-              <play-list
+              <PlayList
                 ref="playlistRef"
                 v-model:active="active"
                 :list="playlist"
@@ -63,8 +63,10 @@
               />
             </div>
             <div v-show="detailData.topList.length" class="detail__top">
-              <div class="title title-wrap">相关推荐</div>
-              <relate-list
+              <div class="title title-wrap">
+                相关推荐
+              </div>
+              <RelateList
                 ref="relateRef"
                 :list="detailData.topList"
                 :width="130"
@@ -73,7 +75,7 @@
               />
             </div>
           </div>
-        </scroll-wrap>
+        </ScrollWrap>
         <div v-if="isEmpty" class="detail__empty-wrap">
           <van-empty
             class="detail__empty"
@@ -81,16 +83,16 @@
             image-size="25vw"
             description="什么都没得~"
           />
-          <play-util v-model:url="playUrl" class="detail__empty-util" />
+          <PlayUtil v-model:url="playUrl" class="detail__empty-util" />
         </div>
-      </loading-skeleton>
-      <intro-dialog
+      </LoadingSkeleton>
+      <IntroDialog
         v-if="!isEmpty"
         v-model:visible="showIntro"
         :height="detailHeight"
         :data="detailData.introduction"
       />
-      <playlist-dialog
+      <PlaylistDialog
         v-if="!isEmpty"
         v-model:visible="showPlaylist"
         v-model:active="active"
@@ -113,14 +115,14 @@ import PlayUtil from './play-util.vue'
 import useContent from './use-content'
 import useVideo from './use-video'
 import { LOADING_DELAY } from '@/utils/constant'
-import { px2vw, getImageUrl, getSiteLogo } from '@/utils/common'
+import { getImageUrl, getSiteLogo, px2vw } from '@/utils/common'
 import { useRect } from '@vant/use'
 
-const videoRef = ref<HTMLDivElement>()
+const videoRef = shallowRef<HTMLDivElement>()
 const playUrl = ref('')
-const playlistRef = ref<typeof PlayList>()
-const relateRef = ref<typeof RelateList>()
-const scrollRef = ref<typeof ScrollWrap>()
+const playlistRef = shallowRef<typeof PlayList>()
+const relateRef = shallowRef<typeof RelateList>()
+const scrollRef = shallowRef<typeof ScrollWrap>()
 const showIntro = ref(false)
 const showPlaylist = ref(false)
 const detailHeight = ref('')
@@ -139,7 +141,7 @@ const {
 watch(loading, () => {
   setTimeout(() => {
     const { height } = useRect(scrollRef.value?.$el)
-    detailHeight.value = height + 'px'
+    detailHeight.value = `${height}px`
     playlistRef.value?.scrollToActive()
     relateRef.value?.scroll?.scrollTo(0, 0, 800)
   }, LOADING_DELAY + 100)

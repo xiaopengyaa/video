@@ -1,4 +1,4 @@
-import { DetailRes } from '@/types/detail'
+import type { DetailRes } from '@/types/detail'
 
 export function getDefDetail(): DetailRes {
   return {

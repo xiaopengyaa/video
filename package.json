@@ -1,86 +1,121 @@
 {
   "name": "vue-video",
+  "version": "2.0.0",
   "private": true,
-  "version": "0.0.0",
+  "packageManager": "pnpm@10.5.2",
   "scripts": {
     "dev": "vite",
-    "server": "npx nodemon server/bin/www",
-    "server-prd": "pm2 start server/bin/www --name vue-video",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix",
-    "format": "prettier --write ./**/*.{vue,ts,tsx,js,jsx,css,less,scss,json,md}",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "vue-tsc --noEmit",
+    "commitlint": "commitlint --edit",
+    "prepare": "simple-git-hooks",
+    "server": "npx nodemon server/bin/www",
+    "server-prd": "pm2 start server/bin/www --name vue-video",
     "deploy": "bash deploy.sh"
   },
   "dependencies": {
-    "@better-scroll/core": "^2.4.2",
-    "@better-scroll/infinity": "^2.4.2",
-    "@better-scroll/nested-scroll": "^2.4.2",
-    "@better-scroll/observe-dom": "^2.4.2",
-    "@better-scroll/pull-up": "^2.4.2",
-    "@better-scroll/slide": "^2.4.2",
-    "@vant/use": "^1.4.2",
-    "@vueuse/core": "^9.1.0",
+    "@better-scroll/core": "^2.5.1",
+    "@better-scroll/infinity": "^2.5.1",
+    "@better-scroll/nested-scroll": "^2.5.1",
+    "@better-scroll/observe-dom": "^2.5.1",
+    "@better-scroll/pull-up": "^2.5.1",
+    "@better-scroll/slide": "^2.5.1",
+    "@types/jsonp": "^0.2.3",
+    "@unhead/vue": "~1.11.20",
+    "@vant/touch-emulator": "^1.4.0",
+    "@vant/use": "^1.6.0",
+    "@vueuse/core": "^12.7.0",
     "artplayer": "^5.2.2",
-    "axios": "^0.27.2",
-    "cheerio": "1.0.0-rc.12",
+    "axios": "^1.8.1",
+    "cheerio": "^1.0.0",
     "crypto-js": "^4.2.0",
-    "dayjs": "^1.11.4",
-    "debug": "^4.3.4",
+    "dayjs": "^1.11.13",
+    "debug": "^4.4.0",
     "flv.js": "^1.6.2",
     "hls.js": "^1.5.20",
     "jsonp": "^0.2.1",
-    "koa": "^2.13.4",
-    "koa-bodyparser": "^4.3.0",
+    "koa": "^2.16.0",
+    "koa-bodyparser": "^4.4.1",
     "koa-convert": "^2.0.0",
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.1",
-    "koa-onerror": "^4.2.0",
-    "koa-router": "^12.0.0",
+    "koa-onerror": "^5.0.1",
+    "koa-router": "^13.0.1",
+    "lodash-es": "^4.17.21",
+    "nodemon": "^3.1.9",
     "normalize.css": "^8.0.1",
-    "pinia": "^2.0.17",
-    "sass": "^1.54.4",
-    "vant": "^3.5.4",
-    "vue": "^3.2.37",
-    "vue-router": "^4.1.3"
+    "nprogress": "^0.2.0",
+    "pinia": "^3.0.1",
+    "pinia-plugin-persistedstate": "^4.2.0",
+    "postcss-px-to-viewport-8-plugin": "^1.2.5",
+    "qs": "^6.14.0",
+    "resize-detector": "^0.3.0",
+    "sass": "^1.85.1",
+    "vant": "^4.9.17",
+    "vconsole": "^3.15.1",
+    "vite-plugin-vue-setup-extend": "^0.4.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@types/jsonp": "^0.2.1",
-    "@types/node": "^18.7.3",
-    "@typescript-eslint/eslint-plugin": "^5.32.0",
-    "@typescript-eslint/parser": "^5.32.0",
-    "@vitejs/plugin-vue": "^3.0.0",
-    "eslint": "^8.21.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-vue": "^9.3.0",
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.3",
-    "nodemon": "^2.0.19",
-    "postcss-px-to-viewport-8-plugin": "^1.1.5",
-    "prettier": "^2.7.1",
-    "qs": "^6.11.0",
-    "typescript": "^4.6.4",
-    "unplugin-auto-import": "^0.10.3",
-    "unplugin-vue-components": "^0.21.2",
-    "vconsole": "^3.14.6",
-    "vite": "^3.0.9",
-    "vite-plugin-vconsole": "^1.2.2",
-    "vite-plugin-vue-setup-extend": "^0.4.0",
-    "vue-tsc": "^0.38.4"
+    "@antfu/eslint-config": "4.3.0",
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
+    "@commitlint/types": "^19.5.0",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^22.13.10",
+    "@types/nprogress": "^0.2.3",
+    "@vant/auto-import-resolver": "^1.3.0",
+    "@vitejs/plugin-legacy": "^6.0.2",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "autoprefixer": "^10.4.20",
+    "consola": "^3.4.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.21.0",
+    "eslint-plugin-format": "^1.0.1",
+    "lint-staged": "^15.4.3",
+    "postcss-mobile-forever": "^4.4.0",
+    "rollup": "^4.34.9",
+    "simple-git-hooks": "^2.11.1",
+    "terser": "^5.39.0",
+    "typescript": "^5.8.2",
+    "unplugin-auto-import": "^19.1.1",
+    "unplugin-vue-components": "^28.4.1",
+    "unplugin-vue-router": "^0.11.2",
+    "vite": "^6.2.0",
+    "vite-plugin-sitemap": "^0.7.1",
+    "vite-plugin-vconsole": "^2.1.1",
+    "vite-plugin-vue-devtools": "^7.7.2",
+    "vue-tsc": "^2.2.6"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+  "pnpm": {
+    "allowedDeprecatedVersions": {
+      "glob": "7.2.3",
+      "inflight": "1.0.6",
+      "sourcemap-codec": "1.4.8"
+    },
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "typescript": "5.8.2"
+      }
+    },
+    "onlyBuiltDependencies": [
+      "core-js",
+      "esbuild",
+      "simple-git-hooks"
+    ]
+  },
+  "resolutions": {
+    "vite": "^6.2.0"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged",
+    "commit-msg": "pnpm commitlint $1"
   },
   "lint-staged": {
-    "*.{js,vue,ts,jsx,tsx}": [
-      "prettier --write",
-      "eslint --fix"
-    ],
-    "*.{html,css,less,scss,md}": [
-      "prettier --write"
-    ]
+    "*": "eslint --fix"
   }
 }
