@@ -1,16 +1,7 @@
 <template>
   <transition>
     <div class="detail">
-      <iframe
-        class="detail__video"
-        scrolling="no"
-        allowtransparency
-        allowfullscreen
-        autoplay
-        sandbox="allow-scripts allow-same-origin"
-        :frameborder="0"
-        :src="playUrl"
-      />
+      <div ref="videoRef" class="detail__video"></div>
       <loading-skeleton :loading="loading">
         <scroll-wrap
           v-show="playlist.length"
@@ -125,6 +116,7 @@ import { LOADING_DELAY } from '@/utils/constant'
 import { px2vw, getImageUrl, getSiteLogo } from '@/utils/common'
 import { useRect } from '@vant/use'
 
+const videoRef = ref<HTMLDivElement>()
 const playUrl = ref('')
 const playlistRef = ref<typeof PlayList>()
 const relateRef = ref<typeof RelateList>()
@@ -133,7 +125,7 @@ const showIntro = ref(false)
 const showPlaylist = ref(false)
 const detailHeight = ref('')
 
-const { cid, site } = useVideo()
+const { cid, site } = useVideo(videoRef)
 const {
   detailData,
   playlist,
@@ -162,6 +154,7 @@ watch(loading, () => {
   width: 100%;
   height: 100%;
   background: #fff;
+  user-select: none;
   .title-wrap {
     display: flex;
     align-items: center;

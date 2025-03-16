@@ -20,6 +20,10 @@ export function getImageUrl(name: string) {
   return new URL(`../assets/images/${name}`, import.meta.url).href
 }
 
+export function getAssetsUrl(name: string) {
+  return new URL(`../assets/${name}`, import.meta.url).href
+}
+
 export function setTitle(title: string) {
   const defTitle = 'xiaopengyaa视频'
   return title ? `${title} - ${defTitle}` : defTitle

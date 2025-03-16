@@ -1,6 +1,6 @@
 <template>
   <div class="play-util">
-    <i class="iconfont icon-shuaxin" :class="{ start }" @click="refreshUrl" />
+    <!-- <i class="iconfont icon-shuaxin" :class="{ start }" @click="refreshUrl" /> -->
     <i class="iconfont icon-shezhi1" @click="show = true" />
     <i class="iconfont icon-backdelete" @click="toHome" />
     <van-action-sheet
