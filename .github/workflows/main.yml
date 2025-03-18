@@ -20,5 +20,3 @@ jobs:
             git pull # 拉取最新代码
             pnpm install # 安装项目依赖
             pnpm build # 项目打包
-            pm2 delete vue-video # 删除旧的进程
-            pm2 start server/bin/www --name vue-video # 启动新的进程

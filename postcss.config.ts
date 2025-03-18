@@ -9,7 +9,7 @@ export default {
       rootContainingBlockSelectorList: ['van-tabbar', 'van-popup'],
     },
     'postcss-px-to-viewport-8-plugin': {
-      viewportWidth: 414,
+      viewportWidth: 375,
     },
   },
 }

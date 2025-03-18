@@ -30,9 +30,6 @@ export default antfu(
     ignores: [
       '.github/**',
       'scripts/**',
-      'server/utils/xmflv.js',
-      'server/utils/searchUtil.js',
-      'server/api/qiyi/md5.js',
     ],
   },
 )
