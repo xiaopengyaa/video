@@ -147,9 +147,6 @@ importers:
       lint-staged:
         specifier: ^15.4.3
         version: 15.5.0
-      postcss-mobile-forever:
-        specifier: ^4.4.0
-        version: 4.4.0(postcss@8.5.3)
       rollup:
         specifier: ^4.34.9
         version: 4.35.0
@@ -2845,11 +2842,6 @@ packages:
   pluralize@8.0.0:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
     engines: {node: '>=4'}
-
-  postcss-mobile-forever@4.4.0:
-    resolution: {integrity: sha512-uv+GJL9QwaUhGYDSDWEcGFZ9HNylts+0yYFYzTOTetBNJBi9jEBEqygP2Q2vX1SHPRuXA6pOlN0RMYI5AWWKKQ==}
-    peerDependencies:
-      postcss: ^8.0.0
 
   postcss-px-to-viewport-8-plugin@1.2.5:
     resolution: {integrity: sha512-+yc69+q/euV7iKh5fGXY6C/lpepmVx2DGFHeYj5BpzIFyBBpdACDjZyrZ8AV0kCg+J0bplBv4ZA1QTzgaK0rGg==}
@@ -6416,10 +6408,6 @@ snapshots:
       pathe: 2.0.3
 
   pluralize@8.0.0: {}
-
-  postcss-mobile-forever@4.4.0(postcss@8.5.3):
-    dependencies:
-      postcss: 8.5.3
 
   postcss-px-to-viewport-8-plugin@1.2.5:
     dependencies:

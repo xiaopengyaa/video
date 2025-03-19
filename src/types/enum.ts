@@ -1,5 +1,5 @@
 export enum Code {
-  ERR_OK = 0,
+  ERR_OK = 200,
 }
 
 export enum VideoType {

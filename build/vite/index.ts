@@ -35,9 +35,6 @@ export function createVitePlugins(mode: string) {
         'pinia',
         '@vueuse/core',
         unheadVueComposablesImports,
-        {
-          'vue-router/auto': ['useLink'],
-        },
       ],
       dts: 'src/types/auto-imports.d.ts',
       dirs: [

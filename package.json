@@ -63,7 +63,6 @@
     "eslint": "^9.21.0",
     "eslint-plugin-format": "^1.0.1",
     "lint-staged": "^15.4.3",
-    "postcss-mobile-forever": "^4.4.0",
     "rollup": "^4.34.9",
     "simple-git-hooks": "^2.11.1",
     "terser": "^5.39.0",

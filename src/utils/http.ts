@@ -57,7 +57,7 @@ const http = {
         ...config,
       })
       const serverData = res.data
-      return Promise.resolve(serverData.result)
+      return Promise.resolve(serverData.data)
     }
     catch (err) {
       return Promise.reject(err)
@@ -67,7 +67,7 @@ const http = {
     try {
       const res = await service.post<ResData<T>>(url, data, config)
       const serverData = res.data
-      return Promise.resolve(serverData.result)
+      return Promise.resolve(serverData.data)
     }
     catch (err) {
       return Promise.reject(err)
