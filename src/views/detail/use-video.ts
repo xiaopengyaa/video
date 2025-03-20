@@ -33,7 +33,7 @@ export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>) 
   async function initVideo() {
     if (!video.value)
       return
-    const data = await getVurl(url.value)
+    const res = await getVurl(url.value)
     if (!art.value) {
       const stateSvg = getSvgUrl('state.svg')
       const indicatorSvg = getSvgUrl('indicator.svg')
@@ -69,8 +69,8 @@ export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>) 
         },
       })
     }
-    if (data.code === 0) {
-      art.value.switch = data.result
+    if (res.code === 200) {
+      art.value.switch = res.data
     }
   }
 

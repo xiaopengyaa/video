@@ -30,6 +30,7 @@ export default antfu(
     ignores: [
       '.github/**',
       'scripts/**',
+      'src/assets/iconfont/**',
     ],
   },
 )

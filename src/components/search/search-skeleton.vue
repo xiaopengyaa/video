@@ -1,7 +1,7 @@
 <template>
   <div v-if="loading" class="skeleton-wrap">
     <van-skeleton
-      v-for="item in num"
+      v-for="item in props.num"
       :key="item"
       class="skeleton"
       title
