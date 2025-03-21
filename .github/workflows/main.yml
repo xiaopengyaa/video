@@ -9,7 +9,7 @@ jobs:
     steps:
       # 在服务器端执行相关指令
       - name: Executing remote ssh commands
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.MY_HOST }} # 服务器IP（需要在GitHub上自行配置对应的secret）
           username: ${{ secrets.MY_USER }} # 服务器用户名
