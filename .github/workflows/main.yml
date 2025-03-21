@@ -9,12 +9,13 @@ jobs:
     steps:
       # 在服务器端执行相关指令
       - name: Executing remote ssh commands
-        uses: appleboy/drone-ssh@master
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.MY_HOST }} # 服务器IP（需要在GitHub上自行配置对应的secret）
           username: ${{ secrets.MY_USER }} # 服务器用户名
           password: ${{ secrets.MY_PASS }} # 服务器密码
           script: |
+            source ~/.nvm/nvm.sh 
             cd /www/wwwroot/video # 进入服务器中的端工程所在的目录
             git restore src/* # 还原更改
             git pull # 拉取最新代码
