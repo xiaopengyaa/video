@@ -11,7 +11,9 @@ import 'vant/es/dialog/style'
 import 'vant/es/notify/style'
 import 'vant/es/image-preview/style'
 // 全局引入css
-import '@/assets/css/index.scss'
+import 'normalize.css'
+import '@/assets/iconfont/iconfont.css'
+import '@/assets/css/common.scss'
 
 // 判断是否pc设备打开
 if (

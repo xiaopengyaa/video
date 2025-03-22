@@ -81,9 +81,11 @@
             round
             block
             color="#f6f8fa"
-            icon="star"
             @click="download"
           >
+            <template #icon>
+              <i class="iconfont icon-download3" />
+            </template>
             下载
           </van-button>
         </van-col>
@@ -211,6 +213,9 @@ function download() {
   margin: 12px 0;
   .btn {
     height: 40px;
+    .iconfont {
+      font-size: 14px;
+    }
   }
   :deep(.download .van-button__content) {
     color: #000;
