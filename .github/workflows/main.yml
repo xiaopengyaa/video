@@ -15,7 +15,6 @@ jobs:
           username: ${{ secrets.MY_USER }} # 服务器用户名
           password: ${{ secrets.MY_PASS }} # 服务器密码
           script: |
-            source ~/.nvm/nvm.sh 
             cd /www/wwwroot/video # 进入服务器中的端工程所在的目录
             git restore src/* # 还原更改
             git pull # 拉取最新代码
