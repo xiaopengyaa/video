@@ -8,6 +8,7 @@ import flvjs from 'flv.js'
 import { getImageUrl, getSvgUrl } from '@/utils/common'
 
 const NOT_SUPPORTED = '播放失败，有问题请联系最帅的那位。'
+Artplayer.NOTICE_TIME = 3000
 Artplayer.SETTING_WIDTH = 180
 Artplayer.SETTING_ITEM_WIDTH = 180
 
@@ -32,9 +33,9 @@ export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>, 
   })
 
   async function initVideo() {
-    if (!video.value)
+    if (!video.value) {
       return
-    const res = await getVurl(url.value, type.value)
+    }
     if (!art.value) {
       const stateSvg = getSvgUrl('state.svg')
       const indicatorSvg = getSvgUrl('indicator.svg')
@@ -59,7 +60,6 @@ export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>, 
         fastForward: true,
         autoOrientation: true,
         autoPlayback: true,
-        airplay: true,
         icons: {
           state: stateImg,
           indicator: indicatorImg,
@@ -70,8 +70,22 @@ export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>, 
         },
       })
     }
-    if (res.code === 200) {
-      art.value.switch = res.data
+    try {
+      art.value.loading.show = true
+      const data = await getVurl(url.value, type.value)
+      if (data) {
+        art.value.switch = data
+      }
+      else {
+        throw new Error(NOT_SUPPORTED)
+      }
+    }
+    catch (e) {
+      if (e && e.code === 'ERR_CANCELED') {
+        return
+      }
+      art.value.notice.show = NOT_SUPPORTED
+      art.value.loading.show = false
     }
   }
 
@@ -90,6 +104,7 @@ function playM3u8(video: HTMLVideoElement, url: string, art: Artplayer) {
     art.hls = hls
     art.on('destroy', () => hls.destroy())
     hls.on(Hls.Events.ERROR, (_event, data) => {
+      console.log('hls error', data)
       // 网络错误类型
       if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
         art.notice.show = NOT_SUPPORTED
