@@ -4,7 +4,8 @@ import { viteVConsole } from 'vite-plugin-vconsole'
 export function createViteVConsole() {
   return viteVConsole({
     entry: [path.resolve('src/main.ts')],
-    enabled: true,
+    localEnabled: true,
+    enabled: false,
     config: {
       maxLogNumber: 1000,
       theme: 'light',
