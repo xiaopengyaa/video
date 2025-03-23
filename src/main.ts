@@ -5,6 +5,8 @@ import router from '@/router'
 import browser from '@/utils/page-check'
 // Vant桌面端适配
 import '@vant/touch-emulator'
+// Vant懒加载
+import { Lazyload } from 'vant'
 // Vant手动引入样式
 import 'vant/es/toast/style'
 import 'vant/es/dialog/style'
@@ -28,6 +30,9 @@ if (
 const app = createApp(App)
 const head = createHead()
 
+app.use(Lazyload, {
+  lazyComponent: true,
+})
 app.use(head)
 app.use(router)
 

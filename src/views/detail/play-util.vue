@@ -34,28 +34,28 @@
 <script setup lang="ts">
 import { LINE_KEY } from '@/utils/constant'
 import { setTitle } from '@/utils/common'
+import { ParserType } from '@/types/enum'
 
 interface Props {
-  url: string
+  type: ParserType
 }
 
 const props = defineProps<Props>()
-const route = useRoute()
 const router = useRouter()
 const title = useTitle()
-const lines = ['https://www.yemu.xyz/?url=']
-const url = useVModel(props, 'url')
+const lines: ParserType[] = [ParserType.xmjx, ParserType.qgjx]
+const type = useVModel(props, 'type')
 // const start = ref(false)
 const show = ref(false)
 const sheetHeight = ref('')
-const storageLine = useStorage<string>(LINE_KEY, '')
+const storageLine = useStorage<ParserType>(LINE_KEY, ParserType.xmjx)
 
 watchEffect(() => {
   let line = lines[0]
   if (storageLine.value && lines.includes(storageLine.value)) {
     line = storageLine.value
   }
-  url.value = getPlayUrl(line)
+  type.value = line
 })
 
 onMounted(() => {
@@ -63,17 +63,13 @@ onMounted(() => {
   sheetHeight.value = `${height.value - 0.5625 * width.value}px`
 })
 
-function handleClick(line: string) {
+function handleClick(line: ParserType) {
   storageLine.value = line
-  url.value = getPlayUrl(line)
+  type.value = line
 }
 
-function getPlayUrl(line: string) {
-  return line + route.query.url
-}
-
-function isActiveLine(line: string) {
-  return url.value.includes(line)
+function isActiveLine(line: ParserType) {
+  return type.value === line
 }
 
 // function refreshUrl() {

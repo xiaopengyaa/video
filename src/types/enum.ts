@@ -52,3 +52,8 @@ export enum Site {
   pptv = 'pptv',
   acfun = 'acfun',
 }
+
+export enum ParserType {
+  qgjx = 'qgjx',
+  xmjx = 'xmjx',
+}

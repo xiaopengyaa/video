@@ -32,7 +32,7 @@
               </div>
               <PlayUtil
                 v-if="!isEmpty"
-                v-model:url="playUrl"
+                v-model:type="playType"
                 class="detail__util"
               />
             </div>
@@ -83,7 +83,7 @@
             image-size="25vw"
             description="什么都没得~"
           />
-          <PlayUtil v-model:url="playUrl" class="detail__empty-util" />
+          <PlayUtil v-model:type="playType" class="detail__empty-util" />
         </div>
       </LoadingSkeleton>
       <IntroDialog
@@ -117,9 +117,10 @@ import useVideo from './use-video'
 import { LOADING_DELAY } from '@/utils/constant'
 import { getImageUrl, getSiteLogo, px2vw } from '@/utils/common'
 import { useRect } from '@vant/use'
+import { ParserType } from '@/types/enum'
 
 const videoRef = shallowRef<HTMLDivElement>()
-const playUrl = ref('')
+const playType = ref<ParserType>(ParserType.xmjx)
 const playlistRef = shallowRef<typeof PlayList>()
 const relateRef = shallowRef<typeof RelateList>()
 const scrollRef = shallowRef<typeof ScrollWrap>()
@@ -127,7 +128,7 @@ const showIntro = ref(false)
 const showPlaylist = ref(false)
 const detailHeight = ref('')
 
-const { cid, site } = useVideo(videoRef)
+const { cid, site } = useVideo(videoRef, playType)
 const {
   detailData,
   playlist,

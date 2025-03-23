@@ -1,4 +1,5 @@
 import type { ShallowRef } from 'vue'
+import type { ParserType } from '@/types/enum'
 import { Site } from '@/types/enum'
 import { getVurl } from '@/api/detail'
 import Artplayer from 'artplayer'
@@ -10,7 +11,7 @@ const NOT_SUPPORTED = '播放失败，有问题请联系最帅的那位。'
 Artplayer.SETTING_WIDTH = 180
 Artplayer.SETTING_ITEM_WIDTH = 180
 
-export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>) {
+export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>, type: Ref<ParserType>) {
   const route = useRoute()
   const url = ref('')
   const cid = ref('')
@@ -33,7 +34,7 @@ export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>) 
   async function initVideo() {
     if (!video.value)
       return
-    const res = await getVurl(url.value)
+    const res = await getVurl(url.value, type.value)
     if (!art.value) {
       const stateSvg = getSvgUrl('state.svg')
       const indicatorSvg = getSvgUrl('indicator.svg')

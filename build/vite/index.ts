@@ -1,6 +1,7 @@
 import process from 'node:process'
 import { unheadVueComposablesImports } from '@unhead/vue'
 import vue from '@vitejs/plugin-vue'
+import VueSetupExtend from 'vite-plugin-vue-setup-extend'
 import AutoImport from 'unplugin-auto-import/vite'
 import { VantResolver } from '@vant/auto-import-resolver'
 import Components from 'unplugin-vue-components/vite'
@@ -14,6 +15,7 @@ export function createVitePlugins(mode: string) {
 
   return [
     vue(),
+    VueSetupExtend(),
     Sitemap({
       outDir: env.VITE_APP_OUT_DIR || 'dist',
     }),
