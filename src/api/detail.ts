@@ -15,6 +15,7 @@ export async function getPlaylist(data: DetailReq) {
 
 export async function getVurl(url: string, type: ParserType) {
   const res = await http.get<string>('/detail/getVurl', { url, type }, {
+    timeout: 0,
     headers: {
       'X-Cancel-Previous': '1',
       'X-Hide-Tips': '1',

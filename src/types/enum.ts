@@ -56,4 +56,5 @@ export enum Site {
 export enum ParserType {
   qgjx = 'qgjx',
   xmjx = 'xmjx',
+  jyjx = 'jyjx',
 }

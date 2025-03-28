@@ -43,7 +43,7 @@ interface Props {
 const props = defineProps<Props>()
 const router = useRouter()
 const title = useTitle()
-const lines: ParserType[] = [ParserType.xmjx, ParserType.qgjx]
+const lines: ParserType[] = [ParserType.xmjx, ParserType.qgjx, ParserType.jyjx]
 const type = useVModel(props, 'type')
 // const start = ref(false)
 const show = ref(false)
