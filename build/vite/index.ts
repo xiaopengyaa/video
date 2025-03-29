@@ -10,7 +10,7 @@ import VueDevTools from 'vite-plugin-vue-devtools'
 import { loadEnv } from 'vite'
 import { createViteVConsole } from './vconsole'
 
-export function createVitePlugins(mode: string) {
+export function createVitePlugins(mode: string, command: 'build' | 'serve') {
   const env = loadEnv(mode, process.cwd())
 
   return [
@@ -44,7 +44,7 @@ export function createVitePlugins(mode: string) {
       ],
       resolvers: [VantResolver()],
     }),
-    createViteVConsole(),
+    createViteVConsole(command),
     VueDevTools(),
   ]
 }

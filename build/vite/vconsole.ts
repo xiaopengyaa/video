@@ -1,11 +1,11 @@
 import path from 'node:path'
 import { viteVConsole } from 'vite-plugin-vconsole'
 
-export function createViteVConsole() {
+export function createViteVConsole(command: 'build' | 'serve') {
   return viteVConsole({
     entry: [path.resolve('src/main.ts')],
-    localEnabled: true,
-    enabled: false,
+    localEnabled: command === 'serve',
+    enabled: command === 'serve',
     config: {
       maxLogNumber: 1000,
       theme: 'light',

@@ -104,12 +104,22 @@ function playM3u8(video: HTMLVideoElement, url: string, art: Artplayer) {
     art.hls = hls
     art.on('destroy', () => hls.destroy())
     hls.on(Hls.Events.ERROR, (_event, data) => {
-      console.log('hls error', data)
       // 网络错误类型
       if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
         art.notice.show = NOT_SUPPORTED
         art.loading.show = false
       }
+      if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+        console.error('media错误:', data.details)
+        // 重试超过一定次数就不再重试，提示用户
+        const action = data.errorAction
+        const retryConfig = action?.retryConfig
+        if (retryConfig && retryConfig.maxNumRetry === action.retryCount) {
+          art.notice.show = '当前分片解析失败。'
+        }
+        return
+      }
+      console.error('hls错误:', data)
     })
   }
   else if (video.canPlayType('application/vnd.apple.mpegurl')) {

@@ -5,7 +5,7 @@ import type { ConfigEnv, UserConfig } from 'vite'
 import { createVitePlugins } from './build/vite'
 import { include } from './build/vite/optimize'
 
-export default ({ mode }: ConfigEnv): UserConfig => {
+export default ({ mode, command }: ConfigEnv): UserConfig => {
   const root = process.cwd()
   const env = loadEnv(mode, root)
 
@@ -16,7 +16,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
         '@': path.resolve(__dirname, 'src'),
       },
     },
-    plugins: createVitePlugins(mode),
+    plugins: createVitePlugins(mode, command),
     server: {
       host: true,
       proxy: {
