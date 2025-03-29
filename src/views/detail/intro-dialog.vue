@@ -20,27 +20,27 @@
           <ScrollWrap ref="scrollRef" class="content-wrap">
             <div>
               <div
-                v-if="data.detail_info"
+                v-if="data.detailInfo"
                 class="desc"
-                v-html="data.detail_info"
+                v-html="data.detailInfo"
               />
               <div
-                v-if="data.area_name || data.year || data.main_genres"
+                v-if="data.area || data.year || data.kinds"
                 class="desc"
               >
-                {{ data.area_name }}
+                {{ data.area }}
                 {{ data.year }}
-                {{ data.main_genres?.replace(/,/g, '/') }}
+                {{ data.kinds?.replace(/,/g, '/') }}
               </div>
               <div
-                v-if="data.cover_description"
+                v-if="data.desc"
                 class="content van-hairline--top"
               >
                 <div class="title">
                   简介
                 </div>
                 <div class="text">
-                  {{ data.cover_description }}
+                  {{ data.desc }}
                 </div>
               </div>
             </div>

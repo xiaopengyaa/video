@@ -109,7 +109,7 @@ function playM3u8(video: HTMLVideoElement, url: string, art: Artplayer) {
         art.notice.show = NOT_SUPPORTED
         art.loading.show = false
       }
-      if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+      if (data.type === Hls.ErrorTypes.MEDIA_ERROR && data.details === Hls.ErrorDetails.FRAG_PARSING_ERROR) {
         console.error('media错误:', data.details)
         // 重试超过一定次数就不再重试，提示用户
         const action = data.errorAction

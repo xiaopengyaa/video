@@ -23,25 +23,18 @@ export interface DetailRes {
 }
 
 export interface DetailIntro {
-  area_name: string
-  cover_description: string
-  detail_info: string
-  episode_all: string
-  hotval: string
-  main_genres: string
+  area: string
+  desc: string
+  detailInfo: string
+  kinds: string
   title: string
-  update_notify_desc: string
+  update: string
   year: string
 }
 
 export interface VideoInfo {
-  c_covers: string
-  c_title_output: string
-  pioneer_tag: string
-  title: string
-  type: number
-  type_name: string
   vid: string
+  title: string
 }
 
 export interface TopItem {

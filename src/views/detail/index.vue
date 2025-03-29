@@ -22,10 +22,10 @@
                     detailData.introduction.title
                   }}</span>
                 </div>
-                <div v-if="detailData.introduction.detail_info" class="info">
+                <div v-if="detailData.introduction.detailInfo" class="info">
                   <span
                     class="van-ellipsis"
-                    v-html="detailData.introduction.detail_info"
+                    v-html="detailData.introduction.detailInfo"
                   />
                   <van-icon class="arrow" name="arrow" :size="px2vw(14)" />
                 </div>
@@ -48,10 +48,10 @@
                   />
                 </div>
                 <div
-                  v-if="detailData.introduction.update_notify_desc"
+                  v-if="detailData.introduction.update"
                   class="update__desc van-multi-ellipsis--l2"
                 >
-                  {{ detailData.introduction.update_notify_desc }}
+                  {{ detailData.introduction.update }}
                 </div>
               </div>
               <PlayList
@@ -98,7 +98,7 @@
         v-model:active="active"
         :list="playlist"
         :height="detailHeight"
-        :desc="detailData.introduction.update_notify_desc || ''"
+        :desc="detailData.introduction.update || ''"
       />
     </div>
   </transition>
