@@ -21,8 +21,8 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
       host: true,
       proxy: {
         '/video': {
-          target: 'http://localhost:3111',
-          // target: 'http://42.194.151.46:3111',
+          // target: 'http://localhost:3111',
+          target: 'http://42.194.151.46:3111',
           changeOrigin: true,
         },
       },
