@@ -7,6 +7,7 @@ import { VantResolver } from '@vant/auto-import-resolver'
 import Components from 'unplugin-vue-components/vite'
 import Sitemap from 'vite-plugin-sitemap'
 import VueDevTools from 'vite-plugin-vue-devtools'
+import { VueMcp } from 'vite-plugin-vue-mcp'
 import { loadEnv } from 'vite'
 import { createViteVConsole } from './vconsole'
 
@@ -46,5 +47,6 @@ export function createVitePlugins(mode: string, command: 'build' | 'serve') {
     }),
     createViteVConsole(command),
     VueDevTools(),
+    VueMcp(),
   ]
 }

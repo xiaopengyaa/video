@@ -9,3 +9,10 @@ export interface ResData<T> {
 export interface BaseType {
   site: Site
 }
+
+export interface FlagMsg {
+  flag: boolean
+  message: string
+}
+
+export type FlagResponse<T = undefined> = { flag: true, message: string, data: T } | { flag: false, message: string }

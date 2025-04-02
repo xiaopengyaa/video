@@ -9,7 +9,8 @@ import type { ResData } from '@/types/base'
 import { Code } from '@/types/enum'
 import { showToast } from 'vant'
 import 'vant/es/toast/style'
-
+import router from '@/router'
+import { useAuthStore } from '@/store/auth'
 // 创建axios实例
 const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL, // 数据接口域名统一配置
@@ -27,6 +28,7 @@ function generateRequestKey(config: AxiosRequestConfig) {
 service.interceptors.request.use(
   (config) => {
     const enableCancel = config.headers?.['X-Cancel-Previous'] === '1'
+    const accessToken = localStorage.getItem('accessToken')
 
     if (enableCancel) {
       const requestKey = generateRequestKey(config)
@@ -41,6 +43,10 @@ service.interceptors.request.use(
       // 存储新请求
       config.signal = controller.signal
       pendingRequests.set(requestKey, controller)
+    }
+
+    if (accessToken && !config.url?.includes('/auth/refresh')) {
+      config.headers.Authorization = `Bearer ${accessToken}`
     }
 
     return config
@@ -58,25 +64,67 @@ service.interceptors.response.use(
     const requestKey = generateRequestKey(response.config)
     pendingRequests.delete(requestKey)
     // 响应处理
-    if (response.status !== 200 || response.data.code !== Code.ERR_OK) {
-      !hideTips && showToast('请求失败')
+    const { code, message } = response.data
+
+    // 如果后端返回的是文件流，直接返回
+    if (response.config.responseType === 'blob') {
+      return response
     }
-    return response
+
+    // 如果后端返回的是200，直接返回
+    if (response.status === 200 && code === Code.ERR_OK) {
+      return response
+    }
+
+    !hideTips && showToast(message || '请求失败')
+    return Promise.reject(new Error(message || '请求失败'))
   },
-  (err) => {
-    const data = err.response && err.response.data
-    const hideTips = err.config?.headers?.['X-Hide-Tips'] === '1'
+  async (err) => {
+    const data = err.response?.data
+    const config = err.config
+    const hideTips = config?.headers?.['X-Hide-Tips'] === '1'
 
     if (!axios.isCancel(err)) {
-      const requestKey = generateRequestKey(err.config)
+      const requestKey = generateRequestKey(config)
       pendingRequests.delete(requestKey)
     }
 
-    if (err && err.code === 'ECONNABORTED') {
+    if (err.code === 'ECONNABORTED') {
       !hideTips && showToast('兄弟，\n你这是网络不好呀=。=')
     }
+    else if (err.response?.status === 401) {
+      // 如果是刷新token的请求失败，直接退出登录
+      if (config.url?.includes('/auth/refresh')) {
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        router.push({
+          path: '/login',
+          query: { redirect: router.currentRoute.value.fullPath },
+        })
+        !hideTips && showToast('登录已过期，请重新登录')
+      }
+      else {
+        try {
+          // 尝试刷新token
+          const authStore = useAuthStore()
+          const result = await authStore.refreshTokens()
+
+          // 使用新token重试请求
+          config.headers.Authorization = `Bearer ${result.accessToken}`
+          return service(config)
+        }
+        catch (refreshError) {
+          // 刷新失败，跳转登录页
+          router.push({
+            path: '/login',
+            query: { redirect: router.currentRoute.value.fullPath },
+          })
+          !hideTips && showToast('登录已过期，请重新登录')
+        }
+      }
+    }
     else {
-      !hideTips && showToast('请求失败')
+      !hideTips && showToast(data?.message || '请求失败')
     }
 
     return Promise.reject(data || err)
