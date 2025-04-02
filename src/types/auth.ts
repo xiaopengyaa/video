@@ -11,12 +11,10 @@ export interface LoginParams {
 export interface LoginResult {
   accessToken: string
   refreshToken: string
-  expiresIn: number
-  userInfo: UserInfo
+  user: UserInfo
 }
 
 export interface RefreshTokenResult {
   accessToken: string
   refreshToken: string
-  expiresIn: number
 }

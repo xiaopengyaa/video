@@ -56,7 +56,7 @@ export const useAuthStore = defineStore('auth', () => {
           accessToken: data.accessToken,
           refreshToken: data.refreshToken,
         })
-        userInfo.value = data.userInfo
+        userInfo.value = data.user
         return true
       }
       else {
