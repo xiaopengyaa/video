@@ -1,24 +1,26 @@
 <template>
-  <div class="login-container">
-    <div class="login-content">
-      <div class="login-header">
-        <div class="login-avatar">
-          <img :src="getImageUrl('avatar.webp')" alt="avatar" class="avatar-img">
+  <div class="register-container">
+    <div class="register-content">
+      <div class="register-header">
+        <div class="register-avatar">
+          <img :src="getImageUrl('avatar2.png')" alt="avatar" class="avatar-img">
         </div>
-        <h2 class="login-title">
-          欢迎回来
+        <h2 class="register-title">
+          创建账号
         </h2>
+        <p class="register-subtitle">
+          欢迎加入我们 (｡･ω･｡)ﾉ
+        </p>
       </div>
 
-      <div class="login-form-box">
-        <van-form @submit="handleLogin">
+      <div class="register-form-box">
+        <van-form @submit="handleRegister">
           <van-cell-group inset>
             <van-field
-              v-model="loginForm.username"
+              v-model="registerForm.username"
               class="username-field"
               name="username"
               placeholder="请输入用户名"
-              autocomplete="off"
               :rules="usernameRules"
             >
               <template #left-icon>
@@ -26,9 +28,9 @@
               </template>
             </van-field>
             <van-field
-              v-model="loginForm.password"
-              class="password-field"
+              v-model="registerForm.password"
               type="password"
+              class="password-field"
               name="password"
               placeholder="请输入密码"
               :rules="passwordRules"
@@ -37,23 +39,34 @@
                 <van-icon name="lock" class="field-icon" />
               </template>
             </van-field>
+            <van-field
+              v-model="registerForm.confirmPassword"
+              type="password"
+              class="confirm-password-field"
+              name="confirmPassword"
+              placeholder="请确认密码"
+              :rules="confirmPasswordRules"
+            >
+              <template #left-icon>
+                <van-icon name="checked" class="field-icon" />
+              </template>
+            </van-field>
           </van-cell-group>
 
-          <div class="login-btn-wrap">
+          <div class="register-btn-wrap">
             <van-button
               round
               block
               type="primary"
               native-type="submit"
               :loading="loading"
-              class="login-btn"
+              class="register-btn"
             >
-              进入系统 ʕ •ᴥ•ʔ
+              注册账号 (◕ᴗ◕✿)
             </van-button>
-            <div class="register-link">
-              没有账号？
-              <router-link to="/register" class="link">
-                去注册
+            <div class="login-link">
+              已有账号？<router-link to="/login" class="link">
+                去登录
               </router-link>
             </div>
           </div>
@@ -69,13 +82,13 @@ import { useAuthStore } from '@/store/auth'
 import { getImageUrl } from '@/utils/common'
 
 const router = useRouter()
-const route = useRoute()
 const authStore = useAuthStore()
 const loading = ref(false)
 
-const loginForm = reactive({
+const registerForm = reactive({
   username: '',
   password: '',
+  confirmPassword: '',
 })
 
 const usernameRules: FieldRule[] = [
@@ -88,13 +101,26 @@ const passwordRules: FieldRule[] = [
   { pattern: /^.{6,20}$/, message: '密码长度在6-20位之间' },
 ]
 
-async function handleLogin() {
+const confirmPasswordRules = computed<FieldRule[]>(() => [
+  { required: true, message: '请确认密码' },
+  {
+    validator: (value) => {
+      return value === registerForm.password
+    },
+    message: '两次输入的密码不一致',
+  },
+])
+
+async function handleRegister() {
   loading.value = true
   try {
-    const success = await authStore.loginAction(loginForm)
+    const success = await authStore.registerAction({
+      username: registerForm.username,
+      password: registerForm.password,
+    })
     if (success) {
-      const redirect = route.query.redirect as string
-      router.push(redirect || '/')
+      showToast('注册成功')
+      router.push('/login')
     }
   }
   finally {
@@ -104,17 +130,16 @@ async function handleLogin() {
 </script>
 
 <style lang="scss" scoped>
-.login-container {
-  position: relative;
+.register-container {
   min-height: 100%;
   background: linear-gradient(135deg, #f0f5ff 0%, #e6f0ff 100%);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  user-select: none;
+  overflow: auto;
+  position: relative;
 }
 
-.login-content {
+.register-content {
   flex: 1;
   padding: 20px;
   width: 100%;
@@ -125,13 +150,13 @@ async function handleLogin() {
   justify-content: flex-start;
 }
 
-.login-header {
+.register-header {
   padding: 10% 0 8%;
   text-align: center;
   flex-shrink: 1;
 }
 
-.login-avatar {
+.register-avatar {
   width: 110px;
   height: 110px;
   margin: 0 auto 20px;
@@ -149,20 +174,20 @@ async function handleLogin() {
   border-radius: 50%;
 }
 
-.login-title {
+.register-title {
   font-size: 32px;
   color: #4a90e2;
   margin: 0;
   font-weight: 600;
 }
 
-.login-subtitle {
+.register-subtitle {
   font-size: 16px;
   color: #8b8b8b;
   margin: 12px 0 0;
 }
 
-.login-form-box {
+.register-form-box {
   margin-top: 20px;
   flex-shrink: 0;
 }
@@ -209,15 +234,19 @@ async function handleLogin() {
 }
 
 .password-field {
+  margin: 10px 0;
+}
+
+.confirm-password-field {
   margin-top: 10px;
 }
 
-.login-btn-wrap {
+.register-btn-wrap {
   margin-top: 28px;
   padding: 0 12px;
 }
 
-.login-btn {
+.register-btn {
   height: 46px;
   font-size: 18px;
   font-weight: 500;
@@ -235,7 +264,7 @@ async function handleLogin() {
   }
 }
 
-.register-link {
+.login-link {
   text-align: center;
   margin-top: 16px;
   font-size: 14px;
@@ -264,11 +293,11 @@ async function handleLogin() {
 
 // 当键盘弹出时应用的样式
 @media screen and (max-height: 480px) {
-  .login-header {
+  .register-header {
     padding: 5% 0 4%;
   }
 
-  .login-avatar {
+  .register-avatar {
     width: 70px;
     height: 70px;
     margin-bottom: 10px;
@@ -276,21 +305,30 @@ async function handleLogin() {
     animation: none;
   }
 
-  .login-title {
+  .register-title {
     font-size: 24px;
   }
 
-  .login-form-box {
+  .register-subtitle {
+    font-size: 14px;
+    margin: 8px 0 0;
+  }
+
+  .register-form-box {
     margin-top: 10px;
   }
 
-  .login-btn-wrap {
+  .register-btn-wrap {
     margin-top: 20px;
   }
 
-  .login-btn {
+  .register-btn {
     height: 42px;
     font-size: 16px;
+  }
+
+  .login-link {
+    margin-top: 12px;
   }
 }
 </style>

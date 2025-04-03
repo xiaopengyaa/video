@@ -1,5 +1,5 @@
-import type { LoginParams, RefreshTokenResult, UserInfo } from '@/types/auth'
-import { getUserInfo, login, logout, refreshToken } from '@/api/auth'
+import type { LoginParams, RefreshTokenResult, RegisterParams, UserInfo } from '@/types/auth'
+import { getUserInfo, login, logout, refreshToken, register } from '@/api/auth'
 import { showToast } from 'vant'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -72,6 +72,26 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function registerAction(params: RegisterParams) {
+    loading.value = true
+    try {
+      const result = await register(params)
+      if (result.flag) {
+        return true
+      }
+      else {
+        showToast(result.message)
+        return false
+      }
+    }
+    catch (error) {
+      return false
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   async function logoutAction() {
     loading.value = true
     try {
@@ -109,6 +129,7 @@ export const useAuthStore = defineStore('auth', () => {
     userInfo,
     loading,
     loginAction,
+    registerAction,
     logoutAction,
     getUserInfoAction,
     refreshTokens,

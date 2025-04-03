@@ -1,9 +1,14 @@
 import http from '@/utils/http'
 import type { FlagResponse } from '@/types/base'
-import type { LoginParams, LoginResult, RefreshTokenResult, UserInfo } from '@/types/auth'
+import type { LoginParams, LoginResult, RefreshTokenResult, RegisterParams, UserInfo } from '@/types/auth'
 
 export async function login(params: LoginParams) {
   const data = await http.post<FlagResponse<LoginResult>>('/auth/login', params)
+  return data
+}
+
+export async function register(params: RegisterParams) {
+  const data = await http.post<FlagResponse>('/auth/register', params)
   return data
 }
 

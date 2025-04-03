@@ -8,6 +8,11 @@ export interface LoginParams {
   password: string
 }
 
+export interface RegisterParams {
+  username: string
+  password: string
+}
+
 export interface LoginResult {
   accessToken: string
   refreshToken: string
