@@ -112,7 +112,7 @@ function toHome() {
 function onLogout() {
   showDialog({
     title: '提示',
-    message: '确定要退出登录吗？',
+    message: '确定要退出账号吗？',
     showCancelButton: true,
   }).then((action) => {
     if (action === 'confirm') {
@@ -192,7 +192,7 @@ function onLogout() {
   }
 
   .logout-btn {
-    margin: 20px 14px 0;
+    margin: 14px;
 
     :deep(.van-button) {
       color: #323233;

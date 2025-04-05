@@ -10,9 +10,11 @@ export function getDefDetail(): DetailRes {
       title: '',
       update: '',
       year: '',
+      poster: '',
     },
     topList: [],
     videoInfo: {
+      cid: '',
       vid: '',
       title: '',
     },
