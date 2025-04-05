@@ -13,7 +13,14 @@ export const useHistoryStore = defineStore('history', () => {
     loading.value = true
     try {
       const { list, total } = await getHistoryList({ page: page.value, pageSize: pageSize.value })
-      historyList.value = list
+
+      if (page.value === 1) {
+        historyList.value = list
+      }
+      else {
+        historyList.value.push(...list)
+      }
+
       historyTotal.value = total
       return true
     }
@@ -30,6 +37,7 @@ export const useHistoryStore = defineStore('history', () => {
     loading.value = true
     try {
       await addHistory(params)
+      page.value = 1
       await getHistoryListAction()
       return true
     }
@@ -46,6 +54,7 @@ export const useHistoryStore = defineStore('history', () => {
     loading.value = true
     try {
       await updateHistory(params)
+      page.value = 1
       await getHistoryListAction()
       return true
     }
@@ -62,8 +71,8 @@ export const useHistoryStore = defineStore('history', () => {
     loading.value = true
     try {
       await deleteHistory(id)
+      page.value = 1
       await getHistoryListAction()
-      showToast('删除成功')
       return true
     }
     catch (error) {
@@ -80,7 +89,8 @@ export const useHistoryStore = defineStore('history', () => {
     try {
       await clearHistory()
       historyList.value = []
-      showToast('清空成功')
+      historyTotal.value = 0
+      page.value = 1
       return true
     }
     catch (error) {
@@ -93,7 +103,10 @@ export const useHistoryStore = defineStore('history', () => {
 
   return {
     historyList,
+    historyTotal,
     loading,
+    page,
+    pageSize,
     getHistoryListAction,
     addHistoryAction,
     updateHistoryAction,

@@ -1,19 +1,16 @@
 <template>
   <div class="history-list">
-    <van-empty
-      v-if="!historyList.length"
-      class="custom-empty"
-      image="search"
-      description="暂无观看记录"
-    />
-
-    <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-      <van-list
-        v-model:loading="loading"
-        class="history-list-content"
-        :finished="true"
-        finished-text="没有更多了"
-      >
+    <empty v-if="!historyList.length" />
+    <scroll-wrap
+      v-else
+      v-model:loading="loading"
+      v-model:refreshing="refreshing"
+      class="scroll-wrap"
+      :finished="finished"
+      @load="onLoad"
+      @refresh="onRefresh"
+    >
+      <div>
         <div
           v-for="item in historyList"
           :key="item.id"
@@ -23,10 +20,10 @@
           <div class="item-cover">
             <van-image
               :src="item.episodePoster"
-              referrerpolicy="no-referrer"
               fit="cover"
               radius="4"
             />
+            <div class="mask" />
             <van-progress
               class="progress-bar"
               color="#23ade5"
@@ -35,6 +32,9 @@
               :percentage="getProgressPercent(item)"
               :show-pivot="false"
             />
+            <div class="time">
+              {{ formatTime(item.lastWatchTime) }}
+            </div>
           </div>
           <div class="item-info">
             <div class="info-header">
@@ -46,14 +46,11 @@
                 ·
                 <span class="progress-text">{{ getProgressText(item) }}</span>
               </div>
-              <div class="time">
-                {{ formatTime(item.lastWatchTime) }}
-              </div>
             </div>
           </div>
         </div>
-      </van-list>
-    </van-pull-refresh>
+      </div>
+    </scroll-wrap>
   </div>
 </template>
 
@@ -66,19 +63,46 @@ import useListClick from './use-list-click'
 
 const historyStore = useHistoryStore()
 const { toDetail } = useListClick()
-const { historyList, loading } = storeToRefs(historyStore)
+const { historyList, historyTotal, loading, page, pageSize } = storeToRefs(historyStore)
 const refreshing = ref(false)
+const finished = ref(false)
+const pageTotal = computed(() => {
+  return Math.ceil(historyTotal.value / pageSize.value)
+})
 
 // 初始化
 onMounted(async () => {
-  await historyStore.getHistoryListAction()
+  await onRefresh()
 })
+
+// 加载更多
+async function onLoad() {
+  if (finished.value)
+    return
+
+  page.value++
+  await historyStore.getHistoryListAction()
+
+  // 判断是否加载完成
+  if (page.value >= pageTotal.value) {
+    finished.value = true
+  }
+}
 
 // 刷新
 async function onRefresh() {
   refreshing.value = true
+  page.value = 1
+  finished.value = false
+
   await historyStore.getHistoryListAction()
+
   refreshing.value = false
+
+  // 判断是否加载完成
+  if (page.value >= pageTotal.value) {
+    finished.value = true
+  }
 }
 
 // 点击项目
@@ -130,44 +154,21 @@ function formatTime(time: string) {
 .history-list {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   padding: 16px;
   background-color: #fff;
   overflow: hidden;
 }
 
-.history-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-
-  .history-title {
-    font-size: 18px;
-    font-weight: 500;
-    color: #323233;
-    margin: 0;
-  }
-
-  .clear-btn {
-    font-size: 13px;
-  }
-}
-
-.custom-empty {
-  padding: 80px 0;
-}
-
-.history-list-content {
-  flex: 1;
-  overflow: auto;
+.scroll-wrap {
+  height: 100%;
+  overflow: hidden;
 }
 
 .history-item {
   display: flex;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #f5f5f5;
+  padding: 8px 0;
   user-select: none;
   cursor: pointer;
 
@@ -194,6 +195,26 @@ function formatTime(time: string) {
       bottom: 0;
       left: 0;
       width: 100%;
+      z-index: 11;
+    }
+
+    .mask {
+      position: absolute;
+      height: 20px;
+      left: 0;
+      bottom: 0;
+      background: linear-gradient(360deg, rgba(0, 0, 0, 0.399257) 2.29%, rgba(0, 0, 0, 0.0001) 99.71%);
+      z-index: 10;
+      width: 100%;
+    }
+
+    .time {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      font-size: 10px;
+      color: #fff;
+      z-index: 11;
     }
   }
 
@@ -222,15 +243,8 @@ function formatTime(time: string) {
       .episode {
         font-size: 12px;
         color: #666;
-        margin-top: 4px;
+        margin-top: 6px;
         @include text-ellipsis(2);
-      }
-
-      .time {
-        flex-shrink: 0;
-        font-size: 12px;
-        margin-top: 4px;
-        color: #666;
       }
     }
   }

@@ -35,19 +35,19 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/detail',
-    name: 'detail',
-    component: () => import('@/views/detail/index.vue'),
+    path: '/profile',
+    name: 'profile',
+    component: () => import('@/views/home/profile.vue'),
     meta: {
+      title: '个人主页',
       requiresAuth: true,
     },
   },
   {
-    path: '/history',
-    name: 'history',
-    component: () => import('@/views/history/index.vue'),
+    path: '/detail',
+    name: 'detail',
+    component: () => import('@/views/detail/index.vue'),
     meta: {
-      title: '观看历史',
       requiresAuth: true,
     },
   },

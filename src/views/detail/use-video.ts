@@ -63,7 +63,10 @@ export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>, 
           flv: playFlv,
         },
       })
+      // 监听ready事件
       art.value.on('ready', () => {
+        console.log('video:ready')
+        art.value.loading.show = false
         // 回显播放进度
         if (process.value) {
           art.value.currentTime = Number(process.value)

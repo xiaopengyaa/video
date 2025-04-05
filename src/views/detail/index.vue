@@ -77,12 +77,7 @@
           </div>
         </scroll-wrap>
         <div v-if="isEmpty" class="detail__empty-wrap">
-          <van-empty
-            class="detail__empty"
-            :image="getImageUrl('empty-image.png')"
-            image-size="25vw"
-            description="什么都没得~"
-          />
+          <empty />
           <play-util v-model:type="playType" class="detail__empty-util" />
         </div>
       </loading-skeleton>
@@ -114,7 +109,7 @@ import PlayUtil from './play-util.vue'
 import useContent from './use-content'
 import useVideo from './use-video'
 import { LOADING_DELAY } from '@/utils/constant'
-import { getImageUrl, getSiteLogo, px2vw } from '@/utils/common'
+import { getSiteLogo, px2vw } from '@/utils/common'
 import { useRect } from '@vant/use'
 import { ParserType } from '@/types/enum'
 import { updateHistory } from '@/api/history'
@@ -200,6 +195,9 @@ onBeforeUnmount(() => {
     position: relative;
     flex: 1;
     overflow: hidden;
+    :deep(.van-empty__image) {
+      margin-top: 0;
+    }
   }
   &__empty-util {
     position: absolute;

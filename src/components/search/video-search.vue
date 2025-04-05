@@ -34,13 +34,7 @@
               class="list"
             />
           </scroll-wrap>
-          <van-empty
-            v-show="isEmpty"
-            class="detail__empty"
-            :image="getImageUrl('empty-image.png')"
-            image-size="25vw"
-            description="什么都没得~"
-          />
+          <empty v-show="isEmpty" />
         </search-skeleton>
       </div>
       <div v-show="keyword && list.length" class="search-list">
@@ -62,7 +56,6 @@ import useHistory from './use-history'
 import useRecommend from './use-recommend'
 import type { SearchInstance } from 'vant'
 import { useRect } from '@vant/use'
-import { getImageUrl } from '@/utils/common'
 
 interface Props {
   visible: boolean
