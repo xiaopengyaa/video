@@ -3,15 +3,14 @@ import { Site } from '@/types/enum'
 
 interface DetailParam {
   href: string
-  cid: string
   site: Site
-  queryTxt: string
+  progress?: number
 }
 
 export default function useListClick() {
   const router = useRouter()
 
-  function btnClick(item: SearchItem, queryTxt: string) {
+  function btnClick(item: SearchItem) {
     let href = item.href
     if (item.playlist.length) {
       href = item.playlist[0].href
@@ -22,26 +21,22 @@ export default function useListClick() {
 
     toDetail({
       href,
-      cid: item.cid,
       site: item.site,
-      queryTxt,
     })
   }
 
-  function playClick(playItem: PlayItem, item: SearchItem, queryTxt: string) {
+  function playClick(playItem: PlayItem, item: SearchItem) {
     let href = playItem.href
     if (!playItem.href) {
       href = item.playlist[0].href
     }
     toDetail({
       href,
-      cid: item.cid,
       site: item.site,
-      queryTxt,
     })
   }
 
-  function toDetail({ href, cid, site = Site.qq, queryTxt }: DetailParam) {
+  function toDetail({ href, site = Site.qq, progress }: DetailParam) {
     if (!href) {
       return
     }
@@ -49,9 +44,8 @@ export default function useListClick() {
       path: '/detail',
       query: {
         url: href,
-        cid,
         site,
-        queryTxt,
+        progress,
       },
     })
   }

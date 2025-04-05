@@ -18,22 +18,22 @@
         </transition>
       </form>
       <transition name="slide-fade">
-        <SearchHistory
+        <search-history
           v-show="searchVisible && !keyword && searchList.length > 0"
           :list="searchList"
           @click="echoSearch"
         />
       </transition>
       <div v-show="keyword" class="search-list">
-        <SearchSkeletom :loading="loading" :num="3">
-          <ScrollWrap v-show="!isEmpty">
-            <VideoList
+        <search-skeleton :loading="loading" :num="3">
+          <scroll-wrap v-show="!isEmpty">
+            <video-list
               :query="keyword"
               :list="searchData.list"
               :relate-list="searchData.relateList"
               class="list"
             />
-          </ScrollWrap>
+          </scroll-wrap>
           <van-empty
             v-show="isEmpty"
             class="detail__empty"
@@ -41,27 +41,22 @@
             image-size="25vw"
             description="什么都没得~"
           />
-        </SearchSkeletom>
+        </search-skeleton>
       </div>
-      <div v-show="keyword && recommendList.length" class="search-list">
-        <ScrollWrap>
-          <RecommendList
-            :list="recommendList"
+      <div v-show="keyword && list.length" class="search-list">
+        <scroll-wrap>
+          <recommend-list
+            :list="list"
             class="list"
             @click="echoSearch"
           />
-        </ScrollWrap>
+        </scroll-wrap>
       </div>
     </div>
   </transition>
 </template>
 
 <script setup lang="ts">
-import VideoList from '@/components/list/video-list.vue'
-import RecommendList from '@/components/list/recommend-list.vue'
-import ScrollWrap from '@/components/scroll/scroll-wrap.vue'
-import SearchSkeletom from './search-skeleton.vue'
-import SearchHistory from './search-history.vue'
 import useSearch from './use-search'
 import useHistory from './use-history'
 import useRecommend from './use-recommend'
@@ -103,7 +98,7 @@ const {
   onSearch,
   getDefSearch,
 } = useSearch(searchVisible)
-const { recommendList, isFocus } = useRecommend(keyword)
+const { list, isFocus } = useRecommend(keyword)
 
 watch(
   () => props.visible,
@@ -126,7 +121,7 @@ watch(keyword, () => {
 function echoSearch(value: string) {
   keyword.value = value
   isFocus.value = false
-  recommendList.value = []
+  list.value = []
   onSearch(value)
 }
 </script>

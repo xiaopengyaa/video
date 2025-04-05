@@ -1,6 +1,6 @@
 import http from '@/utils/http'
 import type { PlayItem } from '@/types/search'
-import type { DetailReq, DetailRes } from '@/types/detail'
+import type { DetailReq, DetailRes, PlaylistReq } from '@/types/detail'
 import type { ParserType } from '@/types/enum'
 
 export async function getDetail(data: DetailReq) {
@@ -8,7 +8,7 @@ export async function getDetail(data: DetailReq) {
   return res
 }
 
-export async function getPlaylist(data: DetailReq) {
+export async function getPlaylist(data: PlaylistReq) {
   const res = await http.post<PlayItem[]>('/detail/getPlaylist', data)
   return res
 }

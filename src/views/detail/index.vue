@@ -2,8 +2,8 @@
   <transition>
     <div v-show="true" class="detail">
       <div ref="videoRef" class="detail__video" />
-      <LoadingSkeleton :loading="loading">
-        <ScrollWrap
+      <loading-skeleton :loading="loading">
+        <scroll-wrap
           v-show="playlist.length"
           ref="scrollRef"
           class="detail__content"
@@ -30,7 +30,7 @@
                   <van-icon class="arrow" name="arrow" :size="px2vw(14)" />
                 </div>
               </div>
-              <PlayUtil
+              <play-util
                 v-if="!isEmpty"
                 v-model:type="playType"
                 class="detail__util"
@@ -54,9 +54,9 @@
                   {{ detailData.introduction.update }}
                 </div>
               </div>
-              <PlayList
+              <play-list
                 ref="playlistRef"
-                v-model:active="active"
+                v-model:active="vid"
                 :list="playlist"
                 show-active
                 @click="handleClick"
@@ -66,7 +66,7 @@
               <div class="title title-wrap">
                 相关推荐
               </div>
-              <RelateList
+              <relate-list
                 ref="relateRef"
                 :list="detailData.topList"
                 :width="130"
@@ -75,7 +75,7 @@
               />
             </div>
           </div>
-        </ScrollWrap>
+        </scroll-wrap>
         <div v-if="isEmpty" class="detail__empty-wrap">
           <van-empty
             class="detail__empty"
@@ -83,19 +83,19 @@
             image-size="25vw"
             description="什么都没得~"
           />
-          <PlayUtil v-model:type="playType" class="detail__empty-util" />
+          <play-util v-model:type="playType" class="detail__empty-util" />
         </div>
-      </LoadingSkeleton>
-      <IntroDialog
+      </loading-skeleton>
+      <intro-dialog
         v-if="!isEmpty"
         v-model:visible="showIntro"
         :height="detailHeight"
         :data="detailData.introduction"
       />
-      <PlaylistDialog
+      <playlist-dialog
         v-if="!isEmpty"
         v-model:visible="showPlaylist"
-        v-model:active="active"
+        v-model:active="vid"
         :list="playlist"
         :height="detailHeight"
         :desc="detailData.introduction.update || ''"
@@ -106,7 +106,6 @@
 
 <script setup lang="ts" name="detail">
 import PlayList from '@/components/list/play-list.vue'
-import LoadingSkeleton from '@/components/skeleton/loading-skeleton.vue'
 import ScrollWrap from '@/components/scroll/scroll-wrap.vue'
 import RelateList from '@/components/list/relate-list.vue'
 import IntroDialog from './intro-dialog.vue'
@@ -118,6 +117,7 @@ import { LOADING_DELAY } from '@/utils/constant'
 import { getImageUrl, getSiteLogo, px2vw } from '@/utils/common'
 import { useRect } from '@vant/use'
 import { ParserType } from '@/types/enum'
+import { updateHistory } from '@/api/history'
 
 const videoRef = shallowRef<HTMLDivElement>()
 const playType = ref<ParserType>(ParserType.xmjx)
@@ -128,16 +128,21 @@ const showIntro = ref(false)
 const showPlaylist = ref(false)
 const detailHeight = ref('')
 
-const { cid, site } = useVideo(videoRef, playType)
+const { url, site, art } = useVideo(videoRef, playType)
 const {
   detailData,
   playlist,
-  active,
+  cid,
+  vid,
   loading,
   isEmpty,
   handleClick,
   relateClick,
-} = useContent(cid, site)
+} = useContent(site)
+
+const vidText = computed(() => {
+  return playlist.value.find(item => item.vid === vid.value)?.text || ''
+})
 
 watch(loading, () => {
   setTimeout(() => {
@@ -146,6 +151,27 @@ watch(loading, () => {
     playlistRef.value?.scrollToActive()
     relateRef.value?.scroll?.scrollTo(0, 0, 800)
   }, LOADING_DELAY + 100)
+})
+
+onBeforeUnmount(() => {
+  if (art.value) {
+    if (art.value.duration > 0) {
+      // 更新历史记录
+      updateHistory({
+        videoId: vid.value,
+        videoUrl: url.value,
+        videoSite: site.value,
+        videoText: vidText.value,
+        episodeId: cid.value,
+        episodeName: detailData.value.introduction.title,
+        episodePoster: detailData.value.introduction.poster,
+        watchProgress: art.value.currentTime,
+        totalDuration: art.value.duration,
+      })
+    }
+    // 销毁播放器
+    art.value?.destroy(false)
+  }
 })
 </script>
 

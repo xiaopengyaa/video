@@ -15,21 +15,15 @@ Artplayer.SETTING_ITEM_WIDTH = 180
 export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>, type: Ref<ParserType>) {
   const route = useRoute()
   const url = ref('')
-  const cid = ref('')
+  const process = ref('')
   const site = ref<Site>(Site.qq)
   const art = shallowRef<Artplayer | null>(null)
 
   watchEffect(() => {
-    cid.value = route.query.cid as string
     url.value = route.query.url as string
+    process.value = route.query.progress as string || ''
     site.value = route.query.site as Site
     initVideo()
-  })
-
-  onBeforeUnmount(() => {
-    if (art.value?.destroy) {
-      art.value.destroy(false)
-    }
   })
 
   async function initVideo() {
@@ -69,6 +63,12 @@ export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>, 
           flv: playFlv,
         },
       })
+      art.value.on('ready', () => {
+        // 回显播放进度
+        if (process.value) {
+          art.value.currentTime = Number(process.value)
+        }
+      })
     }
     try {
       art.value.loading.show = true
@@ -90,7 +90,7 @@ export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>, 
   }
 
   return {
-    cid,
+    url,
     site,
     art,
   }

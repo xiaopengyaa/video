@@ -21,7 +21,7 @@
             {{ desc }}
           </div>
           <div class="content">
-            <PlayList
+            <play-list
               ref="playlistRef"
               v-model:active="active"
               :list="list"
@@ -82,6 +82,7 @@ function handleClick(item: PlayItem) {
     query: {
       ...route.query,
       url: item.href,
+      progress: undefined,
     },
   })
 }

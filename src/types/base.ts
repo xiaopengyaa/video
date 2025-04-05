@@ -10,6 +10,16 @@ export interface BaseType {
   site: Site
 }
 
+export interface PageParams {
+  page: number
+  pageSize: number
+}
+
+export interface PageRes<T> {
+  total: number
+  list: T[]
+}
+
 export interface FlagMsg {
   flag: boolean
   message: string

@@ -4,6 +4,9 @@ import App from '@/App.vue'
 import router from '@/router'
 import { createPinia } from 'pinia'
 import browser from '@/utils/page-check'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/zh-cn'
 // Vant桌面端适配
 import '@vant/touch-emulator'
 // Vant懒加载
@@ -17,6 +20,10 @@ import 'vant/es/image-preview/style'
 import 'normalize.css'
 import '@/assets/iconfont/iconfont.css'
 import '@/assets/css/common.scss'
+
+// 引入dayjs
+dayjs.extend(relativeTime)
+dayjs.locale('zh-cn')
 
 // 判断是否pc设备打开
 if (

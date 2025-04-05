@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    HistoryList: typeof import('./../components/list/history-list.vue')['default']
     LoadingSkeleton: typeof import('./../components/skeleton/loading-skeleton.vue')['default']
     PlayList: typeof import('./../components/list/play-list.vue')['default']
     RecommendList: typeof import('./../components/list/recommend-list.vue')['default']
@@ -30,7 +31,11 @@ declare module 'vue' {
     VanGridItem: typeof import('vant/es')['GridItem']
     VanIcon: typeof import('vant/es')['Icon']
     VanImage: typeof import('vant/es')['Image']
+    VanList: typeof import('vant/es')['List']
+    VanNavBar: typeof import('vant/es')['NavBar']
     VanPopover: typeof import('vant/es')['Popover']
+    VanProgress: typeof import('vant/es')['Progress']
+    VanPullRefresh: typeof import('vant/es')['PullRefresh']
     VanRow: typeof import('vant/es')['Row']
     VanSearch: typeof import('vant/es')['Search']
     VanSkeleton: typeof import('vant/es')['Skeleton']

@@ -17,7 +17,7 @@
               @click="visible = false"
             />
           </div>
-          <ScrollWrap ref="scrollRef" class="content-wrap">
+          <scroll-wrap ref="scrollRef" class="content-wrap">
             <div>
               <div
                 v-if="data.detailInfo"
@@ -44,7 +44,7 @@
                 </div>
               </div>
             </div>
-          </ScrollWrap>
+          </scroll-wrap>
         </div>
       </transition>
     </div>

@@ -7,22 +7,22 @@ import { recommend } from '@/api/search'
 const storeMap: Record<string, RecommendItem[]> = {}
 
 export default function useRecommend(keyword: Ref<string>) {
-  const recommendList = ref<RecommendItem[]>([])
+  const list = ref<RecommendItem[]>([])
   const isFocus = ref(false)
   const getRecommend = useDebounceFn(async (keyword: string) => {
-    recommendList.value = await getRecommendList(keyword)
+    list.value = await getRecommendList(keyword)
   }, 200)
 
   watch(keyword, () => {
     if (!keyword.value || !isFocus.value) {
-      recommendList.value = []
+      list.value = []
       return
     }
     getRecommend(keyword.value.trim())
   })
 
   return {
-    recommendList,
+    list,
     isFocus,
   }
 }

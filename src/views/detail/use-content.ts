@@ -2,33 +2,30 @@ import type { Ref } from 'vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getDetail, getPlaylist } from '@/api/detail'
-import type { DetailReq, DetailRes } from '@/types/detail'
+import type { DetailReq, DetailRes, PlaylistReq } from '@/types/detail'
 import type { PlayItem, SearchItem } from '@/types/search'
 import type { Site } from '@/types/enum'
 import { getDefDetail } from './default'
 import useListClick from '@/components/list/use-list-click'
-import { restoreHtmlText, setTitle } from '@/utils/common'
+import { setTitle } from '@/utils/common'
 
-export default function useContent(cid: Ref<string>, site: Ref<Site>) {
+export default function useContent(site: Ref<Site>) {
   const route = useRoute()
   const router = useRouter()
   const title = useTitle()
   const detailData = ref<DetailRes>(getDefDetail())
-  const active = ref('')
+  const cid = ref('')
+  const vid = ref('')
   const playlist = ref<PlayItem[]>([])
   const loading = ref(false)
   const isEmpty = ref(false)
-
-  const queryTxt = computed<string>(() => {
-    return (route.query.queryTxt as string) || ''
-  })
   const { btnClick } = useListClick()
 
-  watch(cid, () => {
+  onMounted(() => {
     initDetail()
   })
 
-  onMounted(async () => {
+  onActivated(() => {
     initDetail()
   })
 
@@ -38,29 +35,37 @@ export default function useContent(cid: Ref<string>, site: Ref<Site>) {
       return
     }
 
-    isEmpty.value = false
-    loading.value = true
     const detailReq: DetailReq = {
       url: route.query.url as string,
-      cid: cid.value,
       site: site.value,
-      queryTxt: queryTxt.value,
+    }
+    const playlistReq: PlaylistReq = {
+      ...detailReq,
+      cid: '',
       tabs: [],
     }
 
-    try {
-      const detail = await getDetail(detailReq)
-      detailReq.tabs = detail.tabs
-      const list = await getPlaylist(detailReq)
+    isEmpty.value = false
+    loading.value = true
 
+    try {
+      // 获取详情
+      const detail = await getDetail(detailReq)
+      cid.value = detail.videoInfo.cid
+      playlistReq.tabs = detail.tabs
+      playlistReq.cid = cid.value
+
+      // 获取播放列表
+      const list = await getPlaylist(playlistReq)
       detailData.value = detail
       playlist.value = list
       title.value = setTitle(detailData.value.introduction.title)
+
       if (detailData.value.videoInfo.vid) {
-        active.value = detailData.value.videoInfo.vid
+        vid.value = detailData.value.videoInfo.vid
       }
       else if (list.length) {
-        active.value = list[0].vid
+        vid.value = list[0].vid
       }
 
       loading.value = false
@@ -85,21 +90,21 @@ export default function useContent(cid: Ref<string>, site: Ref<Site>) {
       query: {
         ...route.query,
         url: item.href,
+        progress: undefined,
       },
     })
   }
 
   function relateClick(item: SearchItem) {
-    if (item.cid === cid.value && playlist.value.length) {
-      active.value = playlist.value[0].vid
-    }
-    btnClick(item, restoreHtmlText(item.title))
+    initDetail()
+    btnClick(item)
   }
 
   return {
     detailData,
     playlist,
-    active,
+    cid,
+    vid,
     loading,
     isEmpty,
     toHome,

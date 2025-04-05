@@ -16,6 +16,13 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
         '@': path.resolve(__dirname, 'src'),
       },
     },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use "@/assets/css/mixins.scss" as *;`,
+        },
+      },
+    },
     plugins: createVitePlugins(mode, command),
     server: {
       host: true,

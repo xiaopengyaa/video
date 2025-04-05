@@ -1,7 +1,7 @@
 <template>
   <div class="video-list">
     <div v-for="(item, index) in list" :key="index" class="video-item">
-      <div class="main-content" @click="btnClick(item, queryTxt)">
+      <div class="main-content" @click="btnClick(item)">
         <div class="main-content__left">
           <van-image
             :width="px2vw(90)"
@@ -49,7 +49,7 @@
             round
             block
             color="#ec6a38"
-            @click="btnClick(item, queryTxt)"
+            @click="btnClick(item)"
           >
             立即播放
           </van-button>
@@ -59,7 +59,7 @@
             theme="dark"
             placement="top"
             :actions="popoverList[index].actions"
-            @select="(playItem: PlayItem) => playClick(playItem, item, queryTxt)"
+            @select="(playItem: PlayItem) => playClick(playItem, item)"
           >
             <template #reference>
               <van-button
@@ -90,31 +90,30 @@
           </van-button>
         </van-col>
       </van-row>
-      <PlayList
+      <play-list
         v-show="item.playlist.length"
         :list="item.playlist"
-        @click="(playItem: PlayItem) => playClick(playItem, item, queryTxt)"
+        @click="(playItem: PlayItem) => playClick(playItem, item)"
       />
     </div>
     <div v-show="relateList.length" class="video-item">
       <div class="relate-title">
         相关影视作品
       </div>
-      <RelateList
+      <relate-list
         :list="relateList"
-        @click="(item) => btnClick(item, restoreHtmlText(item.title))"
+        @click="btnClick"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import PlayList from './play-list.vue'
 import RelateList from './relate-list.vue'
 import useListClick from './use-list-click'
 import type { PlayItem, SearchItem } from '@/types/search'
 import { showToast } from 'vant'
-import { px2vw, restoreHtmlText } from '@/utils/common'
+import { px2vw } from '@/utils/common'
 import 'vant/es/toast/style'
 
 interface Props {
@@ -129,11 +128,6 @@ interface PopoverItem {
 
 const props = defineProps<Props>()
 const popoverList = ref<PopoverItem[]>([])
-
-const queryTxt = computed<string>(() => {
-  return props.query
-})
-
 const { btnClick, playClick } = useListClick()
 
 watchEffect(() => {

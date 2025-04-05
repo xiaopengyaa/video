@@ -7,12 +7,16 @@ export interface PageTab {
   pageContext: string
 }
 
-export interface DetailReq {
+export interface PlaylistReq {
   url: string
   cid: string
   site: Site
-  queryTxt: string
   tabs: PageTab[]
+}
+
+export interface DetailReq {
+  url: string
+  site: Site
 }
 
 export interface DetailRes {
@@ -30,9 +34,11 @@ export interface DetailIntro {
   title: string
   update: string
   year: string
+  poster: string
 }
 
 export interface VideoInfo {
+  cid: string
   vid: string
   title: string
 }

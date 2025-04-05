@@ -21,7 +21,6 @@ export interface MarkItem {
 
 export interface SearchItem {
   site: Site
-  cid: string
   image: string
   imageInfo: string
   mark: MarkItem | null

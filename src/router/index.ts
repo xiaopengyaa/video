@@ -42,6 +42,15 @@ const routes: RouteRecordRaw[] = [
       requiresAuth: true,
     },
   },
+  {
+    path: '/history',
+    name: 'history',
+    component: () => import('@/views/history/index.vue'),
+    meta: {
+      title: '观看历史',
+      requiresAuth: true,
+    },
+  },
 ]
 
 const router = createRouter({

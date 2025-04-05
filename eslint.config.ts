@@ -8,6 +8,10 @@ export default antfu(
         'vue/block-order': ['error', {
           order: ['template', 'script', 'style'],
         }],
+        'vue/component-name-in-template-casing': ['error', 'kebab-case', {
+          registeredComponentsOnly: false, // 对所有组件生效（包括未显式注册的）
+          ignores: [], // 无需忽略的组件
+        }],
       },
     },
     typescript: true,

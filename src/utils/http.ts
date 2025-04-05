@@ -11,17 +11,32 @@ import { showToast } from 'vant'
 import 'vant/es/toast/style'
 import router from '@/router'
 import { useAuthStore } from '@/store/auth'
+
 // 创建axios实例
 const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL, // 数据接口域名统一配置
   timeout: 1000 * 20, // 默认超时时间20s
 })
+
 // 存储进行中的请求
 const pendingRequests = new Map<string, AbortController>()
 // 生成唯一请求标识
 function generateRequestKey(config: AxiosRequestConfig) {
   const { url = 'default' } = config
   return url
+}
+
+function toLogin(hideTips) {
+  // 如果已经跳转到登录页，则不跳转
+  if (router.currentRoute.value.name === 'login') {
+    return
+  }
+  // 校验失败，跳转登录页
+  router.push({
+    name: 'login',
+    query: { redirect: router.currentRoute.value.fullPath },
+  })
+  !hideTips && showToast('登录已过期，请重新登录')
 }
 
 // request拦截器
@@ -97,11 +112,7 @@ service.interceptors.response.use(
       if (config.url?.includes('/auth/refresh')) {
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
-        router.push({
-          path: '/login',
-          query: { redirect: router.currentRoute.value.fullPath },
-        })
-        !hideTips && showToast('登录已过期，请重新登录')
+        toLogin(hideTips)
       }
       else {
         try {
@@ -114,12 +125,7 @@ service.interceptors.response.use(
           return service(config)
         }
         catch (refreshError) {
-          // 刷新失败，跳转登录页
-          router.push({
-            path: '/login',
-            query: { redirect: router.currentRoute.value.fullPath },
-          })
-          !hideTips && showToast('登录已过期，请重新登录')
+          toLogin(hideTips)
         }
       }
     }

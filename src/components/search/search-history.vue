@@ -2,7 +2,7 @@
   <div class="search-history">
     <div class="title">
       历史搜索
-      <van-icon name="delete-o" :size="px2vw(20)" @click="delHistory" />
+      <van-icon class="delete-icon" name="delete-o" :size="px2vw(20)" @click="delHistory" />
     </div>
     <div class="list">
       <div
@@ -47,6 +47,9 @@ function handleClick(item: string) {
     font-size: 14px;
     color: #848492;
     margin-bottom: 2px;
+    .delete-icon {
+      cursor: pointer;
+    }
   }
   .item {
     display: inline-block;
