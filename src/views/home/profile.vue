@@ -14,7 +14,7 @@
           class="avatar"
           round
           fit="cover"
-          :src="getImageUrl('avatar.webp')"
+          :src="getImageUrl('avatar2.png')"
         />
         <div class="info">
           <h3 class="name">
@@ -58,6 +58,7 @@
       class="history-popup"
       position="bottom"
       round
+      :lock-scroll="false"
     >
       <div class="popup-header">
         <h3>观看历史</h3>
@@ -67,7 +68,7 @@
           @click="onClearHistory"
         />
       </div>
-      <history-list class="list" />
+      <history-list ref="historyRef" class="list" />
     </van-popup>
   </div>
 </template>
@@ -77,14 +78,27 @@ import { ref } from 'vue'
 import { useAuthStore } from '@/store/auth'
 import { useHistoryStore } from '@/store/history'
 import HistoryList from '@/components/list/history-list.vue'
-import { getImageUrl } from '@/utils/common'
+import { getImageUrl, stopBodyScroll } from '@/utils/common'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const historyStore = useHistoryStore()
 const { userInfo } = storeToRefs(authStore)
 const { historyList: list } = storeToRefs(historyStore)
+const historyRef = useTemplateRef<InstanceType<typeof HistoryList>>('historyRef')
 const showHistoryPopup = ref(false)
+
+watch(showHistoryPopup, () => {
+  if (showHistoryPopup.value) {
+    stopBodyScroll(true)
+    setTimeout(() => {
+      historyRef.value?.refreshScroll()
+    }, 500)
+  }
+  else {
+    stopBodyScroll(false)
+  }
+})
 
 function showHistory() {
   showHistoryPopup.value = true

@@ -114,11 +114,11 @@ import { useRect } from '@vant/use'
 import { ParserType } from '@/types/enum'
 import { updateHistory } from '@/api/history'
 
-const videoRef = shallowRef<HTMLDivElement>()
 const playType = ref<ParserType>(ParserType.xmjx)
-const playlistRef = shallowRef<typeof PlayList>()
-const relateRef = shallowRef<typeof RelateList>()
-const scrollRef = shallowRef<typeof ScrollWrap>()
+const videoRef = useTemplateRef<HTMLDivElement>('videoRef')
+const playlistRef = useTemplateRef<InstanceType<typeof PlayList>>('playlistRef')
+const relateRef = useTemplateRef<InstanceType<typeof RelateList>>('relateRef')
+const scrollRef = useTemplateRef<InstanceType<typeof ScrollWrap>>('scrollRef')
 const showIntro = ref(false)
 const showPlaylist = ref(false)
 const detailHeight = ref('')
@@ -144,7 +144,7 @@ watch(loading, () => {
     const { height } = useRect(scrollRef.value?.$el)
     detailHeight.value = `${height}px`
     playlistRef.value?.scrollToActive()
-    relateRef.value?.scroll?.scrollTo(0, 0, 800)
+    relateRef.value?.scroll.scrollTo(0, 0, 800)
   }, LOADING_DELAY + 100)
 })
 

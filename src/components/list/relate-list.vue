@@ -59,7 +59,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>()
 const HEIGHT = 126
 const IMG_INFO_TOP = 106
-const rootRef = shallowRef<HTMLElement | null>(null)
+const rootRef = useTemplateRef<HTMLElement>('rootRef')
 const scroll = useScroll(
   rootRef,
   {

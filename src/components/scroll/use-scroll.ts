@@ -8,7 +8,7 @@ import type { ShallowRef } from 'vue'
 BScroll.use(ObserveDOM)
 
 export default function useScroll(
-  wrapperRef: ShallowRef<HTMLElement | null>,
+  wrapperRef: ShallowRef<HTMLElement>,
   options: Options,
   emit: (event: 'scroll', ...args: unknown[]) => void,
 ) {

@@ -54,7 +54,7 @@ const visible = useVModel(props, 'visible')
 const active = useVModel(props, 'active')
 const route = useRoute()
 const router = useRouter()
-const playlistRef = shallowRef<typeof PlayList>()
+const playlistRef = useTemplateRef<InstanceType<typeof PlayList>>('playlistRef')
 
 const detailStyle = computed(() => {
   const height = props.height || 'calc(100vh - 56.25vw)'
@@ -67,8 +67,8 @@ watch(visible, () => {
   if (visible.value) {
     stopBodyScroll(true)
     setTimeout(() => {
-      playlistRef.value?.refreshScroll()
-      playlistRef.value?.scrollToActive()
+      playlistRef.value.refreshScroll()
+      playlistRef.value.scrollToActive()
     }, 300)
   }
   else {

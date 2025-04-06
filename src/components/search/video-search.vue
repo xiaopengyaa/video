@@ -68,8 +68,8 @@ const props = withDefaults(defineProps<Props>(), {
   visible: false,
 })
 const emit = defineEmits<Emits>()
-const searchRef = shallowRef<SearchInstance>()
-const formRef = shallowRef<HTMLElement>()
+const searchRef = useTemplateRef<SearchInstance>('searchRef')
+const formRef = useTemplateRef<HTMLElement>('formRef')
 const formHeight = ref('0px')
 
 const searchVisible = computed({
@@ -98,7 +98,7 @@ watch(
   (visible) => {
     if (visible) {
       setTimeout(() => {
-        searchRef.value?.focus()
+        searchRef.value.focus()
         const { height } = useRect(formRef)
         formHeight.value = `${height}px`
       }, 500)

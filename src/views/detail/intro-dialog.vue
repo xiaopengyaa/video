@@ -64,7 +64,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const visible = useVModel(props, 'visible')
-const scrollRef = shallowRef<typeof ScrollWrap>()
+const scrollRef = useTemplateRef<InstanceType<typeof ScrollWrap>>('scrollRef')
 const detailStyle = computed(() => {
   const height = props.height || 'calc(100vh - 56.25vw)'
   return {

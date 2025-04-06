@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
   scrollY: true,
 })
 const emit = defineEmits<Emits>()
-const rootRef = shallowRef<HTMLElement | null>(null)
+const rootRef = useTemplateRef<HTMLElement>('rootRef')
 const scroll = useScroll(rootRef, props, emit)
 
 defineExpose({

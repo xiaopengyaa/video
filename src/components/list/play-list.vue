@@ -77,8 +77,8 @@ defineExpose({
 
 const ITEM_ROW_LEN = 6
 const SERIES_ROW_LEN = 2
-const rootRef = shallowRef<HTMLElement | null>(null)
-const playlistRef = shallowRef<HTMLElement | null>(null)
+const rootRef = useTemplateRef<HTMLElement>('rootRef')
+const playlistRef = useTemplateRef<HTMLElement>('playlistRef')
 const isVertical = computed(() => props.direction === 'vertical')
 const isSeries = computed<boolean>(() => {
   if (props.list.length) {
@@ -111,7 +111,7 @@ onUpdated(() => {
 })
 
 function scrollToActive() {
-  const elem = rootRef.value?.querySelector<HTMLElement>('.active')
+  const elem = rootRef.value.querySelector<HTMLElement>('.active')
   if (elem) {
     scroll.value?.scrollToElement(elem, 800, -40, 0)
   }

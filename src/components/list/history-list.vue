@@ -3,6 +3,7 @@
     <empty v-if="!historyList.length" />
     <scroll-wrap
       v-else
+      ref="scrollRef"
       v-model:loading="loading"
       v-model:refreshing="refreshing"
       class="scroll-wrap"
@@ -55,12 +56,14 @@
 </template>
 
 <script setup lang="ts">
+import ScrollWrap from '@/components/scroll/scroll-wrap.vue'
 import { useHistoryStore } from '@/store/history'
 import type { HistoryItem } from '@/types/history'
 import type { Site } from '@/types/enum'
 import dayjs from 'dayjs'
 import useListClick from './use-list-click'
 
+const scrollRef = useTemplateRef<InstanceType<typeof ScrollWrap>>('scrollRef')
 const historyStore = useHistoryStore()
 const { toDetail } = useListClick()
 const { historyList, historyTotal, loading, page, pageSize } = storeToRefs(historyStore)
@@ -70,10 +73,19 @@ const pageTotal = computed(() => {
   return Math.ceil(historyTotal.value / pageSize.value)
 })
 
+defineExpose({
+  refreshScroll,
+})
+
 // 初始化
 onMounted(async () => {
   await onRefresh()
 })
+
+// 刷新scroll组件
+function refreshScroll() {
+  scrollRef.value?.scroll.refresh()
+}
 
 // 加载更多
 async function onLoad() {
@@ -89,7 +101,7 @@ async function onLoad() {
   }
 }
 
-// 刷新
+// 刷新列表
 async function onRefresh() {
   refreshing.value = true
   page.value = 1

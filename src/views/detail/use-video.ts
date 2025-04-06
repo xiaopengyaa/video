@@ -12,7 +12,7 @@ Artplayer.NOTICE_TIME = 3000
 Artplayer.SETTING_WIDTH = 180
 Artplayer.SETTING_ITEM_WIDTH = 180
 
-export default function useVideo(video: ShallowRef<HTMLDivElement | undefined>, type: Ref<ParserType>) {
+export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<ParserType>) {
   const route = useRoute()
   const url = ref('')
   const process = ref('')
