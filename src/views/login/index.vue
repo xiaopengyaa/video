@@ -3,7 +3,7 @@
     <div class="login-content">
       <div class="login-header">
         <div class="login-avatar">
-          <img :src="getImageUrl('avatar.webp')" alt="avatar" class="avatar-img">
+          <img :src="getImageUrl('avatar.jpg')" alt="avatar" class="avatar-img">
         </div>
         <h2 class="login-title">
           欢迎回来
@@ -137,7 +137,7 @@ async function handleLogin() {
   margin: 0 auto 20px;
   background: #fff;
   border-radius: 55px;
-  padding: 10px;
+  padding: 4px;
   box-shadow: 0 8px 20px rgba(64, 128, 255, 0.2);
   animation: float 3s ease-in-out infinite;
 }

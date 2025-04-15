@@ -1,6 +1,6 @@
 <template>
   <div class="history-list">
-    <empty v-if="!historyList.length" />
+    <empty v-if="finished && !historyList.length" />
     <scroll-wrap
       v-else
       ref="scrollRef"
@@ -89,8 +89,9 @@ function refreshScroll() {
 
 // 加载更多
 async function onLoad() {
-  if (finished.value)
+  if (finished.value) {
     return
+  }
 
   page.value++
   await historyStore.getHistoryListAction()

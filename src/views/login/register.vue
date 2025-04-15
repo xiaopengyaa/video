@@ -3,7 +3,7 @@
     <div class="register-content">
       <div class="register-header">
         <div class="register-avatar">
-          <img :src="getImageUrl('avatar2.png')" alt="avatar" class="avatar-img">
+          <img :src="getImageUrl('avatar.jpg')" alt="avatar" class="avatar-img">
         </div>
         <h2 class="register-title">
           创建账号
@@ -162,7 +162,7 @@ async function handleRegister() {
   margin: 0 auto 20px;
   background: #fff;
   border-radius: 55px;
-  padding: 10px;
+  padding: 4px;
   box-shadow: 0 8px 20px rgba(64, 128, 255, 0.2);
   animation: float 3s ease-in-out infinite;
 }

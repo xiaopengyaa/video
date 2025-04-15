@@ -30,6 +30,7 @@ const routes: RouteRecordRaw[] = [
     name: 'home',
     component: () => import('@/views/home/index.vue'),
     meta: {
+      title: '首页',
       keepAlive: 'home',
       requiresAuth: true,
     },
@@ -48,6 +49,7 @@ const routes: RouteRecordRaw[] = [
     name: 'detail',
     component: () => import('@/views/detail/index.vue'),
     meta: {
+      title: '视频详情',
       requiresAuth: true,
     },
   },

@@ -4,7 +4,7 @@
       class="avatar"
       round
       fit="cover"
-      :src="getImageUrl('avatar.webp')"
+      :src="getImageUrl('avatar.jpg')"
       @click="toProfile"
     />
     <h1 class="title">

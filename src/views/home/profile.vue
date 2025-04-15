@@ -14,7 +14,7 @@
           class="avatar"
           round
           fit="cover"
-          :src="getImageUrl('avatar2.png')"
+          :src="getImageUrl('avatar.jpg')"
         />
         <div class="info">
           <h3 class="name">
@@ -219,7 +219,7 @@ function onLogout() {
 .history-popup {
   display: flex;
   flex-direction: column;
-  height: 80%;
+  height: 60%;
 }
 
 .popup-header {
