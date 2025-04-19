@@ -2,7 +2,7 @@
   <div class="play-util">
     <!-- <i class="iconfont icon-shuaxin" :class="{ start }" @click="refreshUrl" /> -->
     <i class="iconfont icon-shezhi1" @click="show = true" />
-    <i class="iconfont icon-backdelete" @click="toHome" />
+    <i class="iconfont icon-backdelete" @click="back" />
     <van-action-sheet
       v-model:show="show"
       class="util-action-sheel"
@@ -33,7 +33,6 @@
 
 <script setup lang="ts">
 import { LINE_KEY } from '@/utils/constant'
-import { setTitle } from '@/utils/common'
 import { ParserType } from '@/types/enum'
 
 interface Props {
@@ -42,7 +41,6 @@ interface Props {
 
 const props = defineProps<Props>()
 const router = useRouter()
-const title = useTitle()
 const lines: ParserType[] = [ParserType.xmjx, ParserType.qgjx, ParserType.jyjx]
 const type = useVModel(props, 'type')
 // const start = ref(false)
@@ -82,9 +80,8 @@ function isActiveLine(line: ParserType) {
 //   }, 1000)
 // }
 
-function toHome() {
-  title.value = setTitle('')
-  router.push('/')
+function back() {
+  router.back()
 }
 </script>
 

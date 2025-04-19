@@ -52,7 +52,7 @@
             </van-button>
             <div class="register-link">
               没有账号？
-              <router-link to="/register" class="link">
+              <router-link replace to="/register" class="link">
                 去注册
               </router-link>
             </div>
@@ -94,7 +94,7 @@ async function handleLogin() {
     const success = await authStore.loginAction(loginForm)
     if (success) {
       const redirect = route.query.redirect as string
-      router.push(redirect || '/')
+      router.replace(redirect || '/')
     }
   }
   finally {

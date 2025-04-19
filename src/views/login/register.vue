@@ -65,7 +65,7 @@
               注册账号 (◕ᴗ◕✿)
             </van-button>
             <div class="login-link">
-              已有账号？<router-link to="/login" class="link">
+              已有账号？<router-link replace to="/login" class="link">
                 去登录
               </router-link>
             </div>
@@ -120,7 +120,7 @@ async function handleRegister() {
     })
     if (success) {
       showToast('注册成功')
-      router.push('/login')
+      router.replace('/login')
     }
   }
   finally {

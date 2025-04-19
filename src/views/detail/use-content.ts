@@ -29,6 +29,10 @@ export default function useContent(site: Ref<Site>) {
     initDetail()
   })
 
+  onDeactivated(() => {
+    title.value = setTitle('')
+  })
+
   async function initDetail() {
     if (!route.query.url) {
       toHome()
@@ -80,7 +84,6 @@ export default function useContent(site: Ref<Site>) {
   }
 
   function toHome() {
-    title.value = setTitle('')
     router.push('/')
   }
 

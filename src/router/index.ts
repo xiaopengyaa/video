@@ -41,6 +41,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/home/profile.vue'),
     meta: {
       title: '个人主页',
+      keepAlive: 'profile',
       requiresAuth: true,
     },
   },
