@@ -6,6 +6,8 @@ import Artplayer from 'artplayer'
 import Hls from 'hls.js'
 import flvjs from 'flv.js'
 import { getImageUrl, getSvgUrl } from '@/utils/common'
+import { updateBus } from '@/utils/event-bus'
+import { PROGRESS_KEY } from '@/utils/constant'
 
 const NOT_SUPPORTED = '播放失败，有问题请联系最帅的那位。'
 Artplayer.NOTICE_TIME = 3000
@@ -13,11 +15,13 @@ Artplayer.SETTING_WIDTH = 180
 Artplayer.SETTING_ITEM_WIDTH = 180
 
 export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<ParserType>) {
+  const router = useRouter()
   const route = useRoute()
   const url = ref('')
   const process = ref('')
   const site = ref<Site>(Site.qq)
   const art = shallowRef<Artplayer | null>(null)
+  const progressStorage = useLocalStorage(PROGRESS_KEY, '')
 
   watchEffect(() => {
     url.value = route.query.url as string
@@ -26,8 +30,18 @@ export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<Pa
     initVideo()
   })
 
+  onMounted(() => {
+    if (progressStorage.value) {
+      updateRouteProgress(Number(progressStorage.value))
+      progressStorage.value = ''
+    }
+    updateBus.on(() => {
+      updateRouteProgress(art.value?.currentTime)
+    })
+  })
+
   async function initVideo() {
-    if (!video.value) {
+    if (!video.value || !type.value) {
       return
     }
     if (!art.value) {
@@ -53,7 +67,7 @@ export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<Pa
         playsInline: true,
         fastForward: true,
         autoOrientation: true,
-        autoPlayback: true,
+        autoPlayback: false,
         icons: {
           state: stateImg,
           indicator: indicatorImg,
@@ -66,11 +80,12 @@ export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<Pa
       // 监听ready事件
       art.value.on('ready', () => {
         console.log('video:ready')
-        art.value.loading.show = false
-        // 回显播放进度
-        if (process.value) {
-          art.value.currentTime = Number(process.value)
-        }
+        echoProcess()
+      })
+      // 监听restart事件
+      art.value.on('restart', () => {
+        console.log('video:restart')
+        echoProcess()
       })
     }
     try {
@@ -92,6 +107,25 @@ export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<Pa
     }
   }
 
+  // 回显播放进度
+  function echoProcess() {
+    if (process.value) {
+      art.value.currentTime = Number(process.value)
+    }
+  }
+
+  function updateRouteProgress(currentTime?: number) {
+    if (currentTime > 0) {
+      router.replace({
+        path: route.path,
+        query: {
+          ...route.query,
+          progress: currentTime,
+        },
+      })
+    }
+  }
+
   return {
     url,
     site,
@@ -106,19 +140,24 @@ function playM3u8(video: HTMLVideoElement, url: string, art: Artplayer) {
     hls.attachMedia(video)
     art.hls = hls
     art.on('destroy', () => hls.destroy())
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      art.loading.show = false
+    })
     hls.on(Hls.Events.ERROR, (_event, data) => {
       // 网络错误类型
       if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
         art.notice.show = NOT_SUPPORTED
         art.loading.show = false
       }
-      if (data.type === Hls.ErrorTypes.MEDIA_ERROR && data.details === Hls.ErrorDetails.FRAG_PARSING_ERROR) {
+      if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
         console.error('media错误:', data.details)
-        // 重试超过一定次数就不再重试，提示用户
-        const action = data.errorAction
-        const retryConfig = action?.retryConfig
-        if (retryConfig && retryConfig.maxNumRetry === action.retryCount) {
-          art.notice.show = '当前分片解析失败。'
+        if (data.details === Hls.ErrorDetails.FRAG_PARSING_ERROR) {
+          // 重试超过一定次数就不再重试，提示用户
+          const action = data.errorAction
+          const retryConfig = action?.retryConfig
+          if (retryConfig && retryConfig.maxNumRetry === action.retryCount) {
+            art.notice.show = '当前分片解析失败。'
+          }
         }
         return
       }
@@ -127,6 +166,9 @@ function playM3u8(video: HTMLVideoElement, url: string, art: Artplayer) {
   }
   else if (video.canPlayType('application/vnd.apple.mpegurl')) {
     video.src = url
+    video.addEventListener('loadedmetadata', () => {
+      art.loading.show = false
+    })
   }
   else {
     art.notice.show = NOT_SUPPORTED

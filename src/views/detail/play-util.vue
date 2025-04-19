@@ -1,6 +1,6 @@
 <template>
   <div class="play-util">
-    <!-- <i class="iconfont icon-shuaxin" :class="{ start }" @click="refreshUrl" /> -->
+    <i class="iconfont icon-shuaxin" :class="{ start }" @click="refreshUrl" />
     <i class="iconfont icon-shezhi1" @click="show = true" />
     <i class="iconfont icon-backdelete" @click="back" />
     <van-action-sheet
@@ -34,16 +34,17 @@
 <script setup lang="ts">
 import { LINE_KEY } from '@/utils/constant'
 import { ParserType } from '@/types/enum'
+import { updateBus } from '@/utils/event-bus'
 
 interface Props {
-  type: ParserType
+  type?: ParserType
 }
 
 const props = defineProps<Props>()
 const router = useRouter()
 const lines: ParserType[] = [ParserType.xmjx, ParserType.qgjx, ParserType.jyjx]
 const type = useVModel(props, 'type')
-// const start = ref(false)
+const start = ref(false)
 const show = ref(false)
 const sheetHeight = ref('')
 const storageLine = useStorage<ParserType>(LINE_KEY, ParserType.xmjx)
@@ -70,15 +71,16 @@ function isActiveLine(line: ParserType) {
   return type.value === line
 }
 
-// function refreshUrl() {
-//   const temp = url.value
-//   url.value = ''
-//   start.value = true
-//   setTimeout(() => {
-//     url.value = temp
-//     start.value = false
-//   }, 1000)
-// }
+function refreshUrl() {
+  const temp = type.value
+  type.value = undefined
+  start.value = true
+  updateBus.emit('update')
+  setTimeout(() => {
+    type.value = temp
+    start.value = false
+  }, 1000)
+}
 
 function back() {
   if (history.length > 1) {

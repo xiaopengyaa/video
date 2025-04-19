@@ -108,7 +108,7 @@ import PlaylistDialog from './playlist-dialog.vue'
 import PlayUtil from './play-util.vue'
 import useContent from './use-content'
 import useVideo from './use-video'
-import { LOADING_DELAY } from '@/utils/constant'
+import { LOADING_DELAY, PROGRESS_KEY } from '@/utils/constant'
 import { getSiteLogo, px2vw } from '@/utils/common'
 import { useRect } from '@vant/use'
 import { ParserType } from '@/types/enum'
@@ -134,6 +134,7 @@ const {
   handleClick,
   relateClick,
 } = useContent(site)
+const progress = useLocalStorage(PROGRESS_KEY, '')
 
 const vidText = computed(() => {
   return playlist.value.find(item => item.vid === vid.value)?.text || ''
@@ -148,26 +149,41 @@ watch(loading, () => {
   }, LOADING_DELAY + 100)
 })
 
-onBeforeUnmount(() => {
-  if (art.value) {
-    if (art.value.duration > 0) {
-      // 更新历史记录
-      updateHistory({
-        videoId: vid.value,
-        videoUrl: url.value,
-        videoSite: site.value,
-        videoText: vidText.value,
-        episodeId: cid.value,
-        episodeName: detailData.value.introduction.title,
-        episodePoster: detailData.value.introduction.poster,
-        watchProgress: art.value.currentTime,
-        totalDuration: art.value.duration,
-      })
-    }
-    // 销毁播放器
-    art.value?.destroy(false)
-  }
+onMounted(() => {
+  window.addEventListener('beforeunload', handleUnload)
 })
+
+onBeforeUnmount(() => {
+  // 更新历史记录
+  update()
+  // 销毁播放器
+  art.value?.destroy(false)
+  // 卸载事件
+  window.removeEventListener('beforeunload', handleUnload)
+})
+
+function handleUnload() {
+  update()
+  if (art.value?.currentTime > 0) {
+    progress.value = art.value.currentTime.toString()
+  }
+}
+
+function update() {
+  if (art.value?.duration > 0) {
+    updateHistory({
+      videoId: vid.value,
+      videoUrl: url.value,
+      videoSite: site.value,
+      videoText: vidText.value,
+      episodeId: cid.value,
+      episodeName: detailData.value.introduction.title,
+      episodePoster: detailData.value.introduction.poster,
+      watchProgress: art.value.currentTime,
+      totalDuration: art.value.duration,
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>
