@@ -75,6 +75,7 @@ const pageTotal = computed(() => {
 
 defineExpose({
   refreshScroll,
+  onRefresh,
 })
 
 // 初始化

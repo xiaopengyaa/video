@@ -81,7 +81,12 @@ function isActiveLine(line: ParserType) {
 // }
 
 function back() {
-  router.back()
+  if (history.length > 1) {
+    router.back()
+  }
+  else {
+    router.push('/')
+  }
 }
 </script>
 

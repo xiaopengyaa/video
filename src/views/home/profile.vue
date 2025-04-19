@@ -78,7 +78,7 @@ import { ref } from 'vue'
 import { useAuthStore } from '@/store/auth'
 import { useHistoryStore } from '@/store/history'
 import HistoryList from '@/components/list/history-list.vue'
-import { getImageUrl, stopBodyScroll } from '@/utils/common'
+import { getImageUrl } from '@/utils/common'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -89,15 +89,15 @@ const historyRef = useTemplateRef<InstanceType<typeof HistoryList>>('historyRef'
 const showHistoryPopup = ref(false)
 
 watch(showHistoryPopup, () => {
-  if (showHistoryPopup.value) {
-    stopBodyScroll(true)
-    setTimeout(() => {
-      historyRef.value?.refreshScroll()
-    }, 500)
-  }
-  else {
-    stopBodyScroll(false)
-  }
+  updateScroll()
+})
+
+onActivated(async () => {
+  // 延迟一下，等历史记录更新完再刷新
+  setTimeout(async () => {
+    await historyRef.value?.onRefresh()
+    updateScroll()
+  }, 500)
 })
 
 function showHistory() {
@@ -115,6 +115,14 @@ function onClearHistory() {
       await historyStore.clearHistoryAction()
     }
   })
+}
+
+function updateScroll() {
+  if (showHistoryPopup.value) {
+    setTimeout(() => {
+      historyRef.value?.refreshScroll()
+    }, 500)
+  }
 }
 
 // 返回首页

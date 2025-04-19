@@ -15,6 +15,9 @@
 
 <script setup lang="ts">
 import { isDark } from './composables/dark'
+import { useLockScroll } from './composables/base'
+
+useLockScroll()
 
 const mode = computed(() => {
   return isDark.value ? 'dark' : 'light'
