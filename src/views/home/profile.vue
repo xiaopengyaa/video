@@ -135,7 +135,7 @@ const historyRef = useTemplateRef<InstanceType<typeof HistoryList>>('historyRef'
 const showHistoryPopup = ref(false)
 const showFeedbackPopup = ref(false)
 const submitting = ref(false)
-const feedback = ref<FeedbackParams>({
+const feedback = reactive<FeedbackParams>({
   content: '',
 })
 
@@ -174,20 +174,18 @@ function onClearHistory() {
 
 // 提交反馈
 async function onSubmitFeedback() {
-  if (!feedback.value.content) {
+  if (!feedback.content) {
     showToast('请输入您的意见或建议')
     return
   }
 
   submitting.value = true
   try {
-    const result = await submitFeedback(feedback.value)
+    const result = await submitFeedback(feedback)
     if (result.flag) {
       showToast('提交成功')
       showFeedbackPopup.value = false
-      feedback.value = {
-        content: '',
-      }
+      feedback.content = ''
     }
     else {
       showToast(result.message || '提交失败')
