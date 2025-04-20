@@ -26,3 +26,7 @@ export interface FlagMsg {
 }
 
 export type FlagResponse<T = undefined> = { flag: true, message: string, data: T } | { flag: false, message: string }
+
+export interface FeedbackParams {
+  content: string
+}

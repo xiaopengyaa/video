@@ -38,6 +38,15 @@
             <van-icon name="clock-o" class="cell-icon" />
           </template>
         </van-cell>
+        <van-cell
+          title="意见反馈"
+          is-link
+          @click="showFeedback"
+        >
+          <template #icon>
+            <van-icon name="comment-o" class="cell-icon" />
+          </template>
+        </van-cell>
       </van-cell-group>
 
       <div class="logout-btn">
@@ -70,6 +79,40 @@
       </div>
       <history-list ref="historyRef" class="list" />
     </van-popup>
+
+    <!-- 意见反馈弹窗 -->
+    <van-popup
+      v-model:show="showFeedbackPopup"
+      class="feedback-popup"
+      position="bottom"
+      round
+    >
+      <div class="popup-header">
+        <h3>意见反馈</h3>
+        <van-icon name="cross" @click="showFeedbackPopup = false" />
+      </div>
+      <div class="feedback-content">
+        <van-field
+          v-model.trim="feedback.content"
+          type="textarea"
+          rows="6"
+          placeholder="请输入您的意见或建议"
+          show-word-limit
+          maxlength="100"
+        />
+        <div class="submit-btn">
+          <van-button
+            block
+            round
+            type="primary"
+            :loading="submitting"
+            @click="onSubmitFeedback"
+          >
+            提交
+          </van-button>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -79,6 +122,9 @@ import { useAuthStore } from '@/store/auth'
 import { useHistoryStore } from '@/store/history'
 import HistoryList from '@/components/list/history-list.vue'
 import { getImageUrl } from '@/utils/common'
+import { submitFeedback } from '@/api/base'
+import type { FeedbackParams } from '@/types/base'
+import { showDialog, showToast } from 'vant'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -87,6 +133,11 @@ const { userInfo } = storeToRefs(authStore)
 const { historyList: list } = storeToRefs(historyStore)
 const historyRef = useTemplateRef<InstanceType<typeof HistoryList>>('historyRef')
 const showHistoryPopup = ref(false)
+const showFeedbackPopup = ref(false)
+const submitting = ref(false)
+const feedback = ref<FeedbackParams>({
+  content: '',
+})
 
 watch(showHistoryPopup, () => {
   updateScroll()
@@ -104,6 +155,10 @@ function showHistory() {
   showHistoryPopup.value = true
 }
 
+function showFeedback() {
+  showFeedbackPopup.value = true
+}
+
 // 清空记录
 function onClearHistory() {
   showDialog({
@@ -115,6 +170,32 @@ function onClearHistory() {
       await historyStore.clearHistoryAction()
     }
   })
+}
+
+// 提交反馈
+async function onSubmitFeedback() {
+  if (!feedback.value.content) {
+    showToast('请输入您的意见或建议')
+    return
+  }
+
+  submitting.value = true
+  try {
+    const result = await submitFeedback(feedback.value)
+    if (result.flag) {
+      showToast('提交成功')
+      showFeedbackPopup.value = false
+      feedback.value = {
+        content: '',
+      }
+    }
+    else {
+      showToast(result.message || '提交失败')
+    }
+  }
+  finally {
+    submitting.value = false
+  }
 }
 
 function updateScroll() {
@@ -230,6 +311,11 @@ function onLogout() {
   height: 60%;
 }
 
+.feedback-popup {
+  display: flex;
+  flex-direction: column;
+}
+
 .popup-header {
   display: flex;
   align-items: center;
@@ -248,6 +334,16 @@ function onLogout() {
     font-size: 20px;
     color: #969799;
     cursor: pointer;
+  }
+}
+
+.feedback-content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+
+  .submit-btn {
+    margin-top: 20px;
   }
 }
 
