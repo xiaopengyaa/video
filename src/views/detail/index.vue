@@ -113,6 +113,7 @@ import { getSiteLogo, px2vw } from '@/utils/common'
 import { useRect } from '@vant/use'
 import { ParserType } from '@/types/enum'
 import { updateHistory } from '@/api/history'
+import browser from '@/utils/page-check'
 
 const playType = ref<ParserType>(ParserType.xmjx)
 const videoRef = useTemplateRef<HTMLDivElement>('videoRef')
@@ -134,7 +135,7 @@ const {
   handleClick,
   relateClick,
 } = useContent(site)
-const progress = useLocalStorage(PROGRESS_KEY, '')
+const progressStorage = useLocalStorage(PROGRESS_KEY, '')
 
 const vidText = computed(() => {
   return playlist.value.find(item => item.vid === vid.value)?.text || ''
@@ -150,7 +151,13 @@ watch(loading, () => {
 })
 
 onMounted(() => {
-  window.addEventListener('beforeunload', handleUnload)
+  // 监听卸载事件
+  if (browser.versions.ios) {
+    window.addEventListener('pagehide', handleUnload)
+  }
+  else {
+    window.addEventListener('beforeunload', handleUnload)
+  }
 })
 
 onBeforeUnmount(() => {
@@ -159,13 +166,22 @@ onBeforeUnmount(() => {
   // 销毁播放器
   art.value?.destroy(false)
   // 卸载事件
-  window.removeEventListener('beforeunload', handleUnload)
+  if (browser.versions.ios) {
+    window.removeEventListener('pagehide', handleUnload)
+  }
+  else {
+    window.removeEventListener('beforeunload', handleUnload)
+  }
 })
 
 function handleUnload() {
   update()
-  if (art.value?.currentTime > 0) {
-    progress.value = art.value.currentTime.toString()
+  setProgress(art.value?.currentTime)
+}
+
+function setProgress(currentTime?: number) {
+  if (currentTime > 0) {
+    progressStorage.value = currentTime.toFixed(0)
   }
 }
 

@@ -54,7 +54,7 @@ export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<Pa
         url: '',
         theme: '#23ade5',
         poster: getImageUrl('poster.png'),
-        autoplay: false,
+        autoplay: true,
         pip: true,
         autoMini: true,
         screenshot: true,
@@ -72,27 +72,23 @@ export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<Pa
           state: stateImg,
           indicator: indicatorImg,
         },
+        moreVideoAttr: {
+          preload: 'metadata',
+        },
         customType: {
           m3u8: playM3u8,
           flv: playFlv,
         },
-      })
-      // 监听ready事件
-      art.value.on('ready', () => {
-        console.log('video:ready')
-        echoProcess()
-      })
-      // 监听restart事件
-      art.value.on('restart', () => {
-        console.log('video:restart')
-        echoProcess()
       })
     }
     try {
       art.value.loading.show = true
       const data = await getVurl(url.value, type.value)
       if (data) {
-        art.value.switch = data
+        art.value.once('video:canplay', () => {
+          echoProcess()
+        })
+        art.value.url = data
       }
       else {
         throw new Error(NOT_SUPPORTED)
@@ -109,8 +105,9 @@ export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<Pa
 
   // 回显播放进度
   function echoProcess() {
+    console.log('echoProcess', process.value)
     if (process.value) {
-      art.value.currentTime = Number(process.value)
+      art.value.seek = Number(process.value)
     }
   }
 
@@ -120,7 +117,7 @@ export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<Pa
         path: route.path,
         query: {
           ...route.query,
-          progress: currentTime,
+          progress: currentTime.toFixed(0),
         },
       })
     }
@@ -134,14 +131,22 @@ export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<Pa
 }
 
 function playM3u8(video: HTMLVideoElement, url: string, art: Artplayer) {
-  if (Hls.isSupported()) {
-    const hls = new Hls()
+  if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = url
+    video.addEventListener('loadedmetadata', () => {
+      video.play()
+    })
+  }
+  else if (Hls.isSupported()) {
+    const hls = new Hls({
+      enableWorker: true,
+    })
     hls.loadSource(url)
     hls.attachMedia(video)
     art.hls = hls
     art.on('destroy', () => hls.destroy())
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      art.loading.show = false
+      video.play()
     })
     hls.on(Hls.Events.ERROR, (_event, data) => {
       // 网络错误类型
@@ -162,12 +167,6 @@ function playM3u8(video: HTMLVideoElement, url: string, art: Artplayer) {
         return
       }
       console.error('hls错误:', data)
-    })
-  }
-  else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    video.src = url
-    video.addEventListener('loadedmetadata', () => {
-      art.loading.show = false
     })
   }
   else {
