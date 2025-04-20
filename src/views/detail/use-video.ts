@@ -83,15 +83,16 @@ export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<Pa
     }
     try {
       art.value.loading.show = true
-      const data = await getVurl(url.value, type.value)
-      if (data) {
+      const res = await getVurl(url.value, type.value)
+      if (res.flag) {
         art.value.once('video:canplay', () => {
           echoProcess()
         })
-        art.value.url = data
+        art.value.url = res.data
       }
       else {
-        throw new Error(NOT_SUPPORTED)
+        art.value.notice.show = res.message
+        art.value.loading.show = false
       }
     }
     catch (e) {
