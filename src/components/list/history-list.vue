@@ -63,6 +63,7 @@ import type { Site } from '@/types/enum'
 import dayjs from 'dayjs'
 import useListClick from './use-list-click'
 
+const route = useRoute()
 const scrollRef = useTemplateRef<InstanceType<typeof ScrollWrap>>('scrollRef')
 const historyStore = useHistoryStore()
 const { toDetail } = useListClick()
@@ -125,6 +126,7 @@ function onItemClick(item: HistoryItem) {
     href: item.videoUrl,
     site: item.videoSite as Site,
     progress: item.watchProgress,
+    back: route.name as string,
   })
 }
 

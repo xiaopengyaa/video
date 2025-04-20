@@ -5,6 +5,7 @@ interface DetailParam {
   href: string
   site: Site
   progress?: number
+  back?: string
 }
 
 export default function useListClick() {
@@ -36,7 +37,7 @@ export default function useListClick() {
     })
   }
 
-  function toDetail({ href, site = Site.qq, progress }: DetailParam) {
+  function toDetail({ href, site = Site.qq, progress, back }: DetailParam) {
     if (!href) {
       return
     }
@@ -46,6 +47,7 @@ export default function useListClick() {
         url: href,
         site,
         progress,
+        back,
       },
     })
   }

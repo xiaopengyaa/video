@@ -107,7 +107,7 @@ export default function useVideo(video: ShallowRef<HTMLDivElement>, type: Ref<Pa
   function echoProcess() {
     console.log('echoProcess', process.value)
     if (process.value) {
-      art.value.seek = Number(process.value)
+      art.value.currentTime = Number(process.value)
     }
   }
 

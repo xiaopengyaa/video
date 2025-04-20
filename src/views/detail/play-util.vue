@@ -42,11 +42,13 @@ interface Props {
 
 const props = defineProps<Props>()
 const router = useRouter()
+const route = useRoute()
 const lines: ParserType[] = [ParserType.xmjx, ParserType.qgjx, ParserType.jyjx]
 const type = useVModel(props, 'type')
 const start = ref(false)
 const show = ref(false)
 const sheetHeight = ref('')
+const backName = ref('')
 const storageLine = useStorage<ParserType>(LINE_KEY, ParserType.xmjx)
 
 watchEffect(() => {
@@ -55,6 +57,7 @@ watchEffect(() => {
     line = storageLine.value
   }
   type.value = line
+  backName.value = route.query.back as string || ''
 })
 
 onMounted(() => {
@@ -83,8 +86,10 @@ function refreshUrl() {
 }
 
 function back() {
-  if (history.length > 1) {
-    router.back()
+  if (backName.value) {
+    router.push({
+      name: backName.value,
+    })
   }
   else {
     router.push('/')
